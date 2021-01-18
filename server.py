@@ -7,9 +7,9 @@ app = Flask(__name__)
 @app.route("/")
 @app.route('/list')
 def route_list():
-    all_questions = data_manager.get_all_questions()
+    questions_list = data_manager.get_questions_sorted_by_submission_date()
+    return render_template('list.html', questions=questions_list)
 
-    return render_template('list.html', questions=all_questions)
 
 if __name__ == "__main__":
     app.run()

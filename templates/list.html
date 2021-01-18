@@ -3,14 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <title>Questions</title>
+    <style>
+        small{
+            display: block;
+        }
+    </style>
 </head>
 <body>
 <h1>Questions</h1>
 <ul>
     {% for question in questions %}
-        {% for key, value in question.items() %}
-            <li>{{question.get(key)}}</li>
-        {% endfor %}
+        <li>
+            <a href="/question/{{ question.get('id') }}">{{question.get('title')}}</a>
+            <small>Number of Views: {{ question.get('view_number') }}</small>
+            <small>Vote Number: {{ question.get('vote_number') }}</small>
+            <p>{{ question.get('message') }}</p>
+        </li>
     {% endfor %}
 </ul>
 </body>

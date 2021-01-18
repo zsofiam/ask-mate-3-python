@@ -3,16 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <title>Q&A</title>
+    <style>
+        li {
+            list-style-type: none;
+        }
+    </style>
 </head>
 <body>
     <a href="/list">Go back to questions</a>
-    <p>{{ question }}</p>
-    <p>{{ answers }}</p>
-{#    <p>{{ question[4] }}</p>#}
-{#    <p>{{ question[5] }}</p>#}
-{#    <ul>#}
-{#    {% for answer in answers %}#}
-{#        <li>{{ answers[4] }}</li>#}
-{#    </ul>#}
+    <p><b>Question: {{ question['title'] }}</b></p>
+    <p>{{ question['message'] }}</p><br>
+    <ul>
+    {% for answer in answers %}
+        <li><em>Answer {{ loop.index }}: {{ answer['message'] }}</em></li><br>{% endfor %}
+    </ul>
 </body>
 </html>

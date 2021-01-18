@@ -15,7 +15,7 @@ def route_list():
     return render_template('list.html', questions=questions_list)
 
 
-@app.route("/question/<int:question_id>")
+@app.route("/question/<question_id>")
 def display_question(question_id):
     question = data_manager.get_one_question(question_id)
     answers = data_manager.get_answers(question_id)

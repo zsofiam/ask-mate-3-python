@@ -11,7 +11,7 @@ def main_page():
 
 @app.route('/list')
 def route_list():
-    questions_list = data_manager.get_questions_sorted_by_submission_date()
+    questions_list = data_manager.get_questions_sorted('submission_time','desc')
     return render_template('list.html', questions=questions_list)
 
 

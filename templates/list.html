@@ -17,6 +17,7 @@
             <a href="/question/{{ question.get('id') }}">{{question.get('title')}}</a>
             <small>Number of Views: {{ question.get('view_number') }}</small>
             <small>Vote Number: {{ question.get('vote_number') }}</small>
+            <small>Submission Time: {{ question["submission_time"] }}</small>
             <p>{{ question.get('message') }}</p>
         </li>
     {% endfor %}

@@ -14,9 +14,28 @@ def get_all_questions_from_file():
     return all_questions
 
 
-def get_questions_sorted_by_submission_date():
+def get_questions_sorted(parameter, direction):
     questions = get_all_questions_from_file()
-    sorted_questions = sorted(questions, key=lambda  k: k['submission_time'], reverse=True)
+    if parameter == 'submission_time' or parameter == 'vote_number' or parameter == 'view_number':
+        sorted_questions = sort_by_number_parameter(questions, parameter, direction)
+    else:
+        sorted_questions = sort_by_text_parameter(questions, parameter, direction)
+    return sorted_questions
+
+
+def sort_by_number_parameter(questions, parameter, direction):
+    if direction == 'desc':
+        sorted_questions = sorted(questions, key = lambda  k: int(k[parameter]), reverse=True)
+    else:
+        sorted_questions = sorted(questions, key = lambda  k: int(k[parameter]))
+    return sorted_questions
+
+
+def sort_by_text_parameter(questions, parameter, direction):
+    if direction == 'desc':
+        sorted_questions = sorted(questions, key = lambda  k: k[parameter], reverse=True)
+    else:
+        sorted_questions = sorted(questions, key = lambda  k: k[parameter])
     return sorted_questions
 
 

@@ -46,6 +46,15 @@ def post_new_answer(question_id):
         return redirect("/question/"+question_id)
 
 
+@app.route("/add-question", methods=['GET', 'POST'])
+def post_new_question():
+    if request.method == 'GET':
+        return render_template('add_question.html')
+    if request.method == 'POST':
+        question = {"title": request.form["title"], "message": request.form["message"]}
+        data_manager.add_question(question)
+        return redirect("/question/"+ str(question["id"]))
+
 
 if __name__ == "__main__":
     app.run(

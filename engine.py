@@ -33,4 +33,8 @@ def delete_answer(answer_id):
         if str(answer[0]) == str(answer_id):
             question_id = answer[3]
             answers.remove(answer)
+    count = 1
+    for answer in answers:
+        answer[0] = str(count)
+        count += 1
     return answers, question_id

@@ -11,7 +11,14 @@ def main_page():
 
 @app.route('/list')
 def route_list():
-    questions_list = data_manager.get_questions_sorted('submission_time','desc')
+    order_by = 'submission_time'
+    order_direction = 'desc'
+    args = request.args
+    if 'order_by' in args:
+        order_by= args["order_by"]
+    if 'order_direction' in args:
+        order_direction = args['order_direction']
+    questions_list = data_manager.get_questions_sorted(order_by,order_direction)
     return render_template('list.html', questions=questions_list)
 
 
@@ -37,6 +44,7 @@ def post_new_answer(question_id):
         new_row = ','.join(new_answer)
         data_manager.write_answer(new_row)
         return redirect("/question/"+question_id)
+
 
 
 if __name__ == "__main__":

@@ -55,3 +55,8 @@ def get_answers(q_id):
             answers.append(answer)
     return answers
 
+
+def write_answer(new_row):
+    with open(ANSWERS_FILE_PATH, 'a') as file:
+        file.write(new_row)
+        file.write("\n")

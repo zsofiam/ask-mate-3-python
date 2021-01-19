@@ -17,5 +17,6 @@
     {% for answer in answers %}
         <li><em>Answer {{ loop.index }}: {{ answer['message'] }}</em></li><br>{% endfor %}
     </ul>
+    <a href="/question/{{ question['id'] }}/new-answer">Write new answer</a>
 </body>
 </html>

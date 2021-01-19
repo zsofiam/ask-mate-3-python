@@ -15,7 +15,7 @@
     <p>{{ question['message'] }}</p><br>
     <ul>
     {% for answer in answers %}
-        <li><em>Answer {{ loop.index }}: {{ answer['message'] }}</em></li><br>{% endfor %}
+        <li><em>Answer {{ loop.index }}: {{ answer['message'] }}</em> | <a href="/answer/{{ answer['id'] }}/delete">DELETE</a></li><br>{% endfor %}
     </ul>
     <a href="/question/{{ question['id'] }}/new-answer">Write new answer</a>
 </body>

@@ -23,3 +23,18 @@ def generate_questions_id():
 def get_timestamp():
     timestamp = int(time.time())
     return timestamp
+
+
+def delete_answer(answer_id):
+    question_id = ""
+    answers = data_manager.get_all_answers()
+    print(answers)
+    for answer in answers:
+        if str(answer[0]) == str(answer_id):
+            question_id = answer[3]
+            answers.remove(answer)
+    count = 1
+    for answer in answers:
+        answer[0] = str(count)
+        count += 1
+    return answers, question_id

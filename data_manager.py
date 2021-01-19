@@ -6,7 +6,7 @@ QUESTIONS_FILE_PATH = 'sample_data/question.csv'
 ANSWERS_FILE_PATH = "sample_data/answer.csv"
 DATA_HEADER = ['id', 'submission_time', 'view_number', 'vote_number', 'title', 'message', 'image']
 LATEST_ID = "sample_data/latest_id.txt"
-
+ANSWER_HEADER = ['id', 'submission_time', 'vote_number', 'question_id', 'message', 'image']
 
 
 def get_dictionary_list_from_file(path):
@@ -114,3 +114,25 @@ def add_question(question):
 
 def write_questions_to_file(questions):
     write_dictionaries_to_file(questions, QUESTIONS_FILE_PATH)
+
+
+def get_all_answers():
+    answers = []
+    with open(ANSWERS_FILE_PATH) as csv_file:
+        csv_answers = csv.reader(csv_file)
+        for answer_index, answer in enumerate(csv_answers):
+            if answer_index != 0:
+                answers.append(answer)
+    return answers
+
+
+def write_all_answers(answers):
+    first_row = ','.join(ANSWER_HEADER)
+    first_row += "\n"
+    with open(ANSWERS_FILE_PATH, 'w') as file:
+        file.write(first_row)
+    with open(ANSWERS_FILE_PATH, 'a') as file:
+        for answer in answers:
+            new_row = ','.join(answer)
+            file.write(new_row)
+            file.write("\n")

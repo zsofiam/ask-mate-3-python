@@ -56,6 +56,13 @@ def post_new_question():
         return redirect("/question/"+ str(question["id"]))
 
 
+@app.route("/answer/<answer_id>/delete")
+def delete_answer(answer_id):
+    answers, question_id = engine.delete_answer(answer_id)
+    data_manager.write_all_answers(answers)
+    return redirect("/question/" + question_id)
+
+
 if __name__ == "__main__":
     app.run(
         debug=True

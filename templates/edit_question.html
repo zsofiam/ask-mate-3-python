@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit Question</title>
+    <style>
+        textarea, input{
+            display: block;
+            margin-bottom: 15px;
+        }
+    </style>
+</head>
+<body>
+<form action="/question/{{ question["id"] }}/edit" method="POST">
+    <label for="title">Title</label>
+    <textarea id="title" name="title" rows="1" cols="100">{{ question["title"] }}</textarea>
+    <label for="message">Message</label>
+    <textarea id="message" name="message" rows="10" cols="100">{{ question["message"] }}</textarea>
+    <input type="submit" value="Save">
+</form>
+</body>
+</html>

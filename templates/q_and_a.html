@@ -7,15 +7,21 @@
         li {
             list-style-type: none;
         }
+        .delete {
+            text-decoration: none;
+            color: brown;
+        }
     </style>
 </head>
 <body>
     <a href="/list">Go back to questions</a>
     <p><b>Question: {{ question['title'] }}</b></p>
-    <p>{{ question['message'] }}</p><br>
-    <ul>
+    <p>{{ question['message'] }}</p>
+    <a class="delete" href="/question/{{ question['id'] }}/delete">DELETE question</a><br><br>
+    <a href="/question/{{ question["id"] }}/edit">EDIT question</a>
+    <ul><br>
     {% for answer in answers %}
-        <li><em>Answer {{ loop.index }}: {{ answer['message'] }}</em> | <a href="/answer/{{ answer['id'] }}/delete">DELETE</a></li><br>{% endfor %}
+        <li><em>Answer {{ loop.index }}: {{ answer['message'] }}</em> | <a class="delete" href="/answer/{{ answer['id'] }}/delete">DELETE answer</a></li><br>{% endfor %}
     </ul>
     <a href="/question/{{ question['id'] }}/new-answer">Write new answer</a>
 </body>

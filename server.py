@@ -57,9 +57,8 @@ def post_new_question():
     if request.method == 'POST':
         question = {"title": request.form["title"], "message": request.form["message"]}
         file = request.files["file"]
-        if file and engine.allowed_file(file.filename):
-            filename = secure_filename(file.filename)
-            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+        filename = secure_filename(file.filename)
+        file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
         data_manager.add_question(question, filename)
         return redirect("/question/"+ str(question["id"]))
 

@@ -34,8 +34,7 @@ def post_new_answer(question_id):
     if request.method == 'GET':
         return render_template('new_answer.html', question_id=question_id)
     else:
-        # id, submission_time, vote_number, question_id, message, image
-        new_answer = [str(engine.generate_answer_id(question_id)),
+        new_answer = [str(data_manager.get_answer_id()),
                       str(engine.get_timestamp()),
                       '0',
                       str(question_id),
@@ -61,6 +60,13 @@ def delete_answer(answer_id):
     answers, question_id = engine.delete_answer(answer_id)
     data_manager.write_all_answers(answers)
     return redirect("/question/" + question_id)
+
+
+@app.route("/question/<question_id>/delete")
+def delete_question(question_id):
+    questions = engine.delete_question(question_id)
+    data_manager.write_questions_to_file(questions)
+    return redirect("/list")
 
 
 if __name__ == "__main__":

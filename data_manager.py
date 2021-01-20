@@ -98,3 +98,8 @@ def write_all_answers(answers):
             new_row = ','.join(answer)
             file.write(new_row)
             file.write("\n")
+
+
+def get_answer_id():
+    answer_id = util.get_latest_id('answer', LATEST_IDS)
+    return answer_id

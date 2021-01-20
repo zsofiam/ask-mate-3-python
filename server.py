@@ -83,8 +83,9 @@ def delete_answer(answer_id):
 
 @app.route("/question/<question_id>/delete")
 def delete_question(question_id):
-    questions = engine.delete_question(question_id)
+    questions, filename = engine.delete_question(question_id)
     data_manager.write_questions_to_file(questions)
+    os.remove(os.path.join(app.config['UPLOAD_FOLDER'], filename))
     return redirect("/list")
 
 

@@ -28,8 +28,10 @@ def delete_answer(answer_id):
 
 def delete_question(question_id):
     questions = data_manager.get_all_questions_from_file()
+    image_name = ""
     for question in questions:
         if question['id'] == question_id:
+            image_name = question['image']
             questions.remove(question)
             break
-    return questions
+    return questions, image_name

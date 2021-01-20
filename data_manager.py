@@ -63,12 +63,13 @@ def write_answer(new_row):
         file.write("\n")
 
 
-def add_question(question):
+def add_question(question, filename):
     question_id = util.get_latest_id('question', LATEST_IDS)
     question["id"] = question_id
     question["submission_time"] = engine.get_timestamp()
     question["vote_number"] = 0
     question["view_number"] = 0
+    question['image'] = filename
     questions = get_all_questions_from_file()
     questions.append(question)
     write_questions_to_file(questions)

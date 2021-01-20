@@ -1,7 +1,12 @@
 import data_manager, engine
 from flask import Flask, render_template, request, redirect
+from werkzeug.utils import secure_filename
+import os
+
 
 app = Flask(__name__)
+UPLOAD_FOLDER = 'static/images'
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 
 @app.route("/")
@@ -51,7 +56,11 @@ def post_new_question():
         return render_template('add_question.html')
     if request.method == 'POST':
         question = {"title": request.form["title"], "message": request.form["message"]}
-        data_manager.add_question(question)
+        file = request.files["file"]
+        if file and engine.allowed_file(file.filename):
+            filename = secure_filename(file.filename)
+            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+        data_manager.add_question(question, filename)
         return redirect("/question/"+ str(question["id"]))
 
 

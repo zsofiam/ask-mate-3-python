@@ -17,6 +17,7 @@
     <a href="/list">Go back to questions</a>
     <p><b>Question: {{ question['title'] }}</b></p>
     <p>{{ question['message'] }}</p>
+    <img src="/static/images/{{ question['image'] }}" alt="{{ question['image'] }}"><br>
     <a class="delete" href="/question/{{ question['id'] }}/delete">DELETE question</a><br><br>
     <a href="/question/{{ question["id"] }}/edit">EDIT question</a>
     <ul><br>

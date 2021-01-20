@@ -39,12 +39,15 @@ def post_new_answer(question_id):
     if request.method == 'GET':
         return render_template('new_answer.html', question_id=question_id)
     else:
+        file = request.files["file"]
+        filename = secure_filename(file.filename)
+        file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
         new_answer = [str(data_manager.get_answer_id()),
                       str(engine.get_timestamp()),
                       '0',
                       str(question_id),
                       request.form['new_message'],
-                      ""]
+                      filename]
         new_row = ','.join(new_answer)
         data_manager.write_answer(new_row)
         return redirect("/question/"+question_id)

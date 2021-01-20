@@ -8,6 +8,7 @@
     <h1>Write new answer</h1>
     <form action="/question/{{ question_id }}/new-answer" method="post" enctype = "multipart/form-data">
         <label>Answer:<br><textarea name="new_message"></textarea></label><br>
+        <input type="file" name="file" accept="image/png, image/jpeg"><br>
         <input type="submit" value="Send">
     </form>
 </body>

@@ -22,13 +22,11 @@
     <a href="/question/{{ question["id"] }}/edit">EDIT question</a>
     <ul><br>
     {% for answer in answers %}
-        {% if answer["image"] == "" %}
-            <li><small>No image</small></li>
-        {% else %}
-            <li><img src="/static/images/{{ answer["image"] }}" alt="{{ answer["image"] }}"></li>
-        {% endif %}
-                <li><em>Answer {{ loop.index }}: {{ answer['message'] }}</em> |
-                    <a class="delete" href="/answer/{{ answer['id'] }}/delete">DELETE answer</a></li><br>{% endfor %}
+    <strong>Answer {{ loop.index }}: </strong>
+    <li><img src="/static/images/{{ answer["image"] }}" alt="{{ answer["image"] }}"></li>
+
+    <li><em>{{ answer['message'] }}</em> |
+        <a class="delete" href="/answer/{{ answer['id'] }}/delete">DELETE answer</a></li><br>{% endfor %}
     </ul>
     <a href="/question/{{ question['id'] }}/new-answer">Write new answer</a>
 </body>

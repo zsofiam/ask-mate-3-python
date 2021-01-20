@@ -69,7 +69,18 @@ def post_new_question():
 @app.route("/question/<question_id>/edit", methods=["GET", "POST"])
 def edit_question(question_id):
     if request.method == 'POST':
-        modifications = {"title": request.form["title"], "message": request.form["message"]}
+        file = request.files["file"]
+        filename = secure_filename(file.filename)
+        if filename:
+            modifications = {"title": request.form["title"],
+                             "message": request.form["message"],
+                             "image": filename}
+            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+            question = data_manager.get_one_question(question_id)
+            old_file = question["image"]
+            os.remove(os.path.join(app.config['UPLOAD_FOLDER'], old_file))
+        else:
+            modifications = {"title": request.form["title"], "message": request.form["message"]}
         modified_question = data_manager.modify_question(question_id, modifications)
         return redirect("/question/" + str(modified_question["id"]))
     question = data_manager.get_one_question(question_id)

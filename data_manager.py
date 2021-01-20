@@ -98,3 +98,17 @@ def write_all_answers(answers):
             new_row = ','.join(answer)
             file.write(new_row)
             file.write("\n")
+
+
+def modify_object(parameter, parameter_id, modifications):
+    if parameter == 'question':
+        path = QUESTIONS_FILE_PATH
+        header = QUESTIONS_HEADER
+    else:
+        path = ANSWERS_FILE_PATH
+        header = ANSWER_HEADER
+    objects = util.get_dictionary_list_from_file()
+    object = util.find_object_by_id(parameter_id, objects)
+    modified_object = util.add_modifications_to_object(object, modifications)
+    util.write_dictionary_list_to_file(objects, path, header)
+    return modified_object

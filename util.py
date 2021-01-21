@@ -40,6 +40,21 @@ def generate_new_id(parameter, latest_ids, path):
     save_latest_ids_to_file(latest_ids, path)
 
 
+def find_object_by_id(parameter_id, objects):
+    searched_object = None
+    for object in objects:
+        if object["id"] == parameter_id:
+            searched_object = object
+            break
+    return searched_object
+
+
+def add_modifications_to_object(object, modifications):
+    for key in modifications:
+        object[key] = modifications[key]
+    return object
+
+
 def save_latest_ids_to_file(latest_ids, path):
     with open(path, 'w') as file:
         file.write(json.dumps(latest_ids))

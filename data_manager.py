@@ -19,8 +19,10 @@ def get_questions_sorted(parameter, direction):
     questions = get_all_questions_from_file()
     if parameter == 'submission_time' or parameter == 'vote_number' or parameter == 'view_number':
         sorted_questions = sort_by_number_parameter(questions, parameter, direction)
-    else:
+    elif parameter == 'title' or parameter == 'message':
         sorted_questions = sort_by_text_parameter(questions, parameter, direction)
+    else:
+        sorted_questions = sort_by_number_parameter(questions, 'submission_time', 'desc')
     return sorted_questions
 
 
@@ -63,12 +65,13 @@ def write_answer(new_row):
         file.write("\n")
 
 
-def add_question(question):
+def add_question(question, filename):
     question_id = util.get_latest_id('question', LATEST_IDS)
     question["id"] = question_id
     question["submission_time"] = engine.get_timestamp()
     question["vote_number"] = 0
     question["view_number"] = 0
+    question['image'] = filename
     questions = get_all_questions_from_file()
     questions.append(question)
     write_questions_to_file(questions)
@@ -98,3 +101,17 @@ def write_all_answers(answers):
             new_row = ','.join(answer)
             file.write(new_row)
             file.write("\n")
+
+
+def modify_question(parameter_id, modifications):
+    questions = get_all_questions_from_file()
+    question = util.find_object_by_id(parameter_id, questions)
+    modified_question = util.add_modifications_to_object(question, modifications)
+    util.write_dictionary_list_to_file(questions, QUESTIONS_FILE_PATH, QUESTIONS_HEADER)
+    return modified_question
+
+
+def get_answer_id():
+    answer_id = util.get_latest_id('answer', LATEST_IDS)
+    return answer_id
+

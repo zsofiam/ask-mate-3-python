@@ -62,6 +62,23 @@ def delete_answer(answer_id):
     data_manager.write_all_answers(answers)
     return redirect("/question/" + question_id)
 
+@app.route('/vote_counter/<question_id>', methods=['POST'])
+def vote_counter(question_id):
+    questions = data_manager.get_all_questions_from_file()
+    if request.method == 'POST':
+        for question in questions:
+            print(question)
+            print(question_id)
+            if int(question[0]) == int(question_id):
+                print("working")
+                print(question_id)
+                question_integer = int(question[2])
+                question_integer += 1
+                question[2] = str(question_integer)
+                break
+    data_manager.write_questions_to_file(questions)
+    return redirect("/list")
+
 
 if __name__ == "__main__":
     app.run(

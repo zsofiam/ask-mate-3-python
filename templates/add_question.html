@@ -11,10 +11,9 @@
     </style>
 </head>
 <body>
-<form action="/add-question" method="POST">
+<form action="/add-question" method="POST" enctype = "multipart/form-data">
     <label for="title">Title</label>
     <textarea id="title" name="title" rows="1" cols="100"></textarea>
-
     <label for="message">Message</label>
     <textarea id="message" name="message" rows="10" cols="100"></textarea>
     <input type="submit" value="Save">

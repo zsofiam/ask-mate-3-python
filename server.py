@@ -103,16 +103,16 @@ def delete_answer(answer_id):
     data_manager.write_all_answers(answers)
     return redirect("/question/" + question_id)
 
+
 @app.route('/vote_counter/<question_id>', methods=['POST'])
 def vote_counter(question_id):
-    question = data_manager.get_one_question(question_id)
-    print(question["vote_number"])
-    question["vote_number"] = str(int(question["vote_number"]) + 1)
-    question_votenumber = question["vote_number"]
-    question_votenumber = int(question_votenumber)
-    question["vote_number"] = str(question_votenumber)
+    questions = data_manager.get_all_questions_from_file()
+    for question in questions:
+        if question['id'] == question_id:
+            question_votenumber = int(question["vote_number"]) + 1
+            question["vote_number"] = str(question_votenumber)
     print(question)
-    # data_manager.write_questions_to_file(question)
+    data_manager.write_questions_to_file(questions)
     return redirect("/list")
 
 

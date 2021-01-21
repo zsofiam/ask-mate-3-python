@@ -57,7 +57,7 @@ def post_new_answer(question_id):
         data_manager.write_answer(new_row)
         return redirect("/question/"+question_id)
 
-
+#gittestcomment
 @app.route("/add-question", methods=['GET', 'POST'])
 def post_new_question():
     if request.method == 'GET':

@@ -24,7 +24,11 @@
             <form action="/vote_counter/{{ question.get('id') }}" method="post">
             <button type="submit">Like!</button>
             </form>
+            <form action="/vote_decounter/{{ question.get('id') }}" method="post">
+            <button type="submit">Dislike!</button>
+            </form>
             <p/>
+
         </li>
     {% endfor %}
 </ul>

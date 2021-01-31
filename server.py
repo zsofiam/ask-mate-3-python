@@ -115,6 +115,16 @@ def vote_counter(question_id):
     data_manager.write_questions_to_file(questions)
     return redirect("/list")
 
+@app.route('/vote_decounter/<question_id>', methods=['POST'])
+def vote_decounter(question_id):
+    questions = data_manager.get_all_questions_from_file()
+    for question in questions:
+        if question['id'] == question_id:
+            question_votenumber = int(question["vote_number"]) - 1
+            question["vote_number"] = str(question_votenumber)
+    print(question)
+    data_manager.write_questions_to_file(questions)
+    return redirect("/list")
 
 @app.route("/question/<question_id>/delete")
 def delete_question(question_id):

@@ -1,9 +1,7 @@
-
 import data_manager, engine
 from flask import Flask, render_template, request, redirect
 from werkzeug.utils import secure_filename
 import os
-
 
 
 app = Flask(__name__)
@@ -139,3 +137,4 @@ if __name__ == "__main__":
     app.run(
         debug=True
     )
+

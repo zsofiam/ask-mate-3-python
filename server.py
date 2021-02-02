@@ -46,7 +46,8 @@ def post_new_question():
             file.save(os.path.join(app.root_path, app.config['UPLOAD_FOLDER'], filename))
         else:
             filename = None
-        question_from_database = data_manager.add_question(question, filename)
+        question['image'] = filename
+        question_from_database = data_manager.add_question(question)
         return redirect("/question/" + str(question_from_database["id"]))
 
 
@@ -76,8 +77,11 @@ def edit_question(question_id):
             filename = secure_filename(file.filename)
             modifications["image"] = filename
             file.save(os.path.join(app.root_path, app.config['UPLOAD_FOLDER'], filename))
-            old_file = question["image"]
-            os.remove(os.path.join(app.root_path, app.config['UPLOAD_FOLDER'], old_file))
+            try:
+                old_file = question["image"]
+                os.remove(os.path.join(app.root_path, app.config['UPLOAD_FOLDER'], old_file))
+            except (TypeError, FileNotFoundError):
+                pass
         else:
             modifications["image"] = None
         data_manager.modify_question(question_id, modifications)
@@ -93,8 +97,10 @@ def delete_question(question_id):
     for answer_id in answer_ids:
         delete_answer(answer_id['id'], True)
     data_manager.delete_question(question_id)
-    if filename is not None:
+    try:
         os.remove(os.path.join(app.root_path, app.config['UPLOAD_FOLDER'], filename))
+    except (FileNotFoundError,TypeError):
+        print("No file was removed!")
     return redirect("/list")
 
 
@@ -140,4 +146,3 @@ if __name__ == "__main__":
     app.run(
         debug=True
     )
-

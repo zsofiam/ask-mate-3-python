@@ -186,17 +186,18 @@ def get_questions_sorted(cursor: RealDictCursor, parameter: str, direction: str 
 
 
 @database_common.connection_handler
-def add_question(cursor: RealDictCursor, question: dict, filename: str) -> list:
-    query = """
-    INSERT INTO question (submission_time, view_number, vote_number, title, message)
-    VALUES(CURRENT_TIMESTAMP, 0, 0, '{}', '{}') RETURNING id;"""\
-        .format(question["title"], question['message'])
-    cursor.execute(query)
-    if filename is not None:
+def add_question(cursor: RealDictCursor, question: dict) -> list:
+    if question['image'] is not None:
         query = """
-            UPDATE question
-            SET image = '{}'
-            WHERE id = {};""".format(filename, question['id'])
+        INSERT INTO question (submission_time, view_number, vote_number, title, message, image)
+        VALUES(CURRENT_TIMESTAMP, 0, 0, '{}', '{}', '{}') RETURNING id;""" \
+            .format(question["title"], question['message'], question['image'])
+        cursor.execute(query)
+    else:
+        query = """
+        INSERT INTO question (submission_time, view_number, vote_number, title, message)
+        VALUES(CURRENT_TIMESTAMP, 0, 0, '{}', '{}') RETURNING id;""" \
+            .format(question["title"], question['message'])
         cursor.execute(query)
     return cursor.fetchone()
 

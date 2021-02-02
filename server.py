@@ -47,9 +47,8 @@ def post_new_question():
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
         else:
             filename = ""
-        question_id = data_manager.add_question(question, filename)
-        print(question_id)
-        return redirect("/question/"+ str(question_id[0]["id"]))
+        question_from_database = data_manager.add_question(question, filename)
+        return redirect("/question/"+ str(question_from_database["id"]))
 
 @app.route("/question/<int:question_id>/new-answer", methods=['GET', 'POST'])
 def post_new_answer(question_id):
@@ -70,22 +69,21 @@ def post_new_answer(question_id):
 
 @app.route("/question/<question_id>/edit", methods=["GET", "POST"])
 def edit_question(question_id):
+    question = data_manager.get_question_by_id(question_id)
     if request.method == 'POST':
-        file = request.files["file"]
-        filename = secure_filename(file.filename)
-        if filename:
-            modifications = {"title": request.form["title"],
-                             "message": request.form["message"],
-                             "image": filename}
+        modifications = {"title": request.form["title"], "message": request.form["message"]}
+        if request.files["file"]:
+            file = request.files["file"]
+            filename = secure_filename(file.filename)
+            modifications["image"] = filename
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-            question = data_manager.get_one_question(question_id)
             old_file = question["image"]
             os.remove(os.path.join(app.config['UPLOAD_FOLDER'], old_file))
         else:
-            modifications = {"title": request.form["title"], "message": request.form["message"]}
-        modified_question = data_manager.modify_question(question_id, modifications)
-        return redirect("/question/" + str(modified_question["id"]))
-    question = data_manager.get_one_question(question_id)
+            modifications["image"] = None
+        data_manager.modify_question(question_id, modifications)
+        return redirect("/question/" + str(question["id"]))
+    question = data_manager.get_question_by_id(question_id)
     return render_template('edit_question.html', question=question)
 
 

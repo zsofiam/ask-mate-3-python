@@ -11,12 +11,6 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 @app.route("/")
 def main_page():
-    data_manager.add_question({
-        "title": "Egyes",
-        "message": "Egyes számú kérdés"
-    }, "image23.png")
-    data_manager.get_questions()
-    data_manager.get_question_by_id(1)
     return redirect('/list')
 
 
@@ -42,6 +36,22 @@ def display_question(question_id):
     return redirect('/')
 
 
+@app.route("/add-question", methods=['GET', 'POST'])
+def post_new_question():
+    if request.method == 'GET':
+        return render_template('add_question.html')
+    if request.method == 'POST':
+        question = {"title": request.form["title"], "message": request.form["message"]}
+        if request.files["file"]:
+            file = request.files["file"]
+            filename = secure_filename(file.filename)
+            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+        else:
+            filename = ""
+        question_id = data_manager.add_question(question, filename)
+        return redirect("/question/"+ str(question_id))
+
+
 @app.route("/question/<int:question_id>/new-answer", methods=['GET', 'POST'])
 def post_new_answer(question_id):
     if request.method == 'GET':
@@ -57,22 +67,6 @@ def post_new_answer(question_id):
         image = filename
         data_manager.write_answer(question_id, message, image)
         return redirect("/question/" + str(question_id))
-
-
-@app.route("/add-question", methods=['GET', 'POST'])
-def post_new_question():
-    if request.method == 'GET':
-        return render_template('add_question.html')
-    if request.method == 'POST':
-        question = {"title": request.form["title"], "message": request.form["message"]}
-        if request.files["file"]:
-            file = request.files["file"]
-            filename = secure_filename(file.filename)
-            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-        else:
-            filename = ""
-        question["id"] = data_manager.add_question(question, filename)
-        return redirect("/question/"+ str(question["id"]))
 
 
 @app.route("/question/<question_id>/edit", methods=["GET", "POST"])

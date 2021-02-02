@@ -21,12 +21,12 @@
             <small>Submission Time: {{ question["submission_time"] }}</small>
             <p>{{ question.get('message') }}</p>
             <p/>
-            {#<form action="/vote_counter/{{ question.get('id') }}" method="post">
+            <form action="/vote_counter/{{ question.get('id') }}" method="post">
             <button type="submit">Like!</button>
             </form>
             <form action="/vote_decounter/{{ question.get('id') }}" method="post">
             <button type="submit">Dislike!</button>
-            </form>#}
+            </form>
             <p/>
 
         </li>

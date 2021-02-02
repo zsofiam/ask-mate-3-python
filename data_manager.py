@@ -155,10 +155,10 @@ def add_question(cursor: RealDictCursor, question: dict, filename: str) -> list:
     question['image'] = filename
     query = """
     INSERT INTO question (submission_time, view_number, vote_number, title, message, image)
-    VALUES(CURRENT_TIMESTAMP, 0, 0, '{}', '{}', '{}';
-    SELECT SCOPE_IDENTITY();)"""\
+    VALUES(CURRENT_TIMESTAMP, 0, 0, '{}', '{}', '{}') RETURNING id;"""\
         .format(question["title"], question['message'], question['image'])
     cursor.execute(query)
+    return cursor.fetchall()
 
 
 # def sort_by_number_parameter(questions, parameter, direction):

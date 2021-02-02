@@ -1,4 +1,4 @@
-import data_manager, engine
+import data_manager
 from flask import Flask, render_template, request, redirect
 from werkzeug.utils import secure_filename
 import os
@@ -35,33 +35,30 @@ def route_list():
 
 @app.route("/question/<question_id>")
 def display_question(question_id):
-    question = data_manager.get_one_question(question_id)
+    # question = data_manager.get_one_question(question_id)
     answers = data_manager.get_answers(question_id)
-    return render_template('q_and_a.html', question=question, answers=answers)
+    # return render_template('q_and_a.html', question=question, answers=answers)
+    print(answers)
+    return redirect('/')
 
 
-@app.route("/question/<question_id>/new-answer", methods=['GET', 'POST'])
+@app.route("/question/<int:question_id>/new-answer", methods=['GET', 'POST'])
 def post_new_answer(question_id):
     if request.method == 'GET':
-        return render_template('new_answer.html', question_id=question_id)
+        return render_template('new_answer.html', question_id=str(question_id))
     else:
         if request.files["file"]:
             file = request.files["file"]
             filename = secure_filename(file.filename)
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
         else:
-            filename = ""
-        new_answer = [str(data_manager.get_answer_id()),
-                      str(engine.get_timestamp()),
-                      '0',
-                      str(question_id),
-                      request.form['new_message'],
-                      filename]
-        new_row = ','.join(new_answer)
-        data_manager.write_answer(new_row)
-        return redirect("/question/"+question_id)
+            filename = None
+        message = request.form['new_message']
+        image = filename
+        data_manager.write_answer(question_id, message, image)
+        return redirect("/question/" + str(question_id))
 
-#gittestcomment
+
 @app.route("/add-question", methods=['GET', 'POST'])
 def post_new_question():
     if request.method == 'GET':
@@ -99,13 +96,25 @@ def edit_question(question_id):
     return render_template('edit_question.html', question=question)
 
 
+@app.route("/question/<question_id>/delete")
+def delete_question(question_id):
+    answer_ids = data_manager.get_question_answers(question_id)
+    for answer_id in answer_ids:
+        data_manager.delete_question_answer(answer_id['id'])
+    data_manager.delete_question(question_id)
+    # if filename is not None:
+    #     os.remove(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+    # return redirect("/list")
+    return redirect("/")
+
+
 @app.route("/answer/<answer_id>/delete")
 def delete_answer(answer_id):
-    answers, question_id, filename = engine.delete_answer(answer_id)
-    if filename is not "":
-        os.remove(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-    data_manager.write_all_answers(answers)
-    return redirect("/question/" + question_id)
+    data_manager.delete_answer(answer_id)
+    # if filename is not None:
+    #     os.remove(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+    # return redirect("/question/" + question_id)
+    return redirect("/")
 
 
 @app.route('/vote_counter/<question_id>', methods=['POST'])
@@ -119,6 +128,7 @@ def vote_counter(question_id):
     data_manager.write_questions_to_file(questions)
     return redirect("/list")
 
+
 @app.route('/vote_decounter/<question_id>', methods=['POST'])
 def vote_decounter(question_id):
     questions = data_manager.get_all_questions_from_file()
@@ -127,14 +137,6 @@ def vote_decounter(question_id):
             question_votenumber = int(question["vote_number"]) - 1
             question["vote_number"] = str(question_votenumber)
     print(question)
-    data_manager.write_questions_to_file(questions)
-    return redirect("/list")
-
-@app.route("/question/<question_id>/delete")
-def delete_question(question_id):
-    questions, filename = engine.delete_question(question_id)
-    if filename is not "":
-        os.remove(os.path.join(app.config['UPLOAD_FOLDER'], filename))
     data_manager.write_questions_to_file(questions)
     return redirect("/list")
 

@@ -135,7 +135,6 @@ def get_question_by_id(cursor: RealDictCursor, id: int) -> list:
         FROM question
         WHERE id = {};""".format(id)
     cursor.execute(query)
-    print(cursor.fetchone())
     return cursor.fetchone()
 
 

@@ -30,11 +30,9 @@ def route_list():
 
 @app.route("/question/<question_id>")
 def display_question(question_id):
-    question = data_manager.get_one_question(question_id)
+    question = data_manager.get_question_by_id(question_id)
     answers = data_manager.get_answers(question_id)
-    # return render_template('q_and_a.html', question=question, answers=answers)
-    print(answers)
-    return redirect('/')
+    return render_template('q_and_a.html', question=question, answers=answers)
 
 
 @app.route("/add-question", methods=['GET', 'POST'])
@@ -50,8 +48,8 @@ def post_new_question():
         else:
             filename = ""
         question_id = data_manager.add_question(question, filename)
-        return redirect("/question/"+ str(question_id[0]))
-
+        print(question_id)
+        return redirect("/question/"+ str(question_id[0]["id"]))
 
 @app.route("/question/<int:question_id>/new-answer", methods=['GET', 'POST'])
 def post_new_answer(question_id):

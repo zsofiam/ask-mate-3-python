@@ -45,7 +45,7 @@ from psycopg2.extras import RealDictCursor
 @database_common.connection_handler
 def get_answers(cursor: RealDictCursor, question_id: int) -> list:
     query = """
-        SELECT image, message, submission_time, vote_number
+        SELECT id, image, message, submission_time, vote_number
         FROM answer
         WHERE question_id={}
         ORDER BY id""".format(question_id)
@@ -59,6 +59,52 @@ def write_answer(cursor: RealDictCursor, question_id: int, message: str, image: 
     INSERT INTO answer (submission_time, vote_number, question_id, message, image)
     VALUES (CURRENT_TIMESTAMP, 0, {}, '{}', '{}');""".format(question_id, message, image)
     cursor.execute(query)
+
+
+@database_common.connection_handler
+def vote_up_answer(cursor: RealDictCursor, answer_id: int) -> list:
+    query = """
+    UPDATE answer
+    SET vote_number = vote_number + 1
+    WHERE id = {}""".format(answer_id)
+    cursor.execute(query)
+
+
+@database_common.connection_handler
+def vote_down_answer(cursor: RealDictCursor, answer_id: int) -> list:
+    query = """
+    UPDATE answer
+    SET vote_number = vote_number - 1
+    WHERE id = {}""".format(answer_id)
+    cursor.execute(query)
+
+
+@database_common.connection_handler
+def vote_up_question(cursor: RealDictCursor, question_id: int) -> list:
+    query = """
+    UPDATE question
+    SET vote_number = vote_number + 1
+    WHERE id = {}""".format(question_id)
+    cursor.execute(query)
+
+
+@database_common.connection_handler
+def vote_down_question(cursor: RealDictCursor, question_id: int) -> list:
+    query = """
+    UPDATE question
+    SET vote_number = vote_number - 1
+    WHERE id = {}""".format(question_id)
+    cursor.execute(query)
+
+
+@database_common.connection_handler
+def get_question_id(cursor: RealDictCursor, answer_id: int) -> tuple:
+    query = """
+        SELECT question_id 
+        FROM answer
+        WHERE id = {}""".format(answer_id)
+    cursor.execute(query)
+    return cursor.fetchone()
 
 
 # def add_question(question, filename):
@@ -192,46 +238,8 @@ def modify_question(cursor: RealDictCursor, question_id: int, modifications: dic
 #             return question
 #
 #
-# def get_answers(q_id):
-#     answers = []
-#     csv_file = open(ANSWERS_FILE_PATH)
-#     csv_answers = csv.DictReader(csv_file)
-#     for answer in csv_answers:
-#         if answer['question_id'] == q_id:
-#             answers.append(answer)
-#     return answers
-#
-#
-# def write_answer(new_row):
-#     with open(ANSWERS_FILE_PATH, 'a') as file:
-#         file.write(new_row)
-#         file.write("\n")
-#
-#
 # def write_questions_to_file(questions):
 #     util.write_dictionary_list_to_file(questions, QUESTIONS_FILE_PATH, QUESTIONS_HEADER)
-#
-#
-# def get_all_answers():
-#     answers = []
-#     with open(ANSWERS_FILE_PATH) as csv_file:
-#         csv_answers = csv.reader(csv_file)
-#         for answer_index, answer in enumerate(csv_answers):
-#             if answer_index != 0:
-#                 answers.append(answer)
-#     return answers
-#
-#
-# def write_all_answers(answers):
-#     first_row = ','.join(ANSWER_HEADER)
-#     first_row += "\n"
-#     with open(ANSWERS_FILE_PATH, 'w') as file:
-#         file.write(first_row)
-#     with open(ANSWERS_FILE_PATH, 'a') as file:
-#         for answer in answers:
-#             new_row = ','.join(answer)
-#             file.write(new_row)
-#             file.write("\n")
 #
 #
 # def modify_question(parameter_id, modifications):
@@ -240,9 +248,4 @@ def modify_question(cursor: RealDictCursor, question_id: int, modifications: dic
 #     modified_question = util.add_modifications_to_object(question, modifications)
 #     util.write_dictionary_list_to_file(questions, QUESTIONS_FILE_PATH, QUESTIONS_HEADER)
 #     return modified_question
-#
-#
-# def get_answer_id():
-#     answer_id = util.get_latest_id('answer', LATEST_IDS)
-#     return answer_id
 #

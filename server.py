@@ -108,28 +108,30 @@ def delete_answer(answer_id):
     return redirect("/")
 
 
-@app.route('/vote_counter/<question_id>', methods=['POST'])
-def vote_counter(question_id):
-    questions = data_manager.get_all_questions_from_file()
-    for question in questions:
-        if question['id'] == question_id:
-            question_votenumber = int(question["vote_number"]) + 1
-            question["vote_number"] = str(question_votenumber)
-    print(question)
-    data_manager.write_questions_to_file(questions)
+@app.route('/question/<question_id>/vote-up', methods=['POST'])
+def vote_up_question(question_id):
+    data_manager.vote_up_question(question_id)
     return redirect("/list")
 
 
-@app.route('/vote_decounter/<question_id>', methods=['POST'])
-def vote_decounter(question_id):
-    questions = data_manager.get_all_questions_from_file()
-    for question in questions:
-        if question['id'] == question_id:
-            question_votenumber = int(question["vote_number"]) - 1
-            question["vote_number"] = str(question_votenumber)
-    print(question)
-    data_manager.write_questions_to_file(questions)
+@app.route('/question/<question_id>/vote-down', methods=['POST'])
+def vote_down_question(question_id):
+    data_manager.vote_down_question(question_id)
     return redirect("/list")
+
+
+@app.route('/answer/<answer_id>/vote-up', methods=['POST'])
+def vote_up_answer(answer_id):
+    data_manager.vote_up_answer(answer_id)
+    question_id = data_manager.get_question_id(answer_id)['question_id']
+    return redirect("/question/" + str(question_id))
+
+
+@app.route('/answer/<answer_id>/vote-down', methods=['POST'])
+def vote_down_answer(answer_id):
+    data_manager.vote_down_answer(answer_id)
+    question_id = data_manager.get_question_id(answer_id)['question_id']
+    return redirect("/question/" + str(question_id))
 
 
 if __name__ == "__main__":

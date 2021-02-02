@@ -11,7 +11,13 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 @app.route("/")
 def main_page():
-    return redirect("/list")
+    data_manager.add_question({
+        "title": "Egyes",
+        "message": "Egyes számú kérdés"
+    }, "image23.png")
+    data_manager.get_questions()
+    data_manager.get_question_by_id(1)
+    return redirect('/list')
 
 
 @app.route('/list')
@@ -68,7 +74,7 @@ def post_new_question():
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
         else:
             filename = ""
-        data_manager.add_question(question, filename)
+        question["id"] = data_manager.add_question(question, filename)
         return redirect("/question/"+ str(question["id"]))
 
 

@@ -24,7 +24,6 @@ def route_list():
     if 'order_direction' in args:
         order_direction = args['order_direction']
     questions_list = data_manager.get_questions_sorted(order_by,order_direction)
-    print(questions_list)
     return render_template('list.html', questions=questions_list)
 
 
@@ -90,21 +89,25 @@ def edit_question(question_id):
 @app.route("/question/<question_id>/delete")
 def delete_question(question_id):
     answer_ids = data_manager.get_question_answers(question_id)
+    filename = data_manager.get_question_by_id(question_id)['image']
     for answer_id in answer_ids:
-        data_manager.delete_question_answer(answer_id['id'])
+        delete_answer(answer_id['id'], True)
     data_manager.delete_question(question_id)
-    # if filename is not None:
-    #     os.remove(os.path.join(app.root_path, app.config['UPLOAD_FOLDER'], filename))
+    if filename is not None:
+        os.remove(os.path.join(app.root_path, app.config['UPLOAD_FOLDER'], filename))
     return redirect("/list")
 
 
 @app.route("/answer/<answer_id>/delete")
-def delete_answer(answer_id):
+def delete_answer(answer_id, del_question):
+    filename = data_manager.get_answer_data(answer_id)['image']
+    question_id = data_manager.get_answer_data(answer_id)['question_id']
     data_manager.delete_answer(answer_id)
-    # if filename is not None:
-    #     os.remove(os.path.join(app.root_path, app.config['UPLOAD_FOLDER'], filename))
-    # return redirect("/question/" + question_id)
-    return redirect("/")
+    if filename is not None:
+        os.remove(os.path.join(app.root_path, app.config['UPLOAD_FOLDER'], filename))
+    if del_question:
+        return
+    return redirect("/question/" + str(question_id))
 
 
 @app.route('/question/<question_id>/vote-up', methods=['POST'])
@@ -122,14 +125,14 @@ def vote_down_question(question_id):
 @app.route('/answer/<answer_id>/vote-up', methods=['POST'])
 def vote_up_answer(answer_id):
     data_manager.vote_up_answer(answer_id)
-    question_id = data_manager.get_question_id(answer_id)['question_id']
+    question_id = data_manager.get_answer_data(answer_id)['question_id']
     return redirect("/question/" + str(question_id))
 
 
 @app.route('/answer/<answer_id>/vote-down', methods=['POST'])
 def vote_down_answer(answer_id):
     data_manager.vote_down_answer(answer_id)
-    question_id = data_manager.get_question_id(answer_id)['question_id']
+    question_id = data_manager.get_answer_data(answer_id)['question_id']
     return redirect("/question/" + str(question_id))
 
 

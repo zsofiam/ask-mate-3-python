@@ -28,14 +28,15 @@
             {% if answer["image"] != none %}
         <li><img src="/static/images/{{ answer["image"] }}" alt="{{ answer["image"] }}"></li>
             {% endif %}
-        <li><em>{{ answer['message'] }}</em> |
-            <a class="delete" href="/answer/{{ answer['id'] }}/delete">DELETE answer</a></li><br>
+        <li><em>{{ answer['message'] }}</em></li><br>
+        <li><small>Vote number: {{ answer['vote_number'] }}</small></li><br>
         <form action="/answer/{{ answer.get('id') }}/vote-up" method="post">
             <button type="submit">Like!</button>
         </form>
         <form action="/answer/{{ answer.get('id') }}/vote-down" method="post">
             <button type="submit">Dislike!</button>
-        </form>
+        </form><br>
+        <li><a class="delete" href="/answer/{{ answer['id'] }}/delete">DELETE answer</a>
     {% endfor %}
     </ul>
     <a href="/question/{{ question['id'] }}/new-answer">Write new answer</a>

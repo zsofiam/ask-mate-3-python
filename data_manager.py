@@ -98,9 +98,9 @@ def vote_down_question(cursor: RealDictCursor, question_id: int) -> list:
 
 
 @database_common.connection_handler
-def get_question_id(cursor: RealDictCursor, answer_id: int) -> tuple:
+def get_answer_data(cursor: RealDictCursor, answer_id: int) -> tuple:
     query = """
-        SELECT question_id 
+        SELECT question_id, image
         FROM answer
         WHERE id = {}""".format(answer_id)
     cursor.execute(query)
@@ -148,14 +148,6 @@ def get_question_answers(cursor: RealDictCursor, question_id: int) -> list:
 
 
 @database_common.connection_handler
-def delete_question_answer(cursor: RealDictCursor, answer_id: int) -> list:
-    query = """
-    DELETE FROM answer
-    WHERE id = {}""".format(answer_id)
-    cursor.execute(query)
-
-
-@database_common.connection_handler
 def delete_question(cursor: RealDictCursor, question_id: int) -> list:
     query = """
     DELETE FROM question
@@ -170,16 +162,15 @@ def get_questions(cursor: RealDictCursor) -> list:
         FROM question
         ORDER BY submission_time DESC;"""
     cursor.execute(query)
-    print(cursor.fetchall())
     return cursor.fetchall()
 
 
 @database_common.connection_handler
-def get_question_by_id(cursor: RealDictCursor, id: int) -> list:
+def get_question_by_id(cursor: RealDictCursor, question_id: int) -> list:
     query = """
         SELECT * 
         FROM question
-        WHERE id = {};""".format(id)
+        WHERE id = {};""".format(question_id)
     cursor.execute(query)
     return cursor.fetchone()
 
@@ -196,12 +187,17 @@ def get_questions_sorted(cursor: RealDictCursor, parameter: str, direction: str 
 
 @database_common.connection_handler
 def add_question(cursor: RealDictCursor, question: dict, filename: str) -> list:
-    question['image'] = filename
     query = """
-    INSERT INTO question (submission_time, view_number, vote_number, title, message, image)
-    VALUES(CURRENT_TIMESTAMP, 0, 0, '{}', '{}', '{}') RETURNING id;"""\
-        .format(question["title"], question['message'], question['image'])
+    INSERT INTO question (submission_time, view_number, vote_number, title, message)
+    VALUES(CURRENT_TIMESTAMP, 0, 0, '{}', '{}') RETURNING id;"""\
+        .format(question["title"], question['message'])
     cursor.execute(query)
+    if filename is not None:
+        query = """
+            UPDATE question
+            SET image = '{}'
+            WHERE id = {};""".format(filename, question['id'])
+        cursor.execute(query)
     return cursor.fetchone()
 
 

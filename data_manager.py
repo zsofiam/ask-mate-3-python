@@ -204,15 +204,20 @@ def add_question(cursor: RealDictCursor, question: dict, filename: str) -> list:
     cursor.execute(query)
     return cursor.fetchone()
 
+
 @database_common.connection_handler
 def modify_question(cursor: RealDictCursor, question_id: int, modifications: dict) -> list:
     query = """
     UPDATE question
-    SET title = '{}', message= '{}', image = '{}'
-     WHERE id = {};""" \
-        .format(modifications["title"], modifications['message'], modifications['image'],
-                question_id)
+    SET title = '{}', message= '{}'
+    WHERE id = {};""".format(modifications["title"], modifications['message'], question_id)
     cursor.execute(query)
+    if modifications['image'] is not None:
+        query = """
+            UPDATE question
+            SET image = '{}'
+            WHERE id = {};""".format(modifications['image'], question_id)
+        cursor.execute(query)
 
 
 # def sort_by_number_parameter(questions, parameter, direction):

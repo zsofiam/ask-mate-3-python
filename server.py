@@ -44,11 +44,12 @@ def post_new_question():
         if request.files["file"]:
             file = request.files["file"]
             filename = secure_filename(file.filename)
-            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+            file.save(os.path.join(app.root_path, app.config['UPLOAD_FOLDER'], filename))
         else:
-            filename = ""
+            filename = None
         question_from_database = data_manager.add_question(question, filename)
-        return redirect("/question/"+ str(question_from_database["id"]))
+        return redirect("/question/" + str(question_from_database["id"]))
+
 
 @app.route("/question/<int:question_id>/new-answer", methods=['GET', 'POST'])
 def post_new_answer(question_id):
@@ -58,12 +59,11 @@ def post_new_answer(question_id):
         if request.files["file"]:
             file = request.files["file"]
             filename = secure_filename(file.filename)
-            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+            file.save(os.path.join(app.root_path, app.config['UPLOAD_FOLDER'], filename))
         else:
             filename = None
         message = request.form['new_message']
-        image = filename
-        data_manager.write_answer(question_id, message, image)
+        data_manager.write_answer(question_id, message, filename)
         return redirect("/question/" + str(question_id))
 
 
@@ -76,9 +76,9 @@ def edit_question(question_id):
             file = request.files["file"]
             filename = secure_filename(file.filename)
             modifications["image"] = filename
-            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+            file.save(os.path.join(app.root_path, app.config['UPLOAD_FOLDER'], filename))
             old_file = question["image"]
-            os.remove(os.path.join(app.config['UPLOAD_FOLDER'], old_file))
+            os.remove(os.path.join(app.root_path, app.config['UPLOAD_FOLDER'], old_file))
         else:
             modifications["image"] = None
         data_manager.modify_question(question_id, modifications)
@@ -94,16 +94,15 @@ def delete_question(question_id):
         data_manager.delete_question_answer(answer_id['id'])
     data_manager.delete_question(question_id)
     # if filename is not None:
-    #     os.remove(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-    # return redirect("/list")
-    return redirect("/")
+    #     os.remove(os.path.join(app.root_path, app.config['UPLOAD_FOLDER'], filename))
+    return redirect("/list")
 
 
 @app.route("/answer/<answer_id>/delete")
 def delete_answer(answer_id):
     data_manager.delete_answer(answer_id)
     # if filename is not None:
-    #     os.remove(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+    #     os.remove(os.path.join(app.root_path, app.config['UPLOAD_FOLDER'], filename))
     # return redirect("/question/" + question_id)
     return redirect("/")
 

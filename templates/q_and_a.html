@@ -24,18 +24,19 @@
     <a href="/question/{{ question["id"] }}/edit">EDIT question</a>
     <ul><br>
     {% for answer in answers %}
-    <strong>Answer {{ loop.index }}: </strong>
-        {% if answer["image"] != none %}
-    <li><img src="/static/images/{{ answer["image"] }}" alt="{{ answer["image"] }}"></li>
-        {% endif %}
-    <li><em>{{ answer['message'] }}</em> |
-        <a class="delete" href="/answer/{{ answer['id'] }}/delete">DELETE answer</a></li><br>{% endfor %}
-    <form action="/answer/{{ answer.get('id') }}/vote-up" method="post">
-        <button type="submit">Like!</button>
-    </form>
-    <form action="/answer/{{ answer.get('id') }}/vote-down" method="post">
-        <button type="submit">Dislike!</button>
-    </form>
+        <strong>Answer {{ loop.index }}: </strong>
+            {% if answer["image"] != none %}
+        <li><img src="/static/images/{{ answer["image"] }}" alt="{{ answer["image"] }}"></li>
+            {% endif %}
+        <li><em>{{ answer['message'] }}</em> |
+            <a class="delete" href="/answer/{{ answer['id'] }}/delete">DELETE answer</a></li><br>
+        <form action="/answer/{{ answer.get('id') }}/vote-up" method="post">
+            <button type="submit">Like!</button>
+        </form>
+        <form action="/answer/{{ answer.get('id') }}/vote-down" method="post">
+            <button type="submit">Dislike!</button>
+        </form>
+    {% endfor %}
     </ul>
     <a href="/question/{{ question['id'] }}/new-answer">Write new answer</a>
 </body>

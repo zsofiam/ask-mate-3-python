@@ -24,12 +24,13 @@ def route_list():
     if 'order_direction' in args:
         order_direction = args['order_direction']
     questions_list = data_manager.get_questions_sorted(order_by,order_direction)
+    print(questions_list)
     return render_template('list.html', questions=questions_list)
 
 
 @app.route("/question/<question_id>")
 def display_question(question_id):
-    # question = data_manager.get_one_question(question_id)
+    question = data_manager.get_one_question(question_id)
     answers = data_manager.get_answers(question_id)
     # return render_template('q_and_a.html', question=question, answers=answers)
     print(answers)
@@ -49,7 +50,7 @@ def post_new_question():
         else:
             filename = ""
         question_id = data_manager.add_question(question, filename)
-        return redirect("/question/"+ str(question_id))
+        return redirect("/question/"+ str(question_id[0]))
 
 
 @app.route("/question/<int:question_id>/new-answer", methods=['GET', 'POST'])

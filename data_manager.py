@@ -146,7 +146,6 @@ def get_questions_sorted(cursor: RealDictCursor, parameter: str, direction: str 
         FROM question
         ORDER BY {} {};""".format(parameter, direction)
     cursor.execute(query)
-    print(cursor.fetchall())
     return cursor.fetchall()
 
 

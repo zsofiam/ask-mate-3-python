@@ -25,7 +25,7 @@ def route_list():
         order_by= args["order_by"]
     if 'order_direction' in args:
         order_direction = args['order_direction']
-    if 'q' in args:
+    if 'q' in args and args['q'] != '':
         word = args['q']
         results = data_manager.search(word)
     questions_list = data_manager.get_questions_sorted(order_by,order_direction)

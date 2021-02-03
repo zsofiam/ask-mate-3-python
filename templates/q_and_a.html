@@ -40,6 +40,20 @@
     {% if question["image"] %}
         <img src="/static/images/{{ question['image'] }}" alt="{{ question['image'] }}"><br>
     {% endif %}
+    <div id="comment">
+    <p>
+        <a href="/question/{{ question['id'] }}/new_comment">Comment the question </a>
+    </p>
+    <br>
+{#        {% if comments == none %}#}
+{#            <p>There is no comment</p>#}
+{#        {%  endif %}#}
+{#        {%  else  %}#}
+        {% for comment in comments %}
+            {{ comment.message }}<br>
+        {% endfor %}
+    </div>
+    <br>
     <a class="delete" href="/question/{{ question['id'] }}/delete">DELETE question</a><br><br>
     <a class="edit" href="/question/{{ question["id"] }}/edit">EDIT question</a>
     <ul><br>
@@ -61,5 +75,6 @@
     {% endfor %}
     </ul>
     <a href="/question/{{ question['id'] }}/new-answer">Write new answer</a>
+     <p/>
 </body>
 </html>

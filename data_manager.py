@@ -60,6 +60,21 @@ def write_answer(cursor: RealDictCursor, question_id: int, message: str, image: 
     VALUES (CURRENT_TIMESTAMP, 0, {}, '{}', '{}');""".format(question_id, message, image)
     cursor.execute(query)
 
+@database_common.connection_handler
+def write_comment(cursor: RealDictCursor, question_id: int, comment: str) -> list:
+    query = """
+    INSERT INTO comment (question_id, answer_id, message, submission_time, edited_count)
+    VALUES ({}, NULL ,'{}',CURRENT_TIMESTAMP,0);""".format(question_id, comment)
+    cursor.execute(query)
+
+@database_common.connection_handler
+def get_question_comment(cursor: RealDictCursor, question_id: int) -> list:
+    query = """
+    SELECT message, submission_time
+    FROM comment
+    WHERE question_id = {};""".format(question_id)
+    cursor.execute(query)
+    return cursor.fetchall()
 
 @database_common.connection_handler
 def vote_up_answer(cursor: RealDictCursor, answer_id: int) -> list:

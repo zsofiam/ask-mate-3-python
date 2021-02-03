@@ -3,7 +3,6 @@ from flask import Flask, render_template, request, redirect
 from werkzeug.utils import secure_filename
 import os
 
-
 app = Flask(__name__)
 UPLOAD_FOLDER = 'static/images'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
@@ -20,10 +19,10 @@ def route_list():
     order_direction = 'desc'
     args = request.args
     if 'order_by' in args:
-        order_by= args["order_by"]
+        order_by = args["order_by"]
     if 'order_direction' in args:
         order_direction = args['order_direction']
-    questions_list = data_manager.get_questions_sorted(order_by,order_direction)
+    questions_list = data_manager.get_questions_sorted(order_by, order_direction)
     return render_template('list.html', questions=questions_list)
 
 
@@ -31,7 +30,8 @@ def route_list():
 def display_question(question_id):
     question = data_manager.get_question_by_id(question_id)
     answers = data_manager.get_answers(question_id)
-    return render_template('q_and_a.html', question=question, answers=answers)
+    question_comments = data_manager.get_question_comment(question_id)
+    return render_template('q_and_a.html',question=question, answers=answers, comments=question_comments)
 
 
 @app.route("/add-question", methods=['GET', 'POST'])
@@ -67,6 +67,16 @@ def post_new_answer(question_id):
         return redirect("/question/" + str(question_id))
 
 
+@app.route("/question/<int:question_id>/new_comment", methods=['GET', 'POST'])
+def post_new_comment(question_id):
+    if request.method == 'GET':
+        return render_template('new_comment.html', question_id=str(question_id))
+    else:
+        comment = request.form['new_comment']
+        data_manager.write_comment(question_id, comment)
+        return redirect("/question/" + str(question_id))
+
+
 @app.route("/question/<question_id>/edit", methods=["GET", "POST"])
 def edit_question(question_id):
     question = data_manager.get_question_by_id(question_id)
@@ -99,7 +109,7 @@ def delete_question(question_id):
     data_manager.delete_question(question_id)
     try:
         os.remove(os.path.join(app.root_path, app.config['UPLOAD_FOLDER'], filename))
-    except (FileNotFoundError,TypeError):
+    except (FileNotFoundError, TypeError):
         print("No file was removed!")
     return redirect("/list")
 

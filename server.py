@@ -128,6 +128,8 @@ def edit_question(question_id):
 
 @app.route("/question/<question_id>/delete")
 def delete_question(question_id):
+    data_manager.remove_tags_from_question(question_id)
+    data_manager.delete_answers_by_question_id(question_id)
     filename = data_manager.get_question_by_id(question_id)['image']
     data_manager.delete_question(question_id)
     try:

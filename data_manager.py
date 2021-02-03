@@ -311,6 +311,14 @@ def add_tag_to_question(cursor: RealDictCursor,tag_id:int,question_id:int) -> li
     cursor.execute(query)
 
 
+@database_common.connection_handler
+def delete_answers_by_question_id(cursor: RealDictCursor, question_id:int) -> list:
+    query = """
+    DELETE FROM answer
+    WHERE question_id = {}""".format(question_id)
+    cursor.execute(query)
+
+
 # def get_one_question(q_id):
 #     all_questions = get_all_questions_from_file()
 #     for question in all_questions:

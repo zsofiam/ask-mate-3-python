@@ -54,6 +54,18 @@ def get_answers(cursor: RealDictCursor, question_id: int) -> list:
 
 
 @database_common.connection_handler
+def get_tags(cursor: RealDictCursor, question_id:int) -> list:
+    query = """
+    SELECT *
+    FROM tag
+    JOIN question_tag 
+    ON tag.id = question_tag.tag_id
+    WHERE question_id = {}""".format(question_id)
+    cursor.execute(query)
+    return cursor.fetchall()
+
+
+@database_common.connection_handler
 def write_answer(cursor: RealDictCursor, question_id: int, message: str, image: str) -> list:
     if image is not None:
         query = """

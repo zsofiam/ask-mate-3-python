@@ -10,9 +10,15 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 
 @app.route("/")
+@app.route('/search')
 def main_page():
+    results = []
+    query_string = request.args
+    if 'q' in query_string and query_string['q'] != '':
+        word = query_string['q']
+        results = data_manager.search(word)
     questions = data_manager.get_latest_five_questions()
-    return render_template('index.html', questions=questions)
+    return render_template('index.html', questions=questions, results=results)
 
 
 @app.route('/list')
@@ -24,6 +30,7 @@ def route_list():
         order_by= args["order_by"]
     if 'order_direction' in args:
         order_direction = args['order_direction']
+
     questions_list = data_manager.get_questions_sorted(order_by,order_direction)
     return render_template('list.html', questions=questions_list)
 

@@ -25,7 +25,7 @@
     <ul><br>
     {% for answer in answers %}
         <strong>Answer {{ loop.index }}: </strong>
-            {% if answer["image"] != none %}
+            {% if answer["image"]%}
         <li><img src="/static/images/{{ answer["image"] }}" alt="{{ answer["image"] }}"></li>
             {% endif %}
         <li><em>{{ answer['message'] }}</em></li><br>

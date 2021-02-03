@@ -92,10 +92,7 @@ def edit_question(question_id):
 
 @app.route("/question/<question_id>/delete")
 def delete_question(question_id):
-    answer_ids = data_manager.get_question_answers(question_id)
     filename = data_manager.get_question_by_id(question_id)['image']
-    for answer_id in answer_ids:
-        delete_answer(answer_id['id'], True)
     data_manager.delete_question(question_id)
     try:
         os.remove(os.path.join(app.root_path, app.config['UPLOAD_FOLDER'], filename))
@@ -105,14 +102,14 @@ def delete_question(question_id):
 
 
 @app.route("/answer/<answer_id>/delete")
-def delete_answer(answer_id, del_question):
+def delete_answer(answer_id):
     filename = data_manager.get_answer_data(answer_id)['image']
     question_id = data_manager.get_answer_data(answer_id)['question_id']
     data_manager.delete_answer(answer_id)
-    if filename is not None:
+    try:
         os.remove(os.path.join(app.root_path, app.config['UPLOAD_FOLDER'], filename))
-    if del_question:
-        return
+    except (FileNotFoundError,TypeError):
+        pass
     return redirect("/question/" + str(question_id))
 
 

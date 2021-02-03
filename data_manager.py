@@ -55,10 +55,16 @@ def get_answers(cursor: RealDictCursor, question_id: int) -> list:
 
 @database_common.connection_handler
 def write_answer(cursor: RealDictCursor, question_id: int, message: str, image: str) -> list:
-    query = """
-    INSERT INTO answer (submission_time, vote_number, question_id, message, image)
-    VALUES (CURRENT_TIMESTAMP, 0, {}, '{}', '{}');""".format(question_id, message, image)
-    cursor.execute(query)
+    if image is not None:
+        query = """
+        INSERT INTO answer (submission_time, vote_number, question_id, message, image)
+        VALUES (CURRENT_TIMESTAMP, 0, {}, '{}', '{}');""".format(question_id, message, image)
+        cursor.execute(query)
+    else:
+        query = """
+        INSERT INTO answer (submission_time, vote_number, question_id, message)
+        VALUES (CURRENT_TIMESTAMP, 0, {}, '{}');""".format(question_id, message)
+        cursor.execute(query)
 
 
 @database_common.connection_handler
@@ -151,7 +157,9 @@ def get_question_answers(cursor: RealDictCursor, question_id: int) -> list:
 def delete_question(cursor: RealDictCursor, question_id: int) -> list:
     query = """
     DELETE FROM question
-    WHERE id = {}""".format(question_id)
+    WHERE id = {};
+    DELETE FROM answer
+    WHERE question_id = {}""".format(question_id, question_id)
     cursor.execute(query)
 
 

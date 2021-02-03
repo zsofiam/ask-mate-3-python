@@ -54,16 +54,32 @@ def get_answers(cursor: RealDictCursor, question_id: int) -> list:
 
 
 @database_common.connection_handler
-def write_answer(cursor: RealDictCursor, question_id: int, message: str, image: str) -> list:
-    if image is not None:
+def write_answer(cursor: RealDictCursor, question_id: int, modifications: dict) -> list:
+    if modifications['image'] is not None:
         query = """
         INSERT INTO answer (submission_time, vote_number, question_id, message, image)
-        VALUES (CURRENT_TIMESTAMP, 0, {}, '{}', '{}');""".format(question_id, message, image)
+        VALUES (CURRENT_TIMESTAMP, 0, {}, '{}', '{}');/
+        """.format(question_id, modifications['message'], modifications['image'])
         cursor.execute(query)
     else:
         query = """
         INSERT INTO answer (submission_time, vote_number, question_id, message)
-        VALUES (CURRENT_TIMESTAMP, 0, {}, '{}');""".format(question_id, message)
+        VALUES (CURRENT_TIMESTAMP, 0, {}, '{}');""".format(question_id, modifications['message'])
+        cursor.execute(query)
+
+
+@database_common.connection_handler
+def modify_answer(cursor: RealDictCursor, answer_id: int, modifications: dict) -> list:
+    query = """
+    UPDATE answer
+    SET message= '{}'
+    WHERE id = {};""".format(modifications['message'], answer_id)
+    cursor.execute(query)
+    if modifications['image'] is not None:
+        query = """
+            UPDATE answer
+            SET image = '{}'
+            WHERE id = {};""".format(modifications['image'], answer_id)
         cursor.execute(query)
 
 
@@ -106,7 +122,7 @@ def vote_down_question(cursor: RealDictCursor, question_id: int) -> list:
 @database_common.connection_handler
 def get_answer_data(cursor: RealDictCursor, answer_id: int) -> tuple:
     query = """
-        SELECT question_id, image
+        SELECT question_id, message, image
         FROM answer
         WHERE id = {}""".format(answer_id)
     cursor.execute(query)

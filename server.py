@@ -97,6 +97,12 @@ def add_new_tag(question_id):
         return redirect("/question/" + str(question_id))
 
 
+@app.route("/question/<int:question_id>/tag/<int:tag_id>/delete")
+def delete_tag(question_id, tag_id):
+    data_manager.remove_tag(question_id, tag_id)
+    return redirect("/question/" + str(question_id))
+
+
 @app.route("/question/<question_id>/edit", methods=["GET", "POST"])
 def edit_question(question_id):
     question = data_manager.get_question_by_id(question_id)

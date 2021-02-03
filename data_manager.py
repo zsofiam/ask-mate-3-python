@@ -75,6 +75,14 @@ def remove_tags_from_question(cursor: RealDictCursor, question_id:int) -> list:
 
 
 @database_common.connection_handler
+def remove_tag(cursor: RealDictCursor, question_id: int, tag_id: int) -> list:
+    query = """
+    DELETE FROM question_tag
+    WHERE question_id = {} AND tag_id = {}""".format(question_id, tag_id)
+    cursor.execute(query)
+
+
+@database_common.connection_handler
 def write_answer(cursor: RealDictCursor, question_id: int, modifications: dict) -> list:
     if modifications['image'] is not None:
         query = """

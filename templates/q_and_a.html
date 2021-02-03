@@ -14,6 +14,14 @@
         .tag {
             text-decoration: none;
             font-size: 1.1em;
+            color: darkgreen;
+        }
+        .delete-tag {
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 1.1em;
+            color: brown;
+        }
         .edit {
             text-decoration: none;
             color: darkblue;
@@ -25,6 +33,7 @@
     <p><b>Question: {{ question['title'] }}</b></p>
     {% for tag in tags %}
         <a class="tag" href="/tag/{{ tag["id"] }}">#{{ tag["name"] }}</a>
+        <a class="delete-tag" href="/question/{{ question["id"] }}/tag/{{ tag["id"] }}/delete">X</a><br>
     {% endfor %}
         <a class="tag" href="/question/{{ question["id"] }}/new-tag">#add tag</a>
     <p>{{ question['message'] }}</p>

@@ -87,8 +87,8 @@ def write_answer(cursor: RealDictCursor, question_id: int, modifications: dict) 
     if modifications['image'] is not None:
         query = """
         INSERT INTO answer (submission_time, vote_number, question_id, message, image)
-        VALUES (CURRENT_TIMESTAMP, 0, {}, '{}', '{}');/
-        """.format(question_id, modifications['message'], modifications['image'])
+        VALUES (CURRENT_TIMESTAMP, 0, {}, '{}', '{}');"""\
+            .format(question_id, modifications['message'], modifications['image'])
         cursor.execute(query)
     else:
         query = """

@@ -113,6 +113,16 @@ def get_answer_data(cursor: RealDictCursor, answer_id: int) -> tuple:
     return cursor.fetchone()
 
 
+@database_common.connection_handler
+def search(cursor: RealDictCursor, word: str) -> list:
+    query = """
+        SELECT title, message, submission_time, view_number, vote_number
+        FROM question
+        WHERE title LIKE '%%{}%%' OR message LIKE '%%{}%%'
+        ORDER BY submission_time DESC""".format(word, word)
+    cursor.execute(query)
+    return cursor.fetchall()
+
 # def add_question(question, filename):
 #     question_id = util.get_latest_id('question', LATEST_IDS)
 #     question["id"] = question_id

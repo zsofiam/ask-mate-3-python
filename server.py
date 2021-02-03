@@ -14,8 +14,10 @@ def main_page():
     return redirect('/list')
 
 
+@app.route('/search')
 @app.route('/list')
 def route_list():
+    results = []
     order_by = 'submission_time'
     order_direction = 'desc'
     args = request.args
@@ -23,8 +25,11 @@ def route_list():
         order_by= args["order_by"]
     if 'order_direction' in args:
         order_direction = args['order_direction']
+    if 'q' in args:
+        word = args['q']
+        results = data_manager.search(word)
     questions_list = data_manager.get_questions_sorted(order_by,order_direction)
-    return render_template('list.html', questions=questions_list)
+    return render_template('list.html', questions=questions_list, results=results)
 
 
 @app.route("/question/<question_id>")

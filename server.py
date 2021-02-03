@@ -41,8 +41,8 @@ def display_question(question_id):
     question = data_manager.get_question_by_id(question_id)
     answers = data_manager.get_answers(question_id)
     tags = data_manager.get_tags_by_question(question_id)
-    question_comments = data_manager.get_question_comment(question_id)
-    return render_template('q_and_a.html',question=question, answers=answers,tags=tags, comments=question_comments)
+    comments = data_manager.get_comment(question_id)
+    return render_template('q_and_a.html',question=question, answers=answers,tags=tags, comments=comments)
 
 
 @app.route("/add-question", methods=['GET', 'POST'])
@@ -191,6 +191,14 @@ def vote_down_question(question_id):
     data_manager.vote_down_question(question_id)
     return redirect("/")
 
+@app.route('/question/<question_id>/answer/<answer_id>/new_comment', methods=["GET", "POST"])
+def post_new_answer_comment(answer_id, question_id):
+    if request.method == 'GET':
+        return render_template('new_answer_comment.html', answer_id=str(answer_id), question_id=str(question_id))
+    else:
+        comment = request.form['new_comment']
+        data_manager.write_answer_comment(question_id, answer_id, comment)
+        return redirect("/question/" + str(question_id))
 
 @app.route('/answer/<answer_id>/vote-up', methods=['POST'])
 def vote_up_answer(answer_id):

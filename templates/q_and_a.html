@@ -45,13 +45,12 @@
         <a href="/question/{{ question['id'] }}/new_comment">Comment the question </a>
     </p>
     <br>
-{#        {% if comments == none %}#}
-{#            <p>There is no comment</p>#}
-{#        {%  endif %}#}
-{#        {%  else  %}#}
         {% for comment in comments %}
+            {% if comment.answer_id == None %}
             {{ comment.message }}<br>
+            {%  endif %}
         {% endfor %}
+
     </div>
     <br>
     <a class="delete" href="/question/{{ question['id'] }}/delete">DELETE question</a><br><br>
@@ -63,6 +62,15 @@
         <li><img src="/static/images/{{ answer["image"] }}" alt="{{ answer["image"] }}"></li>
             {% endif %}
         <li><em>{{ answer['message'] }}</em></li><br>
+        <p>
+         <a href="/question/{{ question['id'] }}/answer/{{ answer['id'] }}/new_comment">Comment to answer </a>
+        <p/>
+        <br>
+         {% for comment in comments %}
+            {% if comment.answer_id == answer.id %}<br>
+             {{ comment.message }}
+             {% endif %}
+        {% endfor %}
         <li><small>Vote number: {{ answer['vote_number'] }}</small></li><br>
         <form action="/answer/{{ answer.get('id') }}/vote-up" method="post">
             <button type="submit">Like!</button>

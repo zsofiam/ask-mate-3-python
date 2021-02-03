@@ -174,6 +174,17 @@ def get_questions(cursor: RealDictCursor) -> list:
 
 
 @database_common.connection_handler
+def get_latest_five_questions(cursor: RealDictCursor) -> list:
+    query = """
+        SELECT *
+        FROM question
+        ORDER BY submission_time 
+        DESC LIMIT 5;"""
+    cursor.execute(query)
+    return cursor.fetchall()
+
+
+@database_common.connection_handler
 def get_question_by_id(cursor: RealDictCursor, question_id: int) -> list:
     query = """
         SELECT * 

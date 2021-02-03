@@ -54,11 +54,62 @@ def get_answers(cursor: RealDictCursor, question_id: int) -> list:
 
 
 @database_common.connection_handler
-def write_answer(cursor: RealDictCursor, question_id: int, message: str, image: str) -> list:
+def get_tags_by_question(cursor: RealDictCursor, question_id:int) -> list:
     query = """
-    INSERT INTO answer (submission_time, vote_number, question_id, message, image)
-    VALUES (CURRENT_TIMESTAMP, 0, {}, '{}', '{}');""".format(question_id, message, image)
+    SELECT id, name
+    FROM tag
+    JOIN question_tag 
+    ON tag.id = question_tag.tag_id
+    WHERE question_id = {}""".format(question_id)
     cursor.execute(query)
+    return cursor.fetchall()
+
+
+@database_common.connection_handler
+def remove_tags_from_question(cursor: RealDictCursor, question_id:int) -> list:
+    query = """
+    DELETE
+    FROM question_tag
+    WHERE question_id = {}""".format(question_id)
+    cursor.execute(query)
+
+
+@database_common.connection_handler
+def remove_tag(cursor: RealDictCursor, question_id: int, tag_id: int) -> list:
+    query = """
+    DELETE FROM question_tag
+    WHERE question_id = {} AND tag_id = {}""".format(question_id, tag_id)
+    cursor.execute(query)
+
+
+@database_common.connection_handler
+def write_answer(cursor: RealDictCursor, question_id: int, modifications: dict) -> list:
+    if modifications['image'] is not None:
+        query = """
+        INSERT INTO answer (submission_time, vote_number, question_id, message, image)
+        VALUES (CURRENT_TIMESTAMP, 0, {}, '{}', '{}');/
+        """.format(question_id, modifications['message'], modifications['image'])
+        cursor.execute(query)
+    else:
+        query = """
+        INSERT INTO answer (submission_time, vote_number, question_id, message)
+        VALUES (CURRENT_TIMESTAMP, 0, {}, '{}');""".format(question_id, modifications['message'])
+        cursor.execute(query)
+
+
+@database_common.connection_handler
+def modify_answer(cursor: RealDictCursor, answer_id: int, modifications: dict) -> list:
+    query = """
+    UPDATE answer
+    SET message= '{}'
+    WHERE id = {};""".format(modifications['message'], answer_id)
+    cursor.execute(query)
+    if modifications['image'] is not None:
+        query = """
+            UPDATE answer
+            SET image = '{}'
+            WHERE id = {};""".format(modifications['image'], answer_id)
+        cursor.execute(query)
 
 @database_common.connection_handler
 def write_comment(cursor: RealDictCursor, question_id: int, comment: str) -> list:
@@ -115,12 +166,23 @@ def vote_down_question(cursor: RealDictCursor, question_id: int) -> list:
 @database_common.connection_handler
 def get_answer_data(cursor: RealDictCursor, answer_id: int) -> tuple:
     query = """
-        SELECT question_id, image
+        SELECT question_id, message, image
         FROM answer
         WHERE id = {}""".format(answer_id)
     cursor.execute(query)
     return cursor.fetchone()
 
+
+@database_common.connection_handler
+def search(cursor: RealDictCursor, word: str) -> list:
+    query = """
+        SELECT DISTINCT title, q.message, q.submission_time, view_number, q.vote_number
+        FROM question AS q LEFT JOIN answer AS a
+        ON q.id = a.question_id
+        WHERE title LIKE '%%{}%%' OR q.message LIKE '%%{}%%' OR a.message LIKE '%%{}%%'
+        ORDER BY submission_time DESC;""".format(word, word, word)
+    cursor.execute(query)
+    return cursor.fetchall()
 
 # def add_question(question, filename):
 #     question_id = util.get_latest_id('question', LATEST_IDS)
@@ -166,16 +228,19 @@ def get_question_answers(cursor: RealDictCursor, question_id: int) -> list:
 def delete_question(cursor: RealDictCursor, question_id: int) -> list:
     query = """
     DELETE FROM question
-    WHERE id = {}""".format(question_id)
+    WHERE id = {};
+    DELETE FROM answer
+    WHERE question_id = {}""".format(question_id, question_id)
     cursor.execute(query)
 
 
 @database_common.connection_handler
-def get_questions(cursor: RealDictCursor) -> list:
+def get_latest_five_questions(cursor: RealDictCursor) -> list:
     query = """
         SELECT *
         FROM question
-        ORDER BY submission_time DESC;"""
+        ORDER BY submission_time 
+        DESC LIMIT 5;"""
     cursor.execute(query)
     return cursor.fetchall()
 
@@ -232,22 +297,43 @@ def modify_question(cursor: RealDictCursor, question_id: int, modifications: dic
         cursor.execute(query)
 
 
-# def sort_by_number_parameter(questions, parameter, direction):
-#     if direction == 'desc':
-#         sorted_questions = sorted(questions, key=lambda k: int(k[parameter]), reverse=True)
-#     else:
-#         sorted_questions = sorted(questions, key=lambda k: int(k[parameter]))
-#     return sorted_questions
-#
-#
-# def sort_by_text_parameter(questions, parameter, direction):
-#     if direction == 'desc':
-#         sorted_questions = sorted(questions, key=lambda k: k[parameter], reverse=True)
-#     else:
-#         sorted_questions = sorted(questions, key=lambda k: k[parameter])
-#     return sorted_questions
-#
-#
+@database_common.connection_handler
+def get_all_tags(cursor: RealDictCursor) -> list:
+    query = """
+    SELECT *
+    FROM tag"""
+    cursor.execute(query)
+    return cursor.fetchall()
+
+
+@database_common.connection_handler
+def save_tag(cursor: RealDictCursor, tag:str) -> list:
+    query = """
+    INSERT INTO
+    tag (name)
+    VALUES('{}')
+    RETURNING *""".format(tag)
+    cursor.execute(query)
+    return cursor.fetchone()
+
+
+@database_common.connection_handler
+def add_tag_to_question(cursor: RealDictCursor,tag_id:int,question_id:int) -> list:
+    query = """
+    INSERT INTO
+    question_tag (question_id, tag_id)
+    VALUES({}, {})""".format(question_id, tag_id)
+    cursor.execute(query)
+
+
+@database_common.connection_handler
+def delete_answers_by_question_id(cursor: RealDictCursor, question_id:int) -> list:
+    query = """
+    DELETE FROM answer
+    WHERE question_id = {}""".format(question_id)
+    cursor.execute(query)
+
+
 # def get_one_question(q_id):
 #     all_questions = get_all_questions_from_file()
 #     for question in all_questions:

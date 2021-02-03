@@ -11,11 +11,31 @@
             text-decoration: none;
             color: brown;
         }
+        .tag {
+            text-decoration: none;
+            font-size: 1.1em;
+            color: darkgreen;
+        }
+        .delete-tag {
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 1.1em;
+            color: brown;
+        }
+        .edit {
+            text-decoration: none;
+            color: darkblue;
+        }
     </style>
 </head>
 <body>
-    <a href="/list">Go back to questions</a>
+    <a href="/">Go back to questions</a>
     <p><b>Question: {{ question['title'] }}</b></p>
+    {% for tag in tags %}
+        <a class="tag" href="/tag/{{ tag["id"] }}">#{{ tag["name"] }}</a>
+        <a class="delete-tag" href="/question/{{ question["id"] }}/tag/{{ tag["id"] }}/delete">X</a><br>
+    {% endfor %}
+        <a class="tag" href="/question/{{ question["id"] }}/new-tag">#add tag</a>
     <p>{{ question['message'] }}</p>
     {% if question["image"] %}
         <img src="/static/images/{{ question['image'] }}" alt="{{ question['image'] }}"><br>
@@ -35,11 +55,11 @@
     </div>
     <br>
     <a class="delete" href="/question/{{ question['id'] }}/delete">DELETE question</a><br><br>
-    <a href="/question/{{ question["id"] }}/edit">EDIT question</a>
+    <a class="edit" href="/question/{{ question["id"] }}/edit">EDIT question</a>
     <ul><br>
     {% for answer in answers %}
         <strong>Answer {{ loop.index }}: </strong>
-            {% if answer["image"] != none %}
+            {% if answer["image"]%}
         <li><img src="/static/images/{{ answer["image"] }}" alt="{{ answer["image"] }}"></li>
             {% endif %}
         <li><em>{{ answer['message'] }}</em></li><br>
@@ -50,6 +70,7 @@
         <form action="/answer/{{ answer.get('id') }}/vote-down" method="post">
             <button type="submit">Dislike!</button>
         </form><br>
+        <li><a class="edit" href="/answer/{{ answer['id'] }}/edit">EDIT answer</a><br>
         <li><a class="delete" href="/answer/{{ answer['id'] }}/delete">DELETE answer</a>
     {% endfor %}
     </ul>

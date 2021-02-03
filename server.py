@@ -9,8 +9,16 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 
 @app.route("/")
+@app.route('/search')
 def main_page():
-    return redirect('/list')
+    results = []
+    word = ''
+    query_string = request.args
+    if 'q' in query_string and query_string['q'] != '':
+        word = query_string['q']
+        results = data_manager.search(word)
+    questions = data_manager.get_latest_five_questions()
+    return render_template('index.html', questions=questions, results=results, word=word)
 
 
 @app.route('/list')
@@ -22,6 +30,7 @@ def route_list():
         order_by = args["order_by"]
     if 'order_direction' in args:
         order_direction = args['order_direction']
+
     questions_list = data_manager.get_questions_sorted(order_by, order_direction)
     return render_template('list.html', questions=questions_list)
 
@@ -30,8 +39,9 @@ def route_list():
 def display_question(question_id):
     question = data_manager.get_question_by_id(question_id)
     answers = data_manager.get_answers(question_id)
+    tags = data_manager.get_tags_by_question(question_id)
     question_comments = data_manager.get_question_comment(question_id)
-    return render_template('q_and_a.html',question=question, answers=answers, comments=question_comments)
+    return render_template('q_and_a.html',question=question, answers=answers,tags=tags, comments=question_comments)
 
 
 @app.route("/add-question", methods=['GET', 'POST'])
@@ -62,8 +72,28 @@ def post_new_answer(question_id):
             file.save(os.path.join(app.root_path, app.config['UPLOAD_FOLDER'], filename))
         else:
             filename = None
-        message = request.form['new_message']
-        data_manager.write_answer(question_id, message, filename)
+        modifications = {'message': request.form['new_message'], 'image': filename}
+        data_manager.write_answer(question_id, modifications)
+        return redirect("/question/" + str(question_id))
+
+
+@app.route("/question/<int:question_id>/new-tag", methods=['GET', 'POST'])
+def add_new_tag(question_id):
+    all_tags = data_manager.get_all_tags()
+    if request.method == 'GET':
+        tags = data_manager.get_tags_by_question(question_id)
+        return render_template('new_tag.html', question_id=str(question_id),all_tags=all_tags, tags=tags)
+    else:
+        new_tag = request.form["new-tag"]
+        data_manager.remove_tags_from_question(question_id)
+        for tag in all_tags:
+            tag_id = str(tag["id"])
+            tag_name = tag["name"]
+            if tag_id in request.form.keys() and request.form[tag_id] == tag_name:
+                data_manager.add_tag_to_question(tag_id, question_id)
+        if new_tag:
+            new_tag_saved = data_manager.save_tag(new_tag)
+            data_manager.add_tag_to_question(new_tag_saved["id"], question_id)
         return redirect("/question/" + str(question_id))
 
 
@@ -75,6 +105,12 @@ def post_new_comment(question_id):
         comment = request.form['new_comment']
         data_manager.write_comment(question_id, comment)
         return redirect("/question/" + str(question_id))
+
+
+@app.route("/question/<int:question_id>/tag/<int:tag_id>/delete")
+def delete_tag(question_id, tag_id):
+    data_manager.remove_tag(question_id, tag_id)
+    return redirect("/question/" + str(question_id))
 
 
 @app.route("/question/<question_id>/edit", methods=["GET", "POST"])
@@ -102,40 +138,56 @@ def edit_question(question_id):
 
 @app.route("/question/<question_id>/delete")
 def delete_question(question_id):
-    answer_ids = data_manager.get_question_answers(question_id)
+    data_manager.remove_tags_from_question(question_id)
+    data_manager.delete_answers_by_question_id(question_id)
     filename = data_manager.get_question_by_id(question_id)['image']
-    for answer_id in answer_ids:
-        delete_answer(answer_id['id'], True)
     data_manager.delete_question(question_id)
     try:
         os.remove(os.path.join(app.root_path, app.config['UPLOAD_FOLDER'], filename))
     except (FileNotFoundError, TypeError):
         print("No file was removed!")
-    return redirect("/list")
+    return redirect("/")
 
 
 @app.route("/answer/<answer_id>/delete")
-def delete_answer(answer_id, del_question):
+def delete_answer(answer_id):
     filename = data_manager.get_answer_data(answer_id)['image']
     question_id = data_manager.get_answer_data(answer_id)['question_id']
     data_manager.delete_answer(answer_id)
-    if filename is not None:
+    try:
         os.remove(os.path.join(app.root_path, app.config['UPLOAD_FOLDER'], filename))
-    if del_question:
-        return
+    except (FileNotFoundError,TypeError):
+        pass
     return redirect("/question/" + str(question_id))
+
+
+@app.route("/answer/<answer_id>/edit", methods=['GET', 'POST'])
+def edit_answer(answer_id):
+    datas = data_manager.get_answer_data(answer_id)
+    if request.method == 'GET':
+        return render_template('edit_answer.html', answer_id=str(answer_id), datas=datas)
+    else:
+        if request.files["new-file"]:
+            file = request.files["new-file"]
+            filename = secure_filename(file.filename)
+            file.save(os.path.join(app.root_path, app.config['UPLOAD_FOLDER'], filename))
+        else:
+            filename = None
+        modifications = {'message': request.form['new-message'], 'image': filename}
+        data_manager.modify_answer(answer_id, modifications)
+        return redirect("/question/" + str(datas['question_id']))
 
 
 @app.route('/question/<question_id>/vote-up', methods=['POST'])
 def vote_up_question(question_id):
     data_manager.vote_up_question(question_id)
-    return redirect("/list")
+    return redirect("/")
 
 
 @app.route('/question/<question_id>/vote-down', methods=['POST'])
 def vote_down_question(question_id):
     data_manager.vote_down_question(question_id)
-    return redirect("/list")
+    return redirect("/")
 
 
 @app.route('/answer/<answer_id>/vote-up', methods=['POST'])

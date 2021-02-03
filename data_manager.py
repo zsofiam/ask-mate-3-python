@@ -236,22 +236,6 @@ def modify_question(cursor: RealDictCursor, question_id: int, modifications: dic
         cursor.execute(query)
 
 
-# def sort_by_number_parameter(questions, parameter, direction):
-#     if direction == 'desc':
-#         sorted_questions = sorted(questions, key=lambda k: int(k[parameter]), reverse=True)
-#     else:
-#         sorted_questions = sorted(questions, key=lambda k: int(k[parameter]))
-#     return sorted_questions
-#
-#
-# def sort_by_text_parameter(questions, parameter, direction):
-#     if direction == 'desc':
-#         sorted_questions = sorted(questions, key=lambda k: k[parameter], reverse=True)
-#     else:
-#         sorted_questions = sorted(questions, key=lambda k: k[parameter])
-#     return sorted_questions
-#
-#
 # def get_one_question(q_id):
 #     all_questions = get_all_questions_from_file()
 #     for question in all_questions:

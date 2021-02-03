@@ -13,7 +13,6 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 def main_page():
     questions = data_manager.get_latest_five_questions()
     return render_template('index.html', questions=questions)
-    #return redirect('/list')
 
 
 @app.route('/list')

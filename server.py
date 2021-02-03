@@ -71,8 +71,8 @@ def post_new_answer(question_id):
             file.save(os.path.join(app.root_path, app.config['UPLOAD_FOLDER'], filename))
         else:
             filename = None
-        message = request.form['new_message']
-        data_manager.write_answer(question_id, message, filename)
+        modifications = {'message': request.form['new_message'], 'image': filename}
+        data_manager.write_answer(question_id, modifications)
         return redirect("/question/" + str(question_id))
 
 
@@ -127,7 +127,7 @@ def delete_question(question_id):
         os.remove(os.path.join(app.root_path, app.config['UPLOAD_FOLDER'], filename))
     except (FileNotFoundError,TypeError):
         print("No file was removed!")
-    return redirect("/list")
+    return redirect("/")
 
 
 @app.route("/answer/<answer_id>/delete")
@@ -142,16 +142,33 @@ def delete_answer(answer_id):
     return redirect("/question/" + str(question_id))
 
 
+@app.route("/answer/<answer_id>/edit", methods=['GET', 'POST'])
+def edit_answer(answer_id):
+    datas = data_manager.get_answer_data(answer_id)
+    if request.method == 'GET':
+        return render_template('edit_answer.html', answer_id=str(answer_id), datas=datas)
+    else:
+        if request.files["new-file"]:
+            file = request.files["new-file"]
+            filename = secure_filename(file.filename)
+            file.save(os.path.join(app.root_path, app.config['UPLOAD_FOLDER'], filename))
+        else:
+            filename = None
+        modifications = {'message': request.form['new-message'], 'image': filename}
+        data_manager.modify_answer(answer_id, modifications)
+        return redirect("/question/" + str(datas['question_id']))
+
+
 @app.route('/question/<question_id>/vote-up', methods=['POST'])
 def vote_up_question(question_id):
     data_manager.vote_up_question(question_id)
-    return redirect("/list")
+    return redirect("/")
 
 
 @app.route('/question/<question_id>/vote-down', methods=['POST'])
 def vote_down_question(question_id):
     data_manager.vote_down_question(question_id)
-    return redirect("/list")
+    return redirect("/")
 
 
 @app.route('/answer/<answer_id>/vote-up', methods=['POST'])

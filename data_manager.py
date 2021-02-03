@@ -54,6 +54,27 @@ def get_answers(cursor: RealDictCursor, question_id: int) -> list:
 
 
 @database_common.connection_handler
+def get_tags_by_question(cursor: RealDictCursor, question_id:int) -> list:
+    query = """
+    SELECT id, name
+    FROM tag
+    JOIN question_tag 
+    ON tag.id = question_tag.tag_id
+    WHERE question_id = {}""".format(question_id)
+    cursor.execute(query)
+    return cursor.fetchall()
+
+
+@database_common.connection_handler
+def remove_tags_from_question(cursor: RealDictCursor, question_id:int) -> list:
+    query = """
+    DELETE
+    FROM question_tag
+    WHERE question_id = {}""".format(question_id)
+    cursor.execute(query)
+
+
+@database_common.connection_handler
 def write_answer(cursor: RealDictCursor, question_id: int, modifications: dict) -> list:
     if modifications['image'] is not None:
         query = """
@@ -191,16 +212,6 @@ def delete_question(cursor: RealDictCursor, question_id: int) -> list:
 
 
 @database_common.connection_handler
-def get_questions(cursor: RealDictCursor) -> list:
-    query = """
-        SELECT *
-        FROM question
-        ORDER BY submission_time DESC;"""
-    cursor.execute(query)
-    return cursor.fetchall()
-
-
-@database_common.connection_handler
 def get_latest_five_questions(cursor: RealDictCursor) -> list:
     query = """
         SELECT *
@@ -261,6 +272,35 @@ def modify_question(cursor: RealDictCursor, question_id: int, modifications: dic
             SET image = '{}'
             WHERE id = {};""".format(modifications['image'], question_id)
         cursor.execute(query)
+
+
+@database_common.connection_handler
+def get_all_tags(cursor: RealDictCursor) -> list:
+    query = """
+    SELECT *
+    FROM tag"""
+    cursor.execute(query)
+    return cursor.fetchall()
+
+
+@database_common.connection_handler
+def save_tag(cursor: RealDictCursor, tag:str) -> list:
+    query = """
+    INSERT INTO
+    tag (name)
+    VALUES('{}')
+    RETURNING *""".format(tag)
+    cursor.execute(query)
+    return cursor.fetchone()
+
+
+@database_common.connection_handler
+def add_tag_to_question(cursor: RealDictCursor,tag_id:int,question_id:int) -> list:
+    query = """
+    INSERT INTO
+    question_tag (question_id, tag_id)
+    VALUES({}, {})""".format(question_id, tag_id)
+    cursor.execute(query)
 
 
 # def get_one_question(q_id):

@@ -40,7 +40,8 @@ def route_list():
 def display_question(question_id):
     question = data_manager.get_question_by_id(question_id)
     answers = data_manager.get_answers(question_id)
-    return render_template('q_and_a.html', question=question, answers=answers)
+    tags = data_manager.get_tags_by_question(question_id)
+    return render_template('q_and_a.html', question=question, answers=answers, tags=tags)
 
 
 @app.route("/add-question", methods=['GET', 'POST'])
@@ -73,6 +74,26 @@ def post_new_answer(question_id):
             filename = None
         modifications = {'message': request.form['new_message'], 'image': filename}
         data_manager.write_answer(question_id, modifications)
+        return redirect("/question/" + str(question_id))
+
+
+@app.route("/question/<int:question_id>/new-tag", methods=['GET', 'POST'])
+def add_new_tag(question_id):
+    all_tags = data_manager.get_all_tags()
+    if request.method == 'GET':
+        tags = data_manager.get_tags_by_question(question_id)
+        return render_template('new_tag.html', question_id=str(question_id),all_tags=all_tags, tags=tags)
+    else:
+        new_tag = request.form["new-tag"]
+        data_manager.remove_tags_from_question(question_id)
+        for tag in all_tags:
+            tag_id = str(tag["id"])
+            tag_name = tag["name"]
+            if tag_id in request.form.keys() and request.form[tag_id] == tag_name:
+                data_manager.add_tag_to_question(tag_id, question_id)
+        if new_tag:
+            new_tag_saved = data_manager.save_tag(new_tag)
+            data_manager.add_tag_to_question(new_tag_saved["id"], question_id)
         return redirect("/question/" + str(question_id))
 
 

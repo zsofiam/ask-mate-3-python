@@ -11,6 +11,9 @@
             text-decoration: none;
             color: brown;
         }
+        .tag {
+            text-decoration: none;
+            font-size: 1.1em;
         .edit {
             text-decoration: none;
             color: darkblue;
@@ -20,6 +23,10 @@
 <body>
     <a href="/">Go back to questions</a>
     <p><b>Question: {{ question['title'] }}</b></p>
+    {% for tag in tags %}
+        <a class="tag" href="/tag/{{ tag["id"] }}">#{{ tag["name"] }}</a>
+    {% endfor %}
+        <a class="tag" href="/question/{{ question["id"] }}/new-tag">#add tag</a>
     <p>{{ question['message'] }}</p>
     {% if question["image"] %}
         <img src="/static/images/{{ question['image'] }}" alt="{{ question['image'] }}"><br>

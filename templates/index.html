@@ -11,6 +11,20 @@
 </head>
 <body>
 <h1>Questions</h1>
+<form action="/search" method="get">
+    <input type="text" name="q"><input type="submit" value="Search">
+</form>
+<div>
+    {% for result in results %}
+    <ul>
+        <li>{{ result['title'] }}</li>
+        <ul>
+            <li><small>Views: {{ result['view_number'] }} | Votes: {{ result['vote_number'] }} | Time: {{ result['submission_time'] }}</small></li>
+            <li>{{ result['message'] }}</li>
+        </ul>
+    </ul>
+    {% endfor %}
+</div>
 <a href="/add-question">Ask a question</a>
 <ul>
     {% for question in questions %}

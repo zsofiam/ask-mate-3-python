@@ -54,7 +54,7 @@
             Comment:
             {% if comment.answer_id == None %}
             {{ comment.message }}<br>
-                <a class="edit" href="/comment/{{ comment["id"] }}/edit">EDIT comment</a>
+                <a class="edit" href="/comment/{{ question['id'] }}/{{ comment['id'] }}/edit">EDIT comment</a>
                 <a class="delete" href="/comment/{{ comment['id'] }}/{{ question['id'] }}/delete">DELETE comment</a><br><br>
 
             {%  endif %}
@@ -81,7 +81,7 @@
                 <small>Submission Time: {{ comment["submission_time"] }}</small>
             Comment:
              {{ comment.message }}
-                  <a class="edit" href="/comment/{{ comment["id"] }}/edit">EDIT comment</a>
+                  <a class="edit" href="/comment/{{ question['id'] }}/{{ comment['id'] }}/edit">EDIT comment</a>
                 <a class="delete" href="/comment/{{ comment['id'] }}/{{ question['id'] }}/delete">DELETE comment</a><br><br>
              {% endif %}
         {% endfor %}

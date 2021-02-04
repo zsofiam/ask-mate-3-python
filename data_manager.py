@@ -80,6 +80,14 @@ def write_comment(cursor: RealDictCursor, question_id: int, comment: str) -> lis
     cursor.execute(query)
 
 @database_common.connection_handler
+def update_comment(cursor: RealDictCursor, id: int, comment: dict):
+    query = """
+    UPDATE comment
+    SET message = '{}'
+    WHERE id = {};""".format(comment["comment"], id)
+    cursor.execute(query)
+
+@database_common.connection_handler
 def write_answer_comment(cursor: RealDictCursor, question_id: int, answer_id: int, comment: str) -> list:
     query = """
     INSERT INTO comment (question_id, answer_id, message, submission_time, edited_count)
@@ -94,6 +102,15 @@ def get_comment(cursor: RealDictCursor, question_id: int) -> list:
     WHERE question_id = {};""".format(question_id)
     cursor.execute(query)
     return cursor.fetchall()
+
+@database_common.connection_handler
+def get_comment_message_by_id(cursor: RealDictCursor, id: int) -> list:
+    query = """
+    SELECT message, question_id, id
+    FROM comment
+    WHERE id = {};""".format(id)
+    cursor.execute(query)
+    return cursor.fetchone()
 
 
 @database_common.connection_handler

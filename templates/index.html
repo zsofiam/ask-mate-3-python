@@ -18,26 +18,25 @@
     <input type="text" name="q"><input type="submit" value="Search">
 </form>
 <div>
-<ul id="search"></ul>
     {% if word != '' %}
         <p>The searched phrase is: "{{ word }}"</p>
     {% endif %}
     {% for result in results %}
-    <ul id="search-results">
+    <ul>
     {%  if result['title'] %}
-        <li>{{ result['title'].replace(word, word.upper()) }}</li>
+        <li>{{ result['title'].replace(word, "<mark>" + word + "</mark>")|safe }}</li>
         {% else %}
         <li>{{ result['title'] }}</li>
-        {% endif %}
         <ul>
+        {% endif %}
             <li><small>Views: {{ result['view_number'] }} | Votes: {{ result['vote_number'] }} | Time: {{ result['submission_time'] }}</small></li>
             {% if result['message'] %}
-            <li>{{ result['message'].replace(word, word.upper()) }}</li>
+            <li>{{ result['message'].replace(word, "<mark>" + word + "</mark>")|safe }}</li>
             {% else %}
             <li>{{ result['message'] }}</li>
             {% endif %}
         {% if result['answer_message'] %}
-            <li class="answer_message">{{ result['answer_message'].replace(word, word.upper()) }}</li>
+            <li class="answer_message">{{ result['answer_message'].replace(word, "<mark>" + word + "</mark>")|safe }}</li>
         {% endif %}
         </ul>
     </ul>
@@ -45,19 +44,19 @@
     {% for result in results_answers %}
         <ul>
             {%  if result['title'] %}
-                <li>{{ result['title'].replace(word, word.upper()) }}</li>
+                <li>{{ result['title'].replace(word, "<mark>" + word + "</mark>")|safe }}</li>
             {% else %}
                 <li>{{ result['title'] }}</li>
             {% endif %}
             <ul>
                 <li><small>Views: {{ result['view_number'] }} | Votes: {{ result['vote_number'] }} | Time: {{ result['submission_time'] }}</small></li>
                 {% if result['message'] %}
-                    <li>{{ result['message'].replace(word, word.upper()) }}</li>
+                    <li>{{ result['message'].replace(word, "<mark>" + word + "</mark>")|safe }}</li>
                 {% else %}
                     <li>{{ result['message'] }}</li>
                 {% endif %}
                 {% if result['answer_message'] %}
-                    <li class="answer_message">{{ result['answer_message'].replace(word, word.upper()) }}</li>
+                    <li class="answer_message">{{ result['answer_message'].replace(word, "<mark>" + word + "</mark>")|safe }}</li>
                 {% endif %}
             </ul>
         </ul>
@@ -84,24 +83,5 @@
     {% endfor %}
 </ul>
 <a href="/list">Display More Questions</a>
-<script>
-    $( document ).ready(function() {
-        alert("héé!")
-
-        {% for result in results %}
-            {%  if result['title'] %}
-                alert("Yeee");
-                var li = document.createElement("li");
-                li.innerHTML = {{ result["title"] }};
-                document.getElementById("search").appendChild(li);
-            {% endif %}
-            {%  if result['message'] %}
-                var li = document.createElement()
-                li.innerHTML = {{ result["message"] }}
-                    document.getElementById("search").appendChild(li)
-            {% endif %}
-        {% endfor %}
-    })
-</script>
 </body>
 </html>

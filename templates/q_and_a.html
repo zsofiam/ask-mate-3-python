@@ -46,9 +46,13 @@
     </p>
     <br>
         {% for comment in comments %}
+            <br>
+            <small>Submission Time: {{ comment["submission_time"] }}</small>
+            Comment:
             {% if comment.answer_id == None %}
             {{ comment.message }}<br>
             {%  endif %}
+
         {% endfor %}
 
     </div>
@@ -68,6 +72,8 @@
         <br>
          {% for comment in comments %}
             {% if comment.answer_id == answer.id %}<br>
+                <small>Submission Time: {{ comment["submission_time"] }}</small>
+            Comment:
              {{ comment.message }}
              {% endif %}
         {% endfor %}

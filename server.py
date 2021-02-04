@@ -12,6 +12,7 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 @app.route('/search')
 def main_page():
     results = []
+    results_answers = []
     word = ''
     query_string = request.args
     if 'q' in query_string and query_string['q'] != '':

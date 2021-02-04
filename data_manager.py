@@ -158,9 +158,9 @@ def search(cursor: RealDictCursor, word: str) -> list:
 def search_answers(cursor: RealDictCursor, word: str) -> list:
     query = """
         SELECT DISTINCT title, q.message, q.submission_time, view_number, q.vote_number, a.message AS answer_message
-        FROM question AS q LEFT JOIN answer AS a
+        FROM question AS q FULL JOIN answer AS a
         ON q.id = a.question_id
-        WHERE a.message LIKE '%%{}%%'
+        WHERE UPPER(a.message) LIKE UPPER('%%{}%%')
         ORDER BY submission_time DESC;""".format(word, word, word)
     cursor.execute(query)
     return cursor.fetchall()

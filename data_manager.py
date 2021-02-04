@@ -73,14 +73,22 @@ def modify_answer(cursor: RealDictCursor, answer_id: int, modifications: dict) -
         cursor.execute(query)
 
 @database_common.connection_handler
-def write_comment(cursor: RealDictCursor, question_id: int, comment: str) -> list:
+def write_comment(cursor: RealDictCursor, question_id: int, comment: str):
     query = """
     INSERT INTO comment (question_id, answer_id, message, submission_time, edited_count)
     VALUES ({}, NULL ,'{}',CURRENT_TIMESTAMP,0);""".format(question_id, comment)
     cursor.execute(query)
 
 @database_common.connection_handler
-def write_answer_comment(cursor: RealDictCursor, question_id: int, answer_id: int, comment: str) -> list:
+def update_comment(cursor: RealDictCursor, id: int, comment: dict):
+    query = """
+    UPDATE comment
+    SET message = '{}'
+    WHERE id = {};""".format(comment["comment"], id)
+    cursor.execute(query)
+
+@database_common.connection_handler
+def write_answer_comment(cursor: RealDictCursor, question_id: int, answer_id: int, comment: str):
     query = """
     INSERT INTO comment (question_id, answer_id, message, submission_time, edited_count)
     VALUES ({}, {} ,'{}',CURRENT_TIMESTAMP,0);""".format(question_id, answer_id, comment)
@@ -95,6 +103,15 @@ def get_comment(cursor: RealDictCursor, question_id: int) -> list:
     cursor.execute(query)
     return cursor.fetchall()
 
+@database_common.connection_handler
+def get_comment_message_by_id(cursor: RealDictCursor, id: int) -> list:
+    query = """
+    SELECT message, question_id, id
+    FROM comment
+    WHERE id = {};""".format(id)
+    cursor.execute(query)
+    return cursor.fetchone()
+
 
 @database_common.connection_handler
 def get_comment_id_by_answer(cursor: RealDictCursor, answer_id: int) -> list:
@@ -107,7 +124,7 @@ def get_comment_id_by_answer(cursor: RealDictCursor, answer_id: int) -> list:
 
 
 @database_common.connection_handler
-def delete_comment_by_id(cursor: RealDictCursor, comment_id: int) -> list:
+def delete_comment_by_id(cursor: RealDictCursor, comment_id: int):
     query = """
     DELETE FROM comment
     WHERE id = {}""".format(comment_id)
@@ -115,7 +132,7 @@ def delete_comment_by_id(cursor: RealDictCursor, comment_id: int) -> list:
 
 
 @database_common.connection_handler
-def delete_comments_by_question_id(cursor: RealDictCursor, question_id: int) -> list:
+def delete_comments_by_question_id(cursor: RealDictCursor, question_id: int):
     query = """
     DELETE FROM comment
     WHERE question_id = {}""".format(question_id)

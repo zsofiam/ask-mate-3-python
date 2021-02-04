@@ -6,10 +6,12 @@
     <title>Edit comment</title>
 </head>
 <body>
-  <h1>Edit comment</h1>
-    <form action="/comment/{{ id }}/edit" method="post" enctype = "multipart/form-data">
-        <label>Answer:<br><textarea name="new-message">{{ datas['message'] }}</textarea></label>
-        <input type="submit" value="Edit">
-    </form>
+    <div class="container">
+        <h1>Edit comment</h1>
+        <form action="/comment/{{ comment['question_id'] }}/{{ comment['id'] }}/edit" method="POST">
+            <label>Comment:<br><textarea name="new-message">{{ comment['message'] }}</textarea></label><br>
+            <button type="submit">Edit</button>
+        </form>
+    </div>
 </body>
 </html>

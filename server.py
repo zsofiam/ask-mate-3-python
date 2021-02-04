@@ -20,7 +20,8 @@ def main_page():
         results = data_manager.search(word)
         results_answers = data_manager.search_answers(word)
     questions = data_manager.get_latest_five_questions()
-    return render_template('index.html', questions=questions, results=results, results_answers=results_answers, word=word)
+    return render_template('index.html', questions=questions, results=results, results_answers=results_answers,
+                           word=word)
 
 
 @app.route('/list')
@@ -84,7 +85,7 @@ def add_new_tag(question_id):
     all_tags = data_manager.get_all_tags()
     if request.method == 'GET':
         tags = data_manager.get_tags_by_question(question_id)
-        return render_template('new_tag.html', question_id=str(question_id),all_tags=all_tags, tags=tags)
+        return render_template('new_tag.html', question_id=str(question_id), all_tags=all_tags, tags=tags)
     else:
         new_tag = request.form["new-tag"]
         data_manager.remove_tags_from_question(question_id)
@@ -108,10 +109,22 @@ def post_new_comment(question_id):
         data_manager.write_comment(question_id, comment)
         return redirect("/question/" + str(question_id))
 
+
 @app.route("/comment/<id>/<question_id>/delete")
 def delete_comment(id, question_id):
     data_manager.delete_comment_by_id(id)
     return redirect("/question/" + str(question_id))
+
+
+@app.route("/comment/<question_id>/<id>/edit", methods=["GET", "POST"])
+def edit_comment(id, question_id):
+    if request.method == 'GET':
+        comment = data_manager.get_comment_message_by_id(id)
+        return render_template('edit_comment.html', comment=comment)
+    else:
+        text = {"comment": request.form["new-message"]}
+        data_manager.update_comment(id, text)
+        return redirect("/question/" + str(question_id))
 
 
 @app.route("/question/<int:question_id>/tag/<int:tag_id>/delete")
@@ -167,7 +180,7 @@ def delete_answer(answer_id):
     data_manager.delete_answer(answer_id)
     try:
         os.remove(os.path.join(app.root_path, app.config['UPLOAD_FOLDER'], filename))
-    except (FileNotFoundError,TypeError):
+    except (FileNotFoundError, TypeError):
         pass
     return redirect("/question/" + str(question_id))
 

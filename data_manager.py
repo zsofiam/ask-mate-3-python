@@ -2,45 +2,6 @@ import database_common
 from psycopg2 import sql
 from psycopg2.extras import RealDictCursor
 
-#
-# def get_all_questions_from_file():
-#     all_questions = util.get_dictionary_list_from_file(QUESTIONS_FILE_PATH)
-#     return all_questions
-#
-#
-# def get_questions_sorted(parameter, direction):
-#     questions = get_all_questions_from_file()
-#     if parameter == 'submission_time' or parameter == 'vote_number' or parameter == 'view_number':
-#         sorted_questions = sort_by_number_parameter(questions, parameter, direction)
-#     elif parameter == 'title' or parameter == 'message':
-#         sorted_questions = sort_by_text_parameter(questions, parameter, direction)
-#     else:
-#         sorted_questions = sort_by_number_parameter(questions, 'submission_time', 'desc')
-#     return sorted_questions
-#
-#
-# def sort_by_number_parameter(questions, parameter, direction):
-#     if direction == 'desc':
-#         sorted_questions = sorted(questions, key=lambda k: int(k[parameter]), reverse=True)
-#     else:
-#         sorted_questions = sorted(questions, key=lambda k: int(k[parameter]))
-#     return sorted_questions
-#
-#
-# def sort_by_text_parameter(questions, parameter, direction):
-#     if direction == 'desc':
-#         sorted_questions = sorted(questions, key=lambda k: k[parameter], reverse=True)
-#     else:
-#         sorted_questions = sorted(questions, key=lambda k: k[parameter])
-#     return sorted_questions
-#
-#
-# def get_one_question(q_id):
-#     all_questions = get_all_questions_from_file()
-#     for question in all_questions:
-#         if question['id'] == q_id:
-#             return question
-
 
 @database_common.connection_handler
 def get_answers(cursor: RealDictCursor, question_id: int) -> list:
@@ -87,8 +48,8 @@ def write_answer(cursor: RealDictCursor, question_id: int, modifications: dict) 
     if modifications['image'] is not None:
         query = """
         INSERT INTO answer (submission_time, vote_number, question_id, message, image)
-        VALUES (CURRENT_TIMESTAMP, 0, {}, '{}', '{}');/
-        """.format(question_id, modifications['message'], modifications['image'])
+        VALUES (CURRENT_TIMESTAMP, 0, {}, '{}', '{}');"""\
+            .format(question_id, modifications['message'], modifications['image'])
         cursor.execute(query)
     else:
         query = """
@@ -184,7 +145,7 @@ def get_answer_data(cursor: RealDictCursor, answer_id: int) -> tuple:
 @database_common.connection_handler
 def search(cursor: RealDictCursor, word: str) -> list:
     query = """
-        SELECT DISTINCT title, q.message, q.submission_time, view_number, q.vote_number
+        SELECT DISTINCT title, q.message, q.submission_time, view_number, q.vote_number, a.message AS answer_message
         FROM question AS q LEFT JOIN answer AS a
         ON q.id = a.question_id
         WHERE title LIKE '%%{}%%' OR q.message LIKE '%%{}%%' OR a.message LIKE '%%{}%%'

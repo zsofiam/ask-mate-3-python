@@ -17,6 +17,7 @@ def main_page():
     if 'q' in query_string and query_string['q'] != '':
         word = query_string['q']
         results = data_manager.search(word)
+        print(results)
     questions = data_manager.get_latest_five_questions()
     return render_template('index.html', questions=questions, results=results, word=word)
 
@@ -140,6 +141,7 @@ def edit_question(question_id):
 def delete_question(question_id):
     data_manager.remove_tags_from_question(question_id)
     data_manager.delete_answers_by_question_id(question_id)
+    #data_manager.delete_comments_by_question_id(question_id)
     filename = data_manager.get_question_by_id(question_id)['image']
     data_manager.delete_question(question_id)
     try:

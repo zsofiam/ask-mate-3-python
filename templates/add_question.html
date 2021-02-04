@@ -2,23 +2,20 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" href="/static/CSS/style.css">
     <title>Ask a Question</title>
-    <style>
-        textarea, input{
-            display: block;
-            margin-bottom: 15px;
-        }
-    </style>
 </head>
 <body>
-<form action="/add-question" method="POST" enctype ="multipart/form-data">
-    <label for="title">Title</label>
-    <textarea id="title" name="title" rows="1" cols="100"></textarea>
-    <label for="message">Message</label>
-    <textarea id="message" name="message" rows="10" cols="100"></textarea>
-    <label for="file">Upload an Image</label>
-    <input type="file" name="file" accept="image/png, image/jpeg">
-    <input type="submit" value="Save">
-</form>
+    <div class="container">
+        <form action="/add-question" method="POST" enctype ="multipart/form-data">
+            <label for="title">Title</label><br>
+            <textarea id="title" name="title" rows="1" cols="100"></textarea><br><br>
+            <label for="message">Message</label><br>
+            <textarea id="message" name="message" rows="10" cols="100"></textarea><br><br>
+            <label for="file">Upload an Image</label><br>
+            <input type="file" name="file" accept="image/png, image/jpeg"><br><br>
+            <input type="submit" value="Save">
+        </form>
+    </div>
 </body>
 </html>

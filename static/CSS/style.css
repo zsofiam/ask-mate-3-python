@@ -1,15 +1,42 @@
-small {
-    display: block;
+body {
+    margin: 0;
+    padding: 0;
+}
+.container {
+    width: 70%;
+    margin: auto;
+    padding: 30px 10px;
+}
+
+.like-form {
+    display: inline-block;
+    padding-bottom: 20px;
+}
+.add {
+    text-decoration: none;
+    color: #000EEE;
+    font-size: 1.2em;
+    background-color: #ebf3ff;
+}
+
+#like {
+    width: 60px;
+    background-color: #baffc4;
+}
+#dislike {
+    width: 60px;
+    background-color: #ff99a3;
 }
 .answer_message {
     margin-left: 20px;
 }
-textarea, input {
-    display: block;
-    margin-bottom: 15px;
-}
+
 ul > li {
     list-style-type: none;
+}
+ol, ul {
+    margin: 10px 0;
+    padding: 0 20px;
 }
 .delete {
     text-decoration: none;

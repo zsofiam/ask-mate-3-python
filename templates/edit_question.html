@@ -2,18 +2,20 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <link rel="stylesheet" type="text/css" href="static/CSS/style.css">
+    <link rel="stylesheet" type="text/css" href="/static/CSS/style.css">
     <title>Edit Question</title>
 </head>
 <body>
-<form action="/question/{{ question["id"] }}/edit" method="POST" enctype = "multipart/form-data">
-    <label for="title">Title</label>
-    <textarea id="title" name="title" rows="1" cols="100">{{ question["title"] }}</textarea>
-    <label for="message">Message</label>
-    <textarea id="message" name="message" rows="10" cols="100">{{ question["message"] }}</textarea>
-    <label for="file">Choose a picture to replace existing one</label>
-    <input type="file" name="file" accept="image/png, image/jpeg">
-    <input type="submit" value="Save">
-</form>
+    <div class="container">
+        <form action="/question/{{ question["id"] }}/edit" method="POST" enctype = "multipart/form-data">
+            <label for="title">Title</label><br>
+            <textarea id="title" name="title" rows="1" cols="100">{{ question["title"] }}</textarea><br><br>
+            <label for="message">Message</label><br>
+            <textarea id="message" name="message" rows="10" cols="100">{{ question["message"] }}</textarea><br><br>
+            <label for="file">Choose a picture to replace existing one</label><br>
+            <input type="file" name="file" accept="image/png, image/jpeg"><br><br>
+            <input type="submit" value="Save">
+        </form>
+    </div>
 </body>
 </html>

@@ -2,24 +2,25 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <link rel="stylesheet" type="text/css" href="static/CSS/style.css">
+    <link rel="stylesheet" type="text/css" href="/static/CSS/style.css">
     <title>Tags</title>
 </head>
 <body>
-<h1>Select tags and/or define a new one</h1>
-
-<form action="/question/{{ question_id }}/new-tag" method="post">
-    {% for all_tag in all_tags %}
-    {% if all_tag in tags %}
-    <input type="checkbox" id="{{ all_tag["name"] }}" name="{{ all_tag["id"] }}" value="{{ all_tag["name"] }}" checked="checked">
-    {% else %}
-        <input type="checkbox" id="{{ all_tag["name"] }}" name="{{ all_tag["id"] }}" value="{{ all_tag["name"] }}">
-    {% endif %}
-        <label for="{{ all_tag["name"] }}">{{ all_tag["name"] }}</label>
-    {% endfor %}
-    <label for="new_tag">New Tag:</label>
-    <input type="text" id="new_tag" name="new-tag">
-    <input type="submit" value="SEND">
-</form>
+    <div class="container">
+        <h1>Select tags and/or define a new one</h1>
+        <form action="/question/{{ question_id }}/new-tag" method="post">
+            {% for all_tag in all_tags %}
+            {% if all_tag in tags %}
+            <input type="checkbox" id="{{ all_tag["name"] }}" name="{{ all_tag["id"] }}" value="{{ all_tag["name"] }}" checked="checked">
+            {% else %}
+                <input type="checkbox" id="{{ all_tag["name"] }}" name="{{ all_tag["id"] }}" value="{{ all_tag["name"] }}">
+            {% endif %}
+                <label for="{{ all_tag["name"] }}">{{ all_tag["name"] }}</label><br>
+            {% endfor %}
+            <br><label for="new_tag">New Tag:</label><br><br>
+            <input type="text" id="new_tag" name="new-tag">
+            <input type="submit" value="SEND">
+        </form>
+    </div>
 </body>
 </html>

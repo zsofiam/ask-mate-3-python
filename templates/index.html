@@ -2,79 +2,87 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <link rel="stylesheet" type="text/css" href="static/CSS/style.css">
+    <link rel="stylesheet" type="text/css" href="/static/CSS/style.css">
     <title>Questions</title>
 </head>
 <body>
-<h1>Questions</h1>
-<form action="/search" method="get">
-    <input type="text" name="q"><input type="submit" value="Search">
-</form>
-<div>
-    {% if word != '' %}
-        <p>The searched phrase is: "{{ word }}"</p>
-    {% endif %}
-    {% for result in results %}
-    <ul>
-    {%  if result['title'] %}
-        <li>{{ result['title'].replace(word, "<mark>" + word + "</mark>")|safe }}</li>
-        {% else %}
-        <li>{{ result['title'] }}</li>
-        <ul>
-        {% endif %}
-            <li><small>Views: {{ result['view_number'] }} | Votes: {{ result['vote_number'] }} | Time: {{ result['submission_time'] }}</small></li>
-            {% if result['message'] %}
-            <li>{{ result['message'].replace(word, "<mark>" + word + "</mark>")|safe }}</li>
-            {% else %}
-            <li>{{ result['message'] }}</li>
+    <div class="container">
+        <h1>Questions</h1>
+        <form action="/search" method="get">
+            <input type="text" name="q"><input type="submit" value="Search">
+        </form>
+        <div>
+            {% if word != '' %}
+                <p>The searched phrase is: "{{ word }}"</p>
             {% endif %}
-        {% if result['answer_message'] %}
-            <li class="answer_message">{{ result['answer_message'].replace(word, "<mark>" + word + "</mark>")|safe }}</li>
-        {% endif %}
-        </ul>
-    </ul>
-    {% endfor %}
-    {% for result in results_answers %}
-        <ul>
+            {% for result in results %}
+            <ul>
             {%  if result['title'] %}
                 <li>{{ result['title'].replace(word, "<mark>" + word + "</mark>")|safe }}</li>
-            {% else %}
-                <li>{{ result['title'] }}</li>
-            {% endif %}
-            <ul>
-                <li><small>Views: {{ result['view_number'] }} | Votes: {{ result['vote_number'] }} | Time: {{ result['submission_time'] }}</small></li>
-                {% if result['message'] %}
-                    <li>{{ result['message'].replace(word, "<mark>" + word + "</mark>")|safe }}</li>
                 {% else %}
-                    <li>{{ result['message'] }}</li>
+                <li>{{ result['title'] }}</li>
+                <ul>
                 {% endif %}
+                    <li><small>Views: {{ result['view_number'] }} | Votes: {{ result['vote_number'] }} | Time: {{ result['submission_time'] }}</small></li>
+                    {% if result['message'] %}
+                    <li>{{ result['message'].replace(word, "<mark>" + word + "</mark>")|safe }}</li>
+                    {% else %}
+                    <li>{{ result['message'] }}</li>
+                    {% endif %}
                 {% if result['answer_message'] %}
                     <li class="answer_message">{{ result['answer_message'].replace(word, "<mark>" + word + "</mark>")|safe }}</li>
                 {% endif %}
+                </ul>
             </ul>
-        </ul>
-    {% endfor %}
-</div>
-<a href="/add-question">Ask a question</a>
-<ul>
-    {% for question in questions %}
-        <li>
-            <a href="/question/{{ question.get('id') }}">{{question.get('title')}}</a>
-            <small>Number of Views: {{ question.get('view_number') }}</small>
-            <small>Vote Number: {{ question.get('vote_number') }}</small>
-            <small>Submission Time: {{ question["submission_time"] }}</small>
-            <p>{{ question.get('message') }}</p>
-            <p/>
-            <form action="/question/{{ question.get('id') }}/vote-up" method="post">
-            <button type="submit">Like!</button>
-            </form>
-            <form action="/question/{{ question.get('id') }}/vote-down" method="post">
-            <button type="submit">Dislike!</button>
-            </form>
-            <p/>
-        </li>
-    {% endfor %}
-</ul>
-<a href="/list">Display More Questions</a>
+            {% endfor %}
+            {% for result in results_answers %}
+                <ul>
+                    {%  if result['title'] %}
+                        <li>{{ result['title'].replace(word, "<mark>" + word + "</mark>")|safe }}</li>
+                    {% else %}
+                        <li>{{ result['title'] }}</li>
+                    {% endif %}
+                    <ul>
+                        <li><small>Views: {{ result['view_number'] }} | Votes: {{ result['vote_number'] }} | Time: {{ result['submission_time'] }}</small></li>
+                        {% if result['message'] %}
+                            <li>{{ result['message'].replace(word, "<mark>" + word + "</mark>")|safe }}</li>
+                        {% else %}
+                            <li>{{ result['message'] }}</li>
+                        {% endif %}
+                        {% if result['answer_message'] %}
+                            <li class="answer_message">{{ result['answer_message'].replace(word, "<mark>" + word + "</mark>")|safe }}</li>
+                        {% endif %}
+                    </ul>
+                </ul>
+            {% endfor %}
+        </div>
+        <br>
+        <a class="add" href="/add-question">Ask a question</a><br><br>
+        <table>
+            {% for question in questions %}
+                <tr>
+                    <td>
+                        <a href="/question/{{ question.get('id') }}"><strong>{{question.get('title')}}</strong></a></td>
+                    <td>
+                        <small>Number of Views: <strong>{{ question.get('view_number') }}</strong></small>
+                        <small>Vote Number: <strong>{{ question.get('vote_number') }}</strong></small>
+                        <small>Submission Time: <strong>{{ question["submission_time"] }}</strong></small>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <p>{{ question.get('message') }}</p>
+                        <form class="like-form" action="/question/{{ question.get('id') }}/vote-up" method="post">
+                        <button id="like" type="submit">Like!</button>
+                        </form>
+                        <form class="like-form" action="/question/{{ question.get('id') }}/vote-down" method="post">
+                        <button id="dislike" type="submit">Dislike!</button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+        </table>
+        <a href="/list">Display More Questions</a>
+    </div>
 </body>
 </html>

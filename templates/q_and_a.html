@@ -30,7 +30,7 @@
                 {% if comment.answer_id == None %}
                 {{ comment.message }}<br><br>
                     <a class="delete" href="/comment/{{ comment['id'] }}/{{ question['id'] }}/delete">DELETE comment</a> |
-                    <a class="edit" href="/comment/{{ comment["id"] }}/edit">EDIT comment</a>
+                    <a class="edit" href="/comment/{{ question['id'] }}/{{ comment['id'] }}/edit">EDIT comment</a>
                     <br><br>
                 {%  endif %}
             {% endfor %}
@@ -60,7 +60,7 @@
                 Comment:
                  {{ comment.message }}<br><br>
                     <a class="delete" href="/comment/{{ comment['id'] }}/{{ question['id'] }}/delete">DELETE comment</a> |
-                      <a class="edit" href="/comment/{{ comment["id"] }}/edit">EDIT comment</a>
+                      <a class="edit" href="/comment/{{ question['id'] }}/{{ comment['id'] }}/edit">EDIT comment</a>
                     <br>
                  {% endif %}
             {% endfor %}

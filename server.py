@@ -17,9 +17,9 @@ def main_page():
     if 'q' in query_string and query_string['q'] != '':
         word = query_string['q']
         results = data_manager.search(word)
-        print(results)
+        results_answers = data_manager.search_answers(word)
     questions = data_manager.get_latest_five_questions()
-    return render_template('index.html', questions=questions, results=results, word=word)
+    return render_template('index.html', questions=questions, results=results, results_answers=results_answers, word=word)
 
 
 @app.route('/list')

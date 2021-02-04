@@ -145,10 +145,22 @@ def get_answer_data(cursor: RealDictCursor, answer_id: int) -> tuple:
 @database_common.connection_handler
 def search(cursor: RealDictCursor, word: str) -> list:
     query = """
+        SELECT DISTINCT title, q.message, q.submission_time, view_number, q.vote_number
+        FROM question AS q LEFT JOIN answer AS a
+        ON q.id = a.question_id
+        WHERE UPPER(title) LIKE UPPER('%%{}%%') OR UPPER(q.message) LIKE UPPER('%%{}%%')
+        ORDER BY submission_time DESC;""".format(word, word, word)
+    cursor.execute(query)
+    return cursor.fetchall()
+
+
+@database_common.connection_handler
+def search_answers(cursor: RealDictCursor, word: str) -> list:
+    query = """
         SELECT DISTINCT title, q.message, q.submission_time, view_number, q.vote_number, a.message AS answer_message
         FROM question AS q LEFT JOIN answer AS a
         ON q.id = a.question_id
-        WHERE title LIKE '%%{}%%' OR q.message LIKE '%%{}%%' OR a.message LIKE '%%{}%%'
+        WHERE a.message LIKE '%%{}%%'
         ORDER BY submission_time DESC;""".format(word, word, word)
     cursor.execute(query)
     return cursor.fetchall()

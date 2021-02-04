@@ -97,6 +97,32 @@ def get_comment(cursor: RealDictCursor, question_id: int) -> list:
 
 
 @database_common.connection_handler
+def get_comment_id_by_answer(cursor: RealDictCursor, answer_id: int) -> list:
+    query = """
+    SELECT id
+    FROM comment
+    WHERE answer_id = {};""".format(answer_id)
+    cursor.execute(query)
+    return cursor.fetchall()
+
+
+@database_common.connection_handler
+def delete_comment_by_id(cursor: RealDictCursor, comment_id: int) -> list:
+    query = """
+    DELETE FROM comment
+    WHERE id = {}""".format(comment_id)
+    cursor.execute(query)
+
+
+@database_common.connection_handler
+def delete_comments_by_question_id(cursor: RealDictCursor, question_id: int) -> list:
+    query = """
+    DELETE FROM comment
+    WHERE question_id = {}""".format(question_id)
+    cursor.execute(query)
+
+
+@database_common.connection_handler
 def vote_up_answer(cursor: RealDictCursor, answer_id: int) -> list:
     query = """
     UPDATE answer

@@ -140,8 +140,8 @@ def edit_question(question_id):
 @app.route("/question/<question_id>/delete")
 def delete_question(question_id):
     data_manager.remove_tags_from_question(question_id)
+    data_manager.delete_comments_by_question_id(question_id)
     data_manager.delete_answers_by_question_id(question_id)
-    #data_manager.delete_comments_by_question_id(question_id)
     filename = data_manager.get_question_by_id(question_id)['image']
     data_manager.delete_question(question_id)
     try:
@@ -155,6 +155,9 @@ def delete_question(question_id):
 def delete_answer(answer_id):
     filename = data_manager.get_answer_data(answer_id)['image']
     question_id = data_manager.get_answer_data(answer_id)['question_id']
+    comment_ids = data_manager.get_comment_id_by_answer(answer_id)
+    for comment in comment_ids:
+        data_manager.delete_comment_by_id(comment['id'])
     data_manager.delete_answer(answer_id)
     try:
         os.remove(os.path.join(app.root_path, app.config['UPLOAD_FOLDER'], filename))

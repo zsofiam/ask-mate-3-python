@@ -153,29 +153,7 @@ def search(cursor: RealDictCursor, word: str) -> list:
     cursor.execute(query)
     return cursor.fetchall()
 
-# def add_question(question, filename):
-#     question_id = util.get_latest_id('question', LATEST_IDS)
-#     question["id"] = question_id
-#     question["submission_time"] = engine.get_timestamp()
-#     question["vote_number"] = 0
-#     question["view_number"] = 0
-#     question['image'] = filename
-#     questions = get_all_questions_from_file()
-#     questions.append(question)
-#     write_questions_to_file(questions)
-#
-#
-# def write_questions_to_file(questions):
-#     util.write_dictionary_list_to_file(questions, QUESTIONS_FILE_PATH, QUESTIONS_HEADER)
-#
-#
-# def modify_question(parameter_id, modifications):
-#     questions = get_all_questions_from_file()
-#     question = util.find_object_by_id(parameter_id, questions)
-#     modified_question = util.add_modifications_to_object(question, modifications)
-#     util.write_dictionary_list_to_file(questions, QUESTIONS_FILE_PATH, QUESTIONS_HEADER)
-#     return modified_question
-#
+
 @database_common.connection_handler
 def delete_answer(cursor: RealDictCursor, answer_id: int) -> list:
     query = """
@@ -301,23 +279,3 @@ def delete_answers_by_question_id(cursor: RealDictCursor, question_id:int) -> li
     DELETE FROM answer
     WHERE question_id = {}""".format(question_id)
     cursor.execute(query)
-
-
-# def get_one_question(q_id):
-#     all_questions = get_all_questions_from_file()
-#     for question in all_questions:
-#         if question['id'] == q_id:
-#             return question
-#
-#
-# def write_questions_to_file(questions):
-#     util.write_dictionary_list_to_file(questions, QUESTIONS_FILE_PATH, QUESTIONS_HEADER)
-#
-#
-# def modify_question(parameter_id, modifications):
-#     questions = get_all_questions_from_file()
-#     question = util.find_object_by_id(parameter_id, questions)
-#     modified_question = util.add_modifications_to_object(question, modifications)
-#     util.write_dictionary_list_to_file(questions, QUESTIONS_FILE_PATH, QUESTIONS_HEADER)
-#     return modified_question
-#

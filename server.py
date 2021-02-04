@@ -12,14 +12,15 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 @app.route('/search')
 def main_page():
     results = []
+    results_answers = []
     word = ''
     query_string = request.args
     if 'q' in query_string and query_string['q'] != '':
         word = query_string['q']
         results = data_manager.search(word)
-        print(results)
+        results_answers = data_manager.search_answers(word)
     questions = data_manager.get_latest_five_questions()
-    return render_template('index.html', questions=questions, results=results, word=word)
+    return render_template('index.html', questions=questions, results=results, results_answers=results_answers, word=word)
 
 
 @app.route('/list')
@@ -140,8 +141,8 @@ def edit_question(question_id):
 @app.route("/question/<question_id>/delete")
 def delete_question(question_id):
     data_manager.remove_tags_from_question(question_id)
+    data_manager.delete_comments_by_question_id(question_id)
     data_manager.delete_answers_by_question_id(question_id)
-    #data_manager.delete_comments_by_question_id(question_id)
     filename = data_manager.get_question_by_id(question_id)['image']
     data_manager.delete_question(question_id)
     try:
@@ -155,6 +156,9 @@ def delete_question(question_id):
 def delete_answer(answer_id):
     filename = data_manager.get_answer_data(answer_id)['image']
     question_id = data_manager.get_answer_data(answer_id)['question_id']
+    comment_ids = data_manager.get_comment_id_by_answer(answer_id)
+    for comment in comment_ids:
+        data_manager.delete_comment_by_id(comment['id'])
     data_manager.delete_answer(answer_id)
     try:
         os.remove(os.path.join(app.root_path, app.config['UPLOAD_FOLDER'], filename))
@@ -191,6 +195,7 @@ def vote_down_question(question_id):
     data_manager.vote_down_question(question_id)
     return redirect("/")
 
+
 @app.route('/question/<question_id>/answer/<answer_id>/new_comment', methods=["GET", "POST"])
 def post_new_answer_comment(answer_id, question_id):
     if request.method == 'GET':
@@ -199,6 +204,7 @@ def post_new_answer_comment(answer_id, question_id):
         comment = request.form['new_comment']
         data_manager.write_answer_comment(question_id, answer_id, comment)
         return redirect("/question/" + str(question_id))
+
 
 @app.route('/answer/<answer_id>/vote-up', methods=['POST'])
 def vote_up_answer(answer_id):

@@ -191,6 +191,7 @@ def vote_down_question(question_id):
     data_manager.vote_down_question(question_id)
     return redirect("/")
 
+
 @app.route('/question/<question_id>/answer/<answer_id>/new_comment', methods=["GET", "POST"])
 def post_new_answer_comment(answer_id, question_id):
     if request.method == 'GET':
@@ -199,6 +200,7 @@ def post_new_answer_comment(answer_id, question_id):
         comment = request.form['new_comment']
         data_manager.write_answer_comment(question_id, answer_id, comment)
         return redirect("/question/" + str(question_id))
+
 
 @app.route('/answer/<answer_id>/vote-up', methods=['POST'])
 def vote_up_answer(answer_id):

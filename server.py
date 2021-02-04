@@ -43,7 +43,7 @@ def display_question(question_id):
     answers = data_manager.get_answers(question_id)
     tags = data_manager.get_tags_by_question(question_id)
     comments = data_manager.get_comment(question_id)
-    return render_template('q_and_a.html',question=question, answers=answers,tags=tags, comments=comments)
+    return render_template('q_and_a.html', question=question, answers=answers, tags=tags, comments=comments)
 
 
 @app.route("/add-question", methods=['GET', 'POST'])
@@ -107,6 +107,11 @@ def post_new_comment(question_id):
         comment = request.form['new_comment']
         data_manager.write_comment(question_id, comment)
         return redirect("/question/" + str(question_id))
+
+@app.route("/comment/<id>/<question_id>/delete")
+def delete_comment(id, question_id):
+    data_manager.delete_comment_by_id(id)
+    return redirect("/question/" + str(question_id))
 
 
 @app.route("/question/<int:question_id>/tag/<int:tag_id>/delete")

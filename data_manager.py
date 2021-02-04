@@ -89,7 +89,7 @@ def write_answer_comment(cursor: RealDictCursor, question_id: int, answer_id: in
 @database_common.connection_handler
 def get_comment(cursor: RealDictCursor, question_id: int) -> list:
     query = """
-    SELECT question_id, answer_id, message, submission_time
+    SELECT id, question_id, answer_id, message, submission_time
     FROM comment
     WHERE question_id = {};""".format(question_id)
     cursor.execute(query)

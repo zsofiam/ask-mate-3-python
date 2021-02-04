@@ -28,7 +28,8 @@
                     <img src="/static/images/{{ question['image'] }}" alt="{{ question['image'] }}"><br>
                 {% endif %}
                 <a class="delete" href="/question/{{ question['id'] }}/delete">DELETE question</a> |
-                <a class="edit" href="/question/{{ question["id"] }}/edit">EDIT question</a>
+                <a class="edit" href="/question/{{ question["id"] }}/edit">EDIT question</a><br><br>
+             <a class="add" href="/question/{{ question['id'] }}/new-answer">Write new answer</a>
             </td>
             <td class="cols">
                 <a class="add" href="/question/{{ question['id'] }}/new_comment">Comment the question </a><br>
@@ -45,14 +46,15 @@
             </td>
         </tr>
         <tr>
-                <a class="add" href="/question/{{ question['id'] }}/new-answer">Write new answer</a>
+
                 {% for answer in answers %}
+
                     <td colspan="2">
-                    <strong>Answer {{ loop.index }}: </strong>
+                    <br><strong>Answer {{ loop.index }}: </strong>
+                    <p><em>{{ answer['message'] }}</em></p>
                         {% if answer["image"]%}
                     <p><img src="/static/images/{{ answer["image"] }}" alt="{{ answer["image"] }}"></p>
                         {% endif %}
-                    <p><em>{{ answer['message'] }}</em></p>
                     <a class="delete" href="/answer/{{ answer['id'] }}/delete">DELETE answer</a> |
                     <a class="edit" href="/answer/{{ answer['id'] }}/edit">EDIT answer</a><br>
                     <p><small>Vote number: {{ answer['vote_number'] }}</small></p>

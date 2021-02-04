@@ -80,10 +80,10 @@ def write_comment(cursor: RealDictCursor, question_id: int, comment: str) -> lis
     cursor.execute(query)
 
 @database_common.connection_handler
-def write_answer_comment(cursor: RealDictCursor, answer_id: int, comment: str) -> list:
+def write_answer_comment(cursor: RealDictCursor, question_id: int, answer_id: int, comment: str) -> list:
     query = """
     INSERT INTO comment (question_id, answer_id, message, submission_time, edited_count)
-    VALUES (NULL, {} ,'{}',CURRENT_TIMESTAMP,0);""".format(answer_id, comment)
+    VALUES ({}, {} ,'{}',CURRENT_TIMESTAMP,0);""".format(question_id, answer_id, comment)
     cursor.execute(query)
 
 @database_common.connection_handler

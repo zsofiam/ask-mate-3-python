@@ -2,12 +2,13 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" href="static/CSS/style.css">
     <title>Edit comment</title>
 </head>
 <body>
   <h1>Edit comment</h1>
     <form action="/comment/{{ id }}/edit" method="post" enctype = "multipart/form-data">
-        <label>Answer:<br><textarea name="new-message">{{ datas['message'] }}</textarea></label><br>
+        <label>Answer:<br><textarea name="new-message">{{ datas['message'] }}</textarea></label>
         <input type="submit" value="Edit">
     </form>
 </body>

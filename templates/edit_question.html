@@ -2,13 +2,8 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" href="static/CSS/style.css">
     <title>Edit Question</title>
-    <style>
-        textarea, input{
-            display: block;
-            margin-bottom: 15px;
-        }
-    </style>
 </head>
 <body>
 <form action="/question/{{ question["id"] }}/edit" method="POST" enctype = "multipart/form-data">

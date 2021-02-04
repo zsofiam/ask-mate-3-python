@@ -197,7 +197,7 @@ def post_new_answer_comment(answer_id, question_id):
         return render_template('new_answer_comment.html', answer_id=str(answer_id), question_id=str(question_id))
     else:
         comment = request.form['new_comment']
-        data_manager.write_answer_comment(question_id, answer_id, comment)
+        data_manager.write_answer_comment(answer_id, comment)
         return redirect("/question/" + str(question_id))
 
 @app.route('/answer/<answer_id>/vote-up', methods=['POST'])

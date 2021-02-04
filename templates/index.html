@@ -11,9 +11,6 @@
             margin-left:20px;
         }
     </style>
-    <script>
-
-    </script>
 </head>
 <body>
 <h1>Questions</h1>
@@ -21,11 +18,12 @@
     <input type="text" name="q"><input type="submit" value="Search">
 </form>
 <div>
+<ul id="search"></ul>
     {% if word != '' %}
         <p>The searched phrase is: "{{ word }}"</p>
     {% endif %}
     {% for result in results %}
-    <ul>
+    <ul id="search-results">
     {%  if result['title'] %}
         <li>{{ result['title'].replace(word, word.upper()) }}</li>
         {% else %}
@@ -82,10 +80,28 @@
             <button type="submit">Dislike!</button>
             </form>
             <p/>
-
         </li>
     {% endfor %}
 </ul>
 <a href="/list">Display More Questions</a>
+<script>
+    $( document ).ready(function() {
+        alert("héé!")
+
+        {% for result in results %}
+            {%  if result['title'] %}
+                alert("Yeee");
+                var li = document.createElement("li");
+                li.innerHTML = {{ result["title"] }};
+                document.getElementById("search").appendChild(li);
+            {% endif %}
+            {%  if result['message'] %}
+                var li = document.createElement()
+                li.innerHTML = {{ result["message"] }}
+                    document.getElementById("search").appendChild(li)
+            {% endif %}
+        {% endfor %}
+    })
+</script>
 </body>
 </html>

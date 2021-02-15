@@ -85,7 +85,7 @@ def write_comment(cursor: RealDictCursor, question_id: int, comment: str):
 def update_comment(cursor: RealDictCursor, id: int, comment: dict):
     query = """
     UPDATE comment
-    SET message = '{}'
+    SET message = '{}', edited_count = edited_count + 1
     WHERE id = {};""".format(comment["comment"], id)
     cursor.execute(query)
 
@@ -101,7 +101,7 @@ def write_answer_comment(cursor: RealDictCursor, question_id: int, answer_id: in
 @database_common.connection_handler
 def get_comment(cursor: RealDictCursor, question_id: int) -> list:
     query = """
-    SELECT id, question_id, answer_id, message, submission_time
+    SELECT id, question_id, answer_id, message, submission_time, edited_count
     FROM comment
     WHERE question_id = {};""".format(question_id)
     cursor.execute(query)

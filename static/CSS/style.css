@@ -18,6 +18,7 @@ table {
 /*}*/
 .cols {
     width: 50%;
+    vertical-align: top;
 }
 div.container {
     width: 65%;

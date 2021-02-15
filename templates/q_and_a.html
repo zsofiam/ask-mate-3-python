@@ -46,9 +46,9 @@
             </td>
         </tr>
         <tr>
+             <td>
                 {% for answer in answers %}
 
-                    <td>
                     <br><strong>Answer {{ loop.index }}: </strong>
                     <p>{{ answer['message'] }}</p>
                         {% if answer["image"]%}
@@ -74,8 +74,8 @@
                             <br>
                          {% endif %}
                     {% endfor %}
-                    </td>
                 {% endfor %}
+             </td>
         </tr>
     </table>
     </div>

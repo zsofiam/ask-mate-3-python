@@ -55,8 +55,6 @@
                         {% if answer["image"]%}
                     <p><img src="/static/images/{{ answer["image"] }}" alt="{{ answer["image"] }}"></p>
                         {% endif %}
-                    <a class="delete" href="/answer/{{ answer['id'] }}/delete">DELETE answer</a> |
-                    <a class="edit" href="/answer/{{ answer['id'] }}/edit">EDIT answer</a><br>
                     <p><small>Vote number: {{ answer['vote_number'] }}</small></p>
                     <form class="like-form" action="/answer/{{ answer.get('id') }}/vote-up" method="post">
                         <button class="all-buttons" id="like" type="submit">Like!</button>
@@ -64,12 +62,14 @@
                     <form class="like-form" action="/answer/{{ answer.get('id') }}/vote-down" method="post">
                         <button class="all-buttons" id="dislike" type="submit">Dislike!</button>
                     </form><br>
+                    <a class="delete" href="/answer/{{ answer['id'] }}/delete">DELETE answer</a> |
+                    <a class="edit" href="/answer/{{ answer['id'] }}/edit">EDIT answer</a><br><br>
                      <a class="add" href="/question/{{ question['id'] }}/answer/{{ answer['id'] }}/new_comment">Comment to answer </a><br>
                      {% for comment in comments %}
                         {% if comment.answer_id == answer.id %}<br>
+                            <b>Comment {{ loop.index }}:</b><br>
                             <small>Submission Time: {{ comment["submission_time"] }}</small><br>
                             <small>Edited <b>{{ comment["edited_count"] }}</b> times</small><br>
-                        <b>Comment {{ loop.index }}:</b><br>
                          {{ comment.message }}<br><br>
                             <a class="delete" href="/comment/{{ comment['id'] }}/{{ question['id'] }}/delete">DELETE comment</a> |
                               <a class="edit" href="/comment/{{ question['id'] }}/{{ comment['id'] }}/edit">EDIT comment</a>

@@ -1,6 +1,10 @@
 body {
     margin: 0;
     padding: 0;
+    background-image: url('../images/background2.jpg');
+    background-attachment: fixed;
+    background-size: cover;
+    background-color: #002b4d;
 }
 table {
     width: 100%;
@@ -15,26 +19,42 @@ table {
 .cols {
     width: 50%;
 }
-.container {
-    width: 70%;
+div.container {
+    width: 65%;
     margin: auto;
-    padding: 30px 10px;
+    padding: 30px 20px;
+    background-image: none;
+    background-color: white;
 }
-
+td {
+    padding: 5px;
+}
 .like-form {
     display: inline-block;
     padding-bottom: 20px;
 }
+a {
+    color: #000EEE;
+}
+a:hover {
+    background-color: #ebf3ff;
+}
 .add {
     text-decoration: none;
-    color: #000EEE;
     font-size: 1.2em;
     background-color: #ebf3ff;
 }
-
+.button {
+    width: 60px;
+    background-color: #b0efff;
+}
+.all-buttons {
+    border-width: 1px;
+    border-radius: 5px;
+}
 #like {
     width: 60px;
-    background-color: #baffc4;
+    background-color: #a8ffb5;
 }
 #dislike {
     width: 60px;

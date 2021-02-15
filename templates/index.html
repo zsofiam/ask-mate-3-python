@@ -9,7 +9,7 @@
     <div class="container">
         <h1>Questions</h1>
         <form action="/search" method="get">
-            <input type="text" name="q"><input type="submit" value="Search">
+            <input type="text" name="q"> <input class="button all-buttons" type="submit" value="Search">
         </form>
         <div>
             {% if word != '' %}
@@ -73,10 +73,10 @@
                     <td colspan="2">
                         <p>{{ question.get('message') }}</p>
                         <form class="like-form" action="/question/{{ question.get('id') }}/vote-up" method="post">
-                        <button id="like" type="submit">Like!</button>
+                        <button class="all-buttons" id="like" type="submit">Like!</button>
                         </form>
                         <form class="like-form" action="/question/{{ question.get('id') }}/vote-down" method="post">
-                        <button id="dislike" type="submit">Dislike!</button>
+                        <button class="all-buttons" id="dislike" type="submit">Dislike!</button>
                         </form>
                     </td>
                 </tr>

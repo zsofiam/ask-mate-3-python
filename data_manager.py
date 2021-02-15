@@ -72,12 +72,14 @@ def modify_answer(cursor: RealDictCursor, answer_id: int, modifications: dict) -
             WHERE id = {};""".format(modifications['image'], answer_id)
         cursor.execute(query)
 
+
 @database_common.connection_handler
 def write_comment(cursor: RealDictCursor, question_id: int, comment: str):
     query = """
     INSERT INTO comment (question_id, answer_id, message, submission_time, edited_count)
     VALUES ({}, NULL ,'{}',CURRENT_TIMESTAMP,0);""".format(question_id, comment)
     cursor.execute(query)
+
 
 @database_common.connection_handler
 def update_comment(cursor: RealDictCursor, id: int, comment: dict):
@@ -87,12 +89,14 @@ def update_comment(cursor: RealDictCursor, id: int, comment: dict):
     WHERE id = {};""".format(comment["comment"], id)
     cursor.execute(query)
 
+
 @database_common.connection_handler
 def write_answer_comment(cursor: RealDictCursor, question_id: int, answer_id: int, comment: str):
     query = """
     INSERT INTO comment (question_id, answer_id, message, submission_time, edited_count)
     VALUES ({}, {} ,'{}',CURRENT_TIMESTAMP,0);""".format(question_id, answer_id, comment)
     cursor.execute(query)
+
 
 @database_common.connection_handler
 def get_comment(cursor: RealDictCursor, question_id: int) -> list:
@@ -102,6 +106,7 @@ def get_comment(cursor: RealDictCursor, question_id: int) -> list:
     WHERE question_id = {};""".format(question_id)
     cursor.execute(query)
     return cursor.fetchall()
+
 
 @database_common.connection_handler
 def get_comment_message_by_id(cursor: RealDictCursor, id: int) -> list:
@@ -215,15 +220,6 @@ def delete_answer(cursor: RealDictCursor, answer_id: int) -> list:
     DELETE FROM answer
     WHERE id = {}""".format(answer_id)
     cursor.execute(query)
-
-
-@database_common.connection_handler
-def get_question_answers(cursor: RealDictCursor, question_id: int) -> list:
-    query = """
-    SELECT id FROM answer
-    WHERE question_id = {}""".format(question_id)
-    cursor.execute(query)
-    return cursor.fetchall()
 
 
 @database_common.connection_handler

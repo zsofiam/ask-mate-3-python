@@ -22,7 +22,7 @@
             </td>
         </tr>
         <tr>
-            <td id="col-3" class="cols">
+            <td class="cols">
                 <p>{{ question['message'] }}</p>
                 {% if question["image"] %}
                     <img src="/static/images/{{ question['image'] }}" alt="{{ question['image'] }}"><br>
@@ -31,12 +31,12 @@
                 <a class="edit" href="/question/{{ question["id"] }}/edit">EDIT question</a><br><br>
              <a class="add" href="/question/{{ question['id'] }}/new-answer">Write new answer</a>
             </td>
-            <td class="cols">
+            <td class="cols" rowspan="2">
                 <a class="add" href="/question/{{ question['id'] }}/new_comment">Comment the question </a><br>
                 {% for comment in comments %}
-                    <small>Submission Time: {{ comment["submission_time"] }}</small><br>
-                    Comment:
                     {% if comment.answer_id == None %}
+                    <small>Submission Time: {{ comment["submission_time"] }}</small><br>
+                    <b>Comment {{ loop.index }}:</b><br>
                     {{ comment.message }}<br><br>
                         <a class="delete" href="/comment/{{ comment['id'] }}/{{ question['id'] }}/delete">DELETE comment</a> |
                         <a class="edit" href="/comment/{{ question['id'] }}/{{ comment['id'] }}/edit">EDIT comment</a>
@@ -46,12 +46,11 @@
             </td>
         </tr>
         <tr>
-
                 {% for answer in answers %}
 
-                    <td colspan="2">
+                    <td>
                     <br><strong>Answer {{ loop.index }}: </strong>
-                    <p><em>{{ answer['message'] }}</em></p>
+                    <p>{{ answer['message'] }}</p>
                         {% if answer["image"]%}
                     <p><img src="/static/images/{{ answer["image"] }}" alt="{{ answer["image"] }}"></p>
                         {% endif %}
@@ -59,16 +58,16 @@
                     <a class="edit" href="/answer/{{ answer['id'] }}/edit">EDIT answer</a><br>
                     <p><small>Vote number: {{ answer['vote_number'] }}</small></p>
                     <form class="like-form" action="/answer/{{ answer.get('id') }}/vote-up" method="post">
-                        <button id="like" type="submit">Like!</button>
+                        <button class="all-buttons" id="like" type="submit">Like!</button>
                     </form>
                     <form class="like-form" action="/answer/{{ answer.get('id') }}/vote-down" method="post">
-                        <button id="dislike" type="submit">Dislike!</button>
+                        <button class="all-buttons" id="dislike" type="submit">Dislike!</button>
                     </form><br>
                      <a class="add" href="/question/{{ question['id'] }}/answer/{{ answer['id'] }}/new_comment">Comment to answer </a><br>
                      {% for comment in comments %}
                         {% if comment.answer_id == answer.id %}<br>
                             <small>Submission Time: {{ comment["submission_time"] }}</small><br>
-                        Comment:
+                        <b>Comment {{ loop.index }}:</b><br>
                          {{ comment.message }}<br><br>
                             <a class="delete" href="/comment/{{ comment['id'] }}/{{ question['id'] }}/delete">DELETE comment</a> |
                               <a class="edit" href="/comment/{{ question['id'] }}/{{ comment['id'] }}/edit">EDIT comment</a>

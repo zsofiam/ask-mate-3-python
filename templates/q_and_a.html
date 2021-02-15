@@ -36,7 +36,7 @@
                 {% for comment in comments %}
                     {% if comment.answer_id == None %}
                     <small>Submission Time: {{ comment["submission_time"] }}</small><br>
-                        <small>Edited <b>{{ comment["edited_count"] }}</b> times</small><br>
+                        <small>Edited <b>{{ comment["edited_count"] }}</b> times</small><br><br>
                     <b>Comment {{ loop.index }}:</b><br>
                     {{ comment.message }}<br><br>
                         <a class="delete" href="/comment/{{ comment['id'] }}/{{ question['id'] }}/delete">DELETE comment</a> |
@@ -69,7 +69,7 @@
                         {% if comment.answer_id == answer.id %}<br>
                             <b>Comment {{ loop.index }}:</b><br>
                             <small>Submission Time: {{ comment["submission_time"] }}</small><br>
-                            <small>Edited <b>{{ comment["edited_count"] }}</b> times</small><br>
+                            <small>Edited <b>{{ comment["edited_count"] }}</b> times</small><br><br>
                          {{ comment.message }}<br><br>
                             <a class="delete" href="/comment/{{ comment['id'] }}/{{ question['id'] }}/delete">DELETE comment</a> |
                               <a class="edit" href="/comment/{{ question['id'] }}/{{ comment['id'] }}/edit">EDIT comment</a>

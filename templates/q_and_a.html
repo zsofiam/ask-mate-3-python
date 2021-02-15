@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <link rel="stylesheet" type="text/css" href="/static/CSS/style.css">
     <title>Q&A</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css" integrity="sha512-HK5fgLBL+xu6dm/Ii3z4xhlSUyZgTT9tuc/hSrtw6uzJOvgRr2a9jyxxT1ely+B+xFAmJKVSTbpM/CuL7qxO8w==" crossorigin="anonymous" />
 </head>
 <body>
     <div class="container">
@@ -39,7 +40,7 @@
                         <small>Edited <b>{{ comment["edited_count"] }}</b> times</small><br><br>
                     <b>Comment {{ loop.index }}:</b><br>
                     {{ comment.message }}<br><br>
-                        <a class="delete" href="/comment/{{ comment['id'] }}/{{ question['id'] }}/delete">DELETE comment</a> |
+                        <a class="delete" href="/comment/{{ comment['id'] }}/{{ question['id'] }}/delete"><i onclick="confirm('Are you sure?')" class="fas fa-trash-alt"></i></a> |
                         <a class="edit" href="/comment/{{ question['id'] }}/{{ comment['id'] }}/edit">EDIT comment</a>
                         <br><br>
                     {%  endif %}
@@ -71,7 +72,7 @@
                             <small>Submission Time: {{ comment["submission_time"] }}</small><br>
                             <small>Edited <b>{{ comment["edited_count"] }}</b> times</small><br><br>
                          {{ comment.message }}<br><br>
-                            <a class="delete" href="/comment/{{ comment['id'] }}/{{ question['id'] }}/delete">DELETE comment</a> |
+                            <a class="delete" href="/comment/{{ comment['id'] }}/{{ question['id'] }}/delete"><i onclick="confirm('Are you sure?')" class="fas fa-trash-alt"></i></a> |
                               <a class="edit" href="/comment/{{ question['id'] }}/{{ comment['id'] }}/edit">EDIT comment</a>
                             <br>
                          {% endif %}

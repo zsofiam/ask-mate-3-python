@@ -23,11 +23,10 @@
         {% endif %}
         </ul>
         </nav>
-        <a href="/">Go back to questions</a><br><br>
         <table>
             <tr>
                 <td class="cols">
-                     <b>Question: {{ question['title'] }}</b>
+                     <b>{{ question['title'] }}</b>
                 </td>
                 <td class="cols">
                     {% for tag in tags %}

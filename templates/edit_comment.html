@@ -22,7 +22,7 @@
         {% endif %}
         </ul>
         </nav>
-        <h1>Edit comment</h1>
+        <b>Edit comment</b><br><br>
         <form action="/comment/{{ comment['question_id'] }}/{{ comment['id'] }}/edit" method="POST">
             <label>Comment:<br><textarea name="new-message">{{ comment['message'] }}</textarea></label><br>
             <button type="submit">Edit</button>

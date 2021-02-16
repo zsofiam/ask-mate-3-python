@@ -22,7 +22,7 @@
         {% endif %}
         </ul>
         </nav>
-      <h1>Edit answer</h1>
+      <b>Edit answer</b><br><br>
         <form action="/answer/{{ answer_id }}/edit" method="post" enctype = "multipart/form-data">
             <label>Answer:<br><textarea name="new-message">{{ datas['message'] }}</textarea></label><br>
             <input type="file" name="new-file" accept="image/png, image/jpeg"><br>

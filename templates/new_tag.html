@@ -22,7 +22,7 @@
         {% endif %}
         </ul>
         </nav>
-        <h1>Select tags and/or define a new one</h1>
+        <b>Select tags and/or define a new one</b><br><br>
         <form action="/question/{{ question_id }}/new-tag" method="post">
             {% for all_tag in all_tags %}
             {% if all_tag in tags %}

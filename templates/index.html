@@ -7,6 +7,11 @@
 </head>
 <body>
     <div class="container">
+    {% if 'username' in session %}
+        <p>Welcome {{ session['username'] }}!</p>
+    {% else %}
+        <a href="/login">Log in</a><br>
+    {% endif %}
         <h1>Questions</h1>
         <form action="/search" method="get">
             <input type="text" name="q"> <input class="button all-buttons" type="submit" value="Search">

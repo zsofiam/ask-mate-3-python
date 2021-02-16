@@ -1,11 +1,12 @@
 import data_manager
-from flask import Flask, render_template, request, redirect
+from flask import Flask, render_template, request, redirect, session
 from werkzeug.utils import secure_filename
 import os
 
 app = Flask(__name__)
 UPLOAD_FOLDER = 'static/images'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+app.secret_key = os.urandom(24)
 
 
 @app.route("/")
@@ -245,10 +246,12 @@ def login():
     else:
         password = request.form['password']
         username = request.form['username']
-        password_dict = data_manager.get_password(username)
-        stored_password = password_dict['password']
+        user_dict = data_manager.get_user_data(username)
+        stored_password = user_dict['password']
         is_valid = data_manager.verify_password(password, stored_password)
         if is_valid:
+            session['username'] = username
+            session['user_id'] = user_dict['id']
             return redirect('/')
         else:
             error_message = "Wrong username or password!"

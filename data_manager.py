@@ -16,9 +16,9 @@ def verify_password(plain_text_password, hashed_password):
 
 
 @database_common.connection_handler
-def get_password(cursor: RealDictCursor, username: str):
+def get_user_data(cursor: RealDictCursor, username: str):
     query = """
-    SELECT password
+    SELECT id, password
     FROM users
     WHERE username = '{}';""".format(username)
     cursor.execute(query)

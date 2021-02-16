@@ -41,7 +41,6 @@ ul#nav {
 }
 #nav li a {
     text-decoration: none;
-    font-weight: bold;
 }
 .nav-right {
     float: right;

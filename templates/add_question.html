@@ -3,22 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <link rel="stylesheet" type="text/css" href="/static/CSS/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css" integrity="sha512-HK5fgLBL+xu6dm/Ii3z4xhlSUyZgTT9tuc/hSrtw6uzJOvgRr2a9jyxxT1ely+B+xFAmJKVSTbpM/CuL7qxO8w==" crossorigin="anonymous" />
     <title>Ask a Question</title>
 </head>
 <body>
     <div class="container">
          <nav>
         <ul id="nav">
-        <li><a href="/">Home</a></li>
+        <li><a href="/"><i class="fas fa-home"></i> Home</a></li>
         {% if 'username' in session %}
-            <li><a href="/users">Users</a></li>
-            <li><a href="/tags">Tags</a></li>
-            <li><a class="nav-right" href="/logout">Log out</a></li>
-            <li><a class="nav-right" href="/user/{{ session['user_id'] }}">Profile</a></li>
+            <li><a href="/users"><i class="fas fa-users"></i> Users</a></li>
+            <li><a href="/tags"><i class="fas fa-tags"></i> Tags</a></li>
+            <li><a class="nav-right" href="/logout"><i class="fas fa-sign-out-alt"></i> Log out</a></li>
+            <li><a class="nav-right" href="/user/{{ session['user_id'] }}"><i class="fas fa-user-circle"></i> Profile</a></li>
             <li><span class="nav-right">Welcome {{ session['username'] }}!</span></li>
         {% else %}
-            <li><a class="nav-right" href="/login">Log in</a></li>
-            <li><a class="nav-right" href="/registration">Sign in</a></li>
+            <li><a class="nav-right" href="/login"><i class="fas fa-sign-in-alt"></i> Log in</a></li>
+            <li><a class="nav-right" href="/registration"><i class="fas fa-user-plus"></i> Sign up</a></li>
         {% endif %}
         </ul>
         </nav>

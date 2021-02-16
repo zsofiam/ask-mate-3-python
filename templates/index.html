@@ -8,17 +8,19 @@
 <body>
     <div class="container">
         <nav>
-        <a href="/">Home</a>
+        <ul id="nav">
+        <li><a href="/">Home</a></li>
         {% if 'username' in session %}
-            <a href="/users">Users</a>
-            <a href="/tags">Tags</a>
-            <span class="nav-right">Welcome {{ session['username'] }}!</span>
-            <a class="nav-right" href="/user/{{ session['user_id'] }}">Profile</a>
-            <a class="nav-right" href="/logout">Log out</a>
+            <li><a href="/users">Users</a></li>
+            <li><a href="/tags">Tags</a></li>
+            <li><a class="nav-right" href="/logout">Log out</a></li>
+            <li><a class="nav-right" href="/user/{{ session['user_id'] }}">Profile</a></li>
+            <li><span class="nav-right">Welcome {{ session['username'] }}!</span></li>
         {% else %}
-            <a class="nav-right" href="/registration">Sign in</a>
-            <a class="nav-right" href="/login">Log in</a><br>
+            <li><a class="nav-right" href="/login">Log in</a></li>
+            <li><a class="nav-right" href="/registration">Sign in</a></li>
         {% endif %}
+        </ul>
         </nav>
         <h1>Questions</h1>
         <form action="/search" method="get">

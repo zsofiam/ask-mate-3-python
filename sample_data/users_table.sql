@@ -1,4 +1,4 @@
-create table users if not exists
+create table users
 (
     id       integer generated always as identity
         constraint users_pkey

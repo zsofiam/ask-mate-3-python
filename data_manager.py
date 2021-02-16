@@ -360,6 +360,8 @@ def delete_answers_by_question_id(cursor: RealDictCursor, question_id:int) -> li
 
 @database_common.connection_handler
 def get_users(cursor: RealDictCursor) -> list:
-    query = """SELECT * FROM users"""
+    query = """SELECT * FROM users
+    JOIN users_statistics
+    ON users.id = users_statistics.user_id"""
     cursor.execute(query)
     return cursor.fetchall()

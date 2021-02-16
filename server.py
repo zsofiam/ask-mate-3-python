@@ -51,7 +51,10 @@ def display_question(question_id):
 @app.route("/add-question", methods=['GET', 'POST'])
 def post_new_question():
     if request.method == 'GET':
-        return render_template('add_question.html')
+        if 'username' in session:
+            return render_template('add_question.html')
+        else:
+            return redirect('/login')
     if request.method == 'POST':
         question = {"title": request.form["title"], "message": request.form["message"]}
         if request.files["file"]:
@@ -68,7 +71,10 @@ def post_new_question():
 @app.route("/question/<int:question_id>/new-answer", methods=['GET', 'POST'])
 def post_new_answer(question_id):
     if request.method == 'GET':
-        return render_template('new_answer.html', question_id=str(question_id))
+        if 'username' in session:
+            return render_template('new_answer.html', question_id=str(question_id))
+        else:
+            return redirect('/login')
     else:
         if request.files["file"]:
             file = request.files["file"]

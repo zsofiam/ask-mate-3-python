@@ -27,6 +27,9 @@ div.container {
     background-image: none;
     background-color: white;
 }
+/*.nav-right {*/
+/*    float: right;*/
+/*}*/
 .error {
     color: red;
 }

@@ -3,6 +3,9 @@ import bcrypt
 from psycopg2 import sql
 from psycopg2.extras import RealDictCursor
 
+# (csilla@hegedus.com - csilla123)
+# (admin@admin.com - admin)
+
 
 def hash_password(plain_text_password):
     # By using bcrypt, the salt is saved into the hash itself

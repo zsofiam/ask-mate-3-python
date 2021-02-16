@@ -363,3 +363,12 @@ def add_user(cursor: RealDictCursor, email:str,password:str):
     INSERT INTO users(id,username,password,registration_date,reputation) 
     VALUES (DEFAULT,%s,%s,CURRENT_TIMESTAMP,0);"""
     cursor.execute(query, (email,password,))
+
+@database_common.connection_handler
+def get_user_id(cursor: RealDictCursor, email:str) -> list:
+    query = """
+    SELECT id
+    FROM users
+    WHERE username = (%s);"""
+    cursor.execute(query, (email,))
+    return cursor.fetchone()

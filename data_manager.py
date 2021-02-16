@@ -1,6 +1,28 @@
 import database_common
+import bcrypt
 from psycopg2 import sql
 from psycopg2.extras import RealDictCursor
+
+
+def hash_password(plain_text_password):
+    # By using bcrypt, the salt is saved into the hash itself
+    hashed_bytes = bcrypt.hashpw(plain_text_password.encode('utf-8'), bcrypt.gensalt())
+    return hashed_bytes.decode('utf-8')
+
+
+def verify_password(plain_text_password, hashed_password):
+    hashed_bytes_password = hashed_password.encode('utf-8')
+    return bcrypt.checkpw(plain_text_password.encode('utf-8'), hashed_bytes_password)
+
+
+@database_common.connection_handler
+def get_user_data(cursor: RealDictCursor, username: str):
+    query = """
+    SELECT id, password
+    FROM users
+    WHERE username = '{}';""".format(username)
+    cursor.execute(query)
+    return cursor.fetchone()
 
 
 @database_common.connection_handler

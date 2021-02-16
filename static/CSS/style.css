@@ -27,6 +27,9 @@ div.container {
     background-image: none;
     background-color: white;
 }
+.error {
+    color: red;
+}
 td {
     padding: 5px;
 }

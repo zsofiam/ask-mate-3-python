@@ -1,11 +1,12 @@
 import data_manager
-from flask import Flask, render_template, request, redirect
+from flask import Flask, render_template, request, redirect, session
 from werkzeug.utils import secure_filename
 import os
 
 app = Flask(__name__)
 UPLOAD_FOLDER = 'static/images'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+app.secret_key = os.urandom(24)
 
 
 @app.route("/")
@@ -50,7 +51,10 @@ def display_question(question_id):
 @app.route("/add-question", methods=['GET', 'POST'])
 def post_new_question():
     if request.method == 'GET':
-        return render_template('add_question.html')
+        if 'username' in session:
+            return render_template('add_question.html')
+        else:
+            return redirect('/login')
     if request.method == 'POST':
         question = {"title": request.form["title"], "message": request.form["message"]}
         if request.files["file"]:
@@ -67,7 +71,10 @@ def post_new_question():
 @app.route("/question/<int:question_id>/new-answer", methods=['GET', 'POST'])
 def post_new_answer(question_id):
     if request.method == 'GET':
-        return render_template('new_answer.html', question_id=str(question_id))
+        if 'username' in session:
+            return render_template('new_answer.html', question_id=str(question_id))
+        else:
+            return redirect('/login')
     else:
         if request.files["file"]:
             file = request.files["file"]
@@ -236,6 +243,32 @@ def vote_down_answer(answer_id):
     data_manager.vote_down_answer(answer_id)
     question_id = data_manager.get_answer_data(answer_id)['question_id']
     return redirect("/question/" + str(question_id))
+
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if request.method == 'GET':
+        return render_template('login.html')
+    else:
+        password = request.form['password']
+        username = request.form['username']
+        user_dict = data_manager.get_user_data(username)
+        stored_password = user_dict['password']
+        is_valid = data_manager.verify_password(password, stored_password)
+        if is_valid:
+            session['username'] = username
+            session['user_id'] = user_dict['id']
+            return redirect('/')
+        else:
+            error_message = "Wrong username or password!"
+            return render_template('login.html', error_message=error_message)
+
+
+@app.route('/logout')
+def logout():
+    session.pop('username', None)
+    session.pop('user_id', None)
+    return redirect('/')
 
 
 if __name__ == "__main__":

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <link rel="stylesheet" type="text/css" href="/static/CSS/style.css">
-    <title>Login</title>
+    <title>Registration</title>
 </head>
 <body>
     <div class="container">
@@ -18,7 +18,7 @@
             <li><span class="nav-right">Welcome {{ session['username'] }}!</span></li>
         {% else %}
             <li><a class="nav-right" href="/login">Log in</a></li>
-            <li><a class="nav-right" href="/registration">Registration</a></li>
+            <li><a class="nav-right" href="/registration">Sign in</a></li>
         {% endif %}
         </ul>
         </nav>

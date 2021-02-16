@@ -18,3 +18,38 @@ UPDATE answer set user_id = 1 WHERE id = 2;
 
 UPDATE comment set user_id = 2 WHERE id = 1;
 UPDATE comment set user_id = 2 WHERE id = 2;
+ALTER TABLE ONLY question
+    ADD COLUMN user_id integer;
+
+ALTER TABLE ONLY answer
+    ADD COLUMN user_id integer;
+
+ALTER TABLE ONLY comment
+    ADD COLUMN user_id integer;
+
+ALTER TABLE ONLY question
+    ADD CONSTRAINT fk_user_id FOREIGN KEY (user_id) REFERENCES users(id);
+
+ALTER TABLE ONLY answer
+    ADD CONSTRAINT fk_user_id FOREIGN KEY (user_id) REFERENCES users(id);
+
+ALTER TABLE ONLY comment
+    ADD CONSTRAINT fk_user_id FOREIGN KEY (user_id) REFERENCES users(id);
+UPDATE question set user_id = 1 WHERE id = 0;
+UPDATE question set user_id = 1 WHERE id = 1;
+UPDATE question set user_id = 2 WHERE id = 2;
+
+UPDATE answer set user_id = 1 WHERE id = 1;
+UPDATE answer set user_id = 1 WHERE id = 2;
+
+
+UPDATE comment set user_id = 2 WHERE id = 1;
+UPDATE comment set user_id = 2 WHERE id = 2;
+
+ALTER TABLE ONLY users
+    ADD COLUMN registration_date date,
+    ADD COLUMN reputation integer;
+UPDATE users set registration_date = '2021-02-16' WHERE id = 1;
+UPDATE users set registration_date = '2021-02-15' WHERE id = 2;
+UPDATE users set reputation = 0 WHERE id = 1;
+UPDATE users set reputation = 0 WHERE id = 2;

@@ -18,18 +18,18 @@
             <li><span class="nav-right">Welcome {{ session['username'] }}!</span></li>
         {% else %}
             <li><a class="nav-right" href="/login">Log in</a></li>
-            <li><a class="nav-right" href="/registration">Sign in</a></li>
+
         {% endif %}
         </ul>
         </nav>
-        <b>Log in</b><br><br>
+        <b>Registration</b><br/><br/>
         {% if error_message %}
         <p class="error">{{ error_message }}</p>
         {% endif %}
-        <form action="/login" method="post">
-            <label>Username (email):<br><input type="text" name="username"></label><br>
-            <label>Password:<br><input type="password" name="password"></label><br>
-            <input type="submit" value="Log in">
+        <form action="/registration" method="POST">
+            <label>E-mail address:<br/><input type="text" name="email_address"></label><br/>
+            <label>Password:<br/><input type="password" name="password"></label><br/>
+            <button type="submit" value="Register">Register </button>
         </form>
     </div>
 </body>

@@ -1,4 +1,4 @@
-create table users
+create table users if not exists
 (
     id       integer generated always as identity
         constraint users_pkey
@@ -48,7 +48,7 @@ UPDATE comment set user_id = 2 WHERE id = 2;
 
 ALTER TABLE ONLY users
     ADD COLUMN registration_date date,
-    ADD COLUMN reputation integer;
+    ADD COLUMN reputation integer;"public"
 UPDATE users set registration_date = '2021-02-16' WHERE id = 1;
 UPDATE users set registration_date = '2021-02-15' WHERE id = 2;
 UPDATE users set reputation = 0 WHERE id = 1;

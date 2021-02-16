@@ -356,3 +356,10 @@ def delete_answers_by_question_id(cursor: RealDictCursor, question_id:int) -> li
     DELETE FROM answer
     WHERE question_id = {}""".format(question_id)
     cursor.execute(query)
+
+
+@database_common.connection_handler
+def get_users(cursor: RealDictCursor) -> list:
+    query = """SELECT * FROM users"""
+    cursor.execute(query)
+    return cursor.fetchall()

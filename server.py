@@ -279,6 +279,10 @@ def logout():
     session.pop('user_id', None)
     return redirect('/')
 
+@app.route('/users')
+def users_table():
+    users_list = data_manager.get_users()
+    return render_template('users.html', users=users_list)
 
 if __name__ == "__main__":
     app.run(

@@ -100,10 +100,10 @@ def modify_answer(cursor: RealDictCursor, answer_id: int, modifications: dict) -
 
 
 @database_common.connection_handler
-def write_comment(cursor: RealDictCursor, question_id: int, comment: str):
+def write_comment(cursor: RealDictCursor, question_id: int, comment: str, user_id: int):
     query = """
-    INSERT INTO comment (question_id, answer_id, message, submission_time, edited_count)
-    VALUES ({}, NULL ,'{}',CURRENT_TIMESTAMP,0);""".format(question_id, comment)
+    INSERT INTO comment (question_id, answer_id, message, submission_time, edited_count, user_id)
+    VALUES ({}, NULL ,'{}',CURRENT_TIMESTAMP,0, {});""".format(question_id, comment, user_id)
     cursor.execute(query)
 
 
@@ -117,10 +117,10 @@ def update_comment(cursor: RealDictCursor, id: int, comment: dict):
 
 
 @database_common.connection_handler
-def write_answer_comment(cursor: RealDictCursor, question_id: int, answer_id: int, comment: str):
+def write_answer_comment(cursor: RealDictCursor, question_id: int, answer_id: int, comment: str, user_id: int):
     query = """
-    INSERT INTO comment (question_id, answer_id, message, submission_time, edited_count)
-    VALUES ({}, {} ,'{}',CURRENT_TIMESTAMP,0);""".format(question_id, answer_id, comment)
+    INSERT INTO comment (question_id, answer_id, message, submission_time, edited_count, user_id)
+    VALUES ({}, {} ,'{}',CURRENT_TIMESTAMP,0, {});""".format(question_id, answer_id, comment, user_id)
     cursor.execute(query)
 
 

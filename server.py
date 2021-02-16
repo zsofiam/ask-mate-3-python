@@ -110,10 +110,15 @@ def add_new_tag(question_id):
 @app.route("/question/<int:question_id>/new_comment", methods=['GET', 'POST'])
 def post_new_comment(question_id):
     if request.method == 'GET':
-        return render_template('new_comment.html', question_id=str(question_id))
+        if 'username' in session:
+            return render_template('new_comment.html', question_id=str(question_id))
+        else:
+            return redirect('/login')
     else:
         comment = request.form['new_comment']
-        data_manager.write_comment(question_id, comment)
+        user_id = session['user_id']
+        print(user_id, session['username'])
+        data_manager.write_comment(question_id, comment, user_id)
         return redirect("/question/" + str(question_id))
 
 
@@ -224,10 +229,14 @@ def vote_down_question(question_id):
 @app.route('/question/<question_id>/answer/<answer_id>/new_comment', methods=["GET", "POST"])
 def post_new_answer_comment(answer_id, question_id):
     if request.method == 'GET':
-        return render_template('new_answer_comment.html', answer_id=str(answer_id), question_id=str(question_id))
+        if 'username' in session:
+            return render_template('new_answer_comment.html', answer_id=str(answer_id), question_id=str(question_id))
+        else:
+            return redirect('/login')
     else:
         comment = request.form['new_comment']
-        data_manager.write_answer_comment(question_id, answer_id, comment)
+        user_id = session['user_id']
+        data_manager.write_answer_comment(question_id, answer_id, comment, user_id)
         return redirect("/question/" + str(question_id))
 
 

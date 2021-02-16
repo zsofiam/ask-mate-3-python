@@ -72,14 +72,15 @@ def remove_tag(cursor: RealDictCursor, question_id: int, tag_id: int) -> list:
 def write_answer(cursor: RealDictCursor, question_id: int, modifications: dict) -> list:
     if modifications['image'] is not None:
         query = """
-        INSERT INTO answer (submission_time, vote_number, question_id, message, image)
-        VALUES (CURRENT_TIMESTAMP, 0, {}, '{}', '{}');"""\
-            .format(question_id, modifications['message'], modifications['image'])
+        INSERT INTO answer (submission_time, vote_number, question_id, message, image, user_id)
+        VALUES (CURRENT_TIMESTAMP, 0, {}, '{}', '{}', {});"""\
+            .format(question_id, modifications['message'], modifications['image'], modifications['user_id'])
         cursor.execute(query)
     else:
         query = """
-        INSERT INTO answer (submission_time, vote_number, question_id, message)
-        VALUES (CURRENT_TIMESTAMP, 0, {}, '{}');""".format(question_id, modifications['message'])
+        INSERT INTO answer (submission_time, vote_number, question_id, message, user_id)
+        VALUES (CURRENT_TIMESTAMP, 0, {}, '{}', {});"""\
+            .format(question_id, modifications['message'], modifications['user_id'])
         cursor.execute(query)
 
 

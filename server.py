@@ -82,7 +82,7 @@ def post_new_answer(question_id):
             file.save(os.path.join(app.root_path, app.config['UPLOAD_FOLDER'], filename))
         else:
             filename = None
-        modifications = {'message': request.form['new_message'], 'image': filename}
+        modifications = {'message': request.form['new_message'], 'image': filename, 'user_id': session['user_id']}
         data_manager.write_answer(question_id, modifications)
         return redirect("/question/" + str(question_id))
 

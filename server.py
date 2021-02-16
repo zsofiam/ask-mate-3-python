@@ -264,6 +264,13 @@ def login():
             return render_template('login.html', error_message=error_message)
 
 
+@app.route('/logout')
+def logout():
+    session.pop('username', None)
+    session.pop('user_id', None)
+    return redirect('/')
+
+
 if __name__ == "__main__":
     app.run(
         debug=True

@@ -9,6 +9,7 @@
     <div class="container">
     {% if 'username' in session %}
         <p>Welcome {{ session['username'] }}!</p>
+        <a href="/logout">Log out</a>
     {% else %}
         <a href="/login">Log in</a><br>
     {% endif %}

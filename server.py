@@ -56,7 +56,7 @@ def post_new_question():
         else:
             return redirect('/login')
     if request.method == 'POST':
-        question = {"title": request.form["title"], "message": request.form["message"]}
+        question = {"title": request.form["title"], "message": request.form["message"], "user_id": session['user_id']}
         if request.files["file"]:
             file = request.files["file"]
             filename = secure_filename(file.filename)

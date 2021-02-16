@@ -292,15 +292,15 @@ def get_questions_sorted(cursor: RealDictCursor, parameter: str, direction: str 
 def add_question(cursor: RealDictCursor, question: dict) -> list:
     if question['image'] is not None:
         query = """
-        INSERT INTO question (submission_time, view_number, vote_number, title, message, image)
-        VALUES(CURRENT_TIMESTAMP, 0, 0, '{}', '{}', '{}') RETURNING id;""" \
-            .format(question["title"], question['message'], question['image'])
+        INSERT INTO question (submission_time, view_number, vote_number, title, message, image, user_id)
+        VALUES(CURRENT_TIMESTAMP, 0, 0, '{}', '{}', '{}', {}) RETURNING id;""" \
+            .format(question["title"], question['message'], question['image'], question['user_id'])
         cursor.execute(query)
     else:
         query = """
-        INSERT INTO question (submission_time, view_number, vote_number, title, message)
-        VALUES(CURRENT_TIMESTAMP, 0, 0, '{}', '{}') RETURNING id;""" \
-            .format(question["title"], question['message'])
+        INSERT INTO question (submission_time, view_number, vote_number, title, message, user_id)
+        VALUES(CURRENT_TIMESTAMP, 0, 0, '{}', '{}', {}) RETURNING id;""" \
+            .format(question["title"], question['message'], question['user_id'])
         cursor.execute(query)
     return cursor.fetchone()
 

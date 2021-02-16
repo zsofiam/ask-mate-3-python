@@ -238,6 +238,23 @@ def vote_down_answer(answer_id):
     return redirect("/question/" + str(question_id))
 
 
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if request.method == 'GET':
+        return render_template('login.html')
+    else:
+        password = request.form['password']
+        username = request.form['username']
+        password_dict = data_manager.get_password(username)
+        stored_password = password_dict['password']
+        is_valid = data_manager.verify_password(password, stored_password)
+        if is_valid:
+            return redirect('/')
+        else:
+            error_message = "Wrong username or password!"
+            return render_template('login.html', error_message=error_message)
+
+
 if __name__ == "__main__":
     app.run(
         debug=True

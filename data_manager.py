@@ -372,3 +372,12 @@ def get_user_id(cursor: RealDictCursor, email:str) -> list:
     WHERE username = (%s);"""
     cursor.execute(query, (email,))
     return cursor.fetchone()
+
+
+@database_common.connection_handler
+def get_users(cursor: RealDictCursor) -> list:
+    query = """SELECT * FROM users
+    JOIN users_statistics
+    ON users.id = users_statistics.user_id"""
+    cursor.execute(query)
+    return cursor.fetchall()

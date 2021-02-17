@@ -302,7 +302,14 @@ def hash_password(plain_text_password):
     return hashed_bytes.decode('utf-8')
 
 
+@app.route('/users')
+def users_table():
+    users_list = data_manager.get_users()
+    return render_template('users.html', users=users_list)
+
+
 if __name__ == "__main__":
     app.run(
         debug=True
     )
+

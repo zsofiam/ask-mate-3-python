@@ -428,3 +428,17 @@ def question_reputation_down(cursor: RealDictCursor, question_id:int):
 	SET reputation = reputation - 2 
 	WHERE id in (SELECT user_id FROM question WHERE id = (%s)); """
     cursor.execute(query, (question_id,))
+
+@database_common.connection_handler
+def answer_reputation_up(cursor: RealDictCursor, answer_id: int):
+    query = """ UPDATE users
+    SET reputation = reputation + 10
+    WHERE id in (SELECT user_id FROM answer WHERE id = (%s)); """
+    cursor.execute(query, (answer_id,))
+
+@database_common.connection_handler
+def answer_reputation_down(cursor: RealDictCursor, answer_id: int):
+    query = """ UPDATE users
+    SET reputation = reputation - 2
+    WHERE id in (SELECT user_id FROM answer WHERE id = (%s)); """
+    cursor.execute(query, (answer_id,))

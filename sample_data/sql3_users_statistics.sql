@@ -15,4 +15,4 @@ ALTER TABLE ONLY users_statistics
 
 INSERT INTO users_statistics VALUES (1, 0, 0, 0, 1);
 INSERT INTO users_statistics VALUES (2, 0, 0, 0, 2);
-INSERT INTO users_statistics VALUES (3, 0, 0, 0, 3);
+-- INSERT INTO users_statistics VALUES (3, 0, 0, 0, 3);

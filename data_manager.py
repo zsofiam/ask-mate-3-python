@@ -3,7 +3,7 @@ import bcrypt
 from psycopg2 import sql
 from psycopg2.extras import RealDictCursor
 
-# (csilla@hegedus.com - csilla123)
+# (try@feature.com - try)
 # (admin@admin.com - admin)
 
 

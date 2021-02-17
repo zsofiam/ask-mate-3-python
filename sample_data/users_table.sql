@@ -53,3 +53,6 @@ UPDATE users set registration_date = '2021-02-16' WHERE id = 1;
 UPDATE users set registration_date = '2021-02-15' WHERE id = 2;
 UPDATE users set reputation = 0 WHERE id = 1;
 UPDATE users set reputation = 0 WHERE id = 2;
+
+ALTER TABLE ONLY users
+    ALTER COLUMN registration_date TYPE timestamp without time zone;

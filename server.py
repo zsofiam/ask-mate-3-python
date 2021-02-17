@@ -1,4 +1,5 @@
 import data_manager
+import bcrypt
 from flask import Flask, render_template, request, redirect, session
 from werkzeug.utils import secure_filename
 import os
@@ -23,6 +24,21 @@ def main_page():
     questions = data_manager.get_latest_five_questions()
     return render_template('index.html', questions=questions, results=results, results_answers=results_answers,
                            word=word)
+
+
+@app.route('/registration', methods=['GET', 'POST'])
+def registration():
+    if request.method == 'GET':
+        return render_template('registration.html')
+    if request.method == 'POST':
+        user_email = request.form['email_address']
+        user_id = data_manager.get_user_id(user_email)
+        if user_id != None:
+            error_message = "User is already registered!"
+            return render_template('registration.html', error_message=error_message)
+        hashed_password = hash_password(request.form['password'])
+        data_manager.add_user(user_email, hashed_password)
+        return redirect('/')
 
 
 @app.route('/list')
@@ -278,6 +294,12 @@ def logout():
     session.pop('username', None)
     session.pop('user_id', None)
     return redirect('/')
+
+
+def hash_password(plain_text_password):
+    # By using bcrypt, the salt is saved into the hash itself
+    hashed_bytes = bcrypt.hashpw(plain_text_password.encode('utf-8'), bcrypt.gensalt())
+    return hashed_bytes.decode('utf-8')
 
 
 @app.route('/users')

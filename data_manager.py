@@ -414,3 +414,17 @@ def get_users(cursor: RealDictCursor) -> list:
     ON users.id = users_statistics.user_id"""
     cursor.execute(query)
     return cursor.fetchall()
+
+@database_common.connection_handler
+def question_reputation_up(cursor: RealDictCursor, question_id:int):
+    query = """ UPDATE users
+	SET reputation = reputation + 5 
+	WHERE id in (SELECT user_id FROM question WHERE id = (%s)); """
+    cursor.execute(query, (question_id,))
+
+@database_common.connection_handler
+def question_reputation_down(cursor: RealDictCursor, question_id:int):
+    query = """ UPDATE users
+	SET reputation = reputation - 2 
+	WHERE id in (SELECT user_id FROM question WHERE id = (%s)); """
+    cursor.execute(query, (question_id,))

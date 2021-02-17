@@ -236,12 +236,14 @@ def edit_answer(answer_id):
 @app.route('/question/<question_id>/vote-up', methods=['POST'])
 def vote_up_question(question_id):
     data_manager.vote_up_question(question_id)
+    data_manager.question_reputation_up(question_id)
     return redirect("/")
 
 
 @app.route('/question/<question_id>/vote-down', methods=['POST'])
 def vote_down_question(question_id):
     data_manager.vote_down_question(question_id)
+    data_manager.question_reputation_down(question_id)
     return redirect("/")
 
 

@@ -3,7 +3,7 @@ import bcrypt
 from psycopg2 import sql
 from psycopg2.extras import RealDictCursor
 
-# (csilla@hegedus.com - csilla123)
+# (try@feature.com - try)
 # (admin@admin.com - admin)
 
 
@@ -72,15 +72,21 @@ def remove_tag(cursor: RealDictCursor, question_id: int, tag_id: int) -> list:
 def write_answer(cursor: RealDictCursor, question_id: int, modifications: dict) -> list:
     if modifications['image'] is not None:
         query = """
+        UPDATE users_statistics
+        SET answer_count  = answer_count + 1
+        WHERE user_id = {};
         INSERT INTO answer (submission_time, vote_number, question_id, message, image, user_id)
         VALUES (CURRENT_TIMESTAMP, 0, {}, '{}', '{}', {});"""\
-            .format(question_id, modifications['message'], modifications['image'], modifications['user_id'])
+            .format(modifications['user_id'], question_id, modifications['message'], modifications['image'], modifications['user_id'])
         cursor.execute(query)
     else:
         query = """
+        UPDATE users_statistics
+        SET answer_count  = answer_count + 1
+        WHERE user_id = {};
         INSERT INTO answer (submission_time, vote_number, question_id, message, user_id)
         VALUES (CURRENT_TIMESTAMP, 0, {}, '{}', {});"""\
-            .format(question_id, modifications['message'], modifications['user_id'])
+            .format(modifications['user_id'], question_id, modifications['message'], modifications['user_id'])
         cursor.execute(query)
 
 
@@ -102,8 +108,11 @@ def modify_answer(cursor: RealDictCursor, answer_id: int, modifications: dict) -
 @database_common.connection_handler
 def write_comment(cursor: RealDictCursor, question_id: int, comment: str, user_id: int):
     query = """
+    UPDATE users_statistics
+    SET comment_count = comment_count + 1
+    WHERE user_id = {};
     INSERT INTO comment (question_id, answer_id, message, submission_time, edited_count, user_id)
-    VALUES ({}, NULL ,'{}',CURRENT_TIMESTAMP,0, {});""".format(question_id, comment, user_id)
+    VALUES ({}, NULL ,'{}',CURRENT_TIMESTAMP,0, {});""".format(user_id, question_id, comment, user_id)
     cursor.execute(query)
 
 
@@ -119,8 +128,11 @@ def update_comment(cursor: RealDictCursor, id: int, comment: dict):
 @database_common.connection_handler
 def write_answer_comment(cursor: RealDictCursor, question_id: int, answer_id: int, comment: str, user_id: int):
     query = """
+    UPDATE users_statistics
+    SET comment_count = comment_count + 1
+    WHERE user_id = {};
     INSERT INTO comment (question_id, answer_id, message, submission_time, edited_count, user_id)
-    VALUES ({}, {} ,'{}',CURRENT_TIMESTAMP,0, {});""".format(question_id, answer_id, comment, user_id)
+    VALUES ({}, {} ,'{}',CURRENT_TIMESTAMP,0, {});""".format(user_id, question_id, answer_id, comment, user_id)
     cursor.execute(query)
 
 
@@ -155,18 +167,24 @@ def get_comment_id_by_answer(cursor: RealDictCursor, answer_id: int) -> list:
 
 
 @database_common.connection_handler
-def delete_comment_by_id(cursor: RealDictCursor, comment_id: int):
+def delete_comment_by_id(cursor: RealDictCursor, comment_id: int, user_id: int):
     query = """
+    UPDATE users_statistics
+    SET comment_count = comment_count - 1
+    WHERE user_id = {};
     DELETE FROM comment
-    WHERE id = {}""".format(comment_id)
+    WHERE id = {}""".format(user_id, comment_id)
     cursor.execute(query)
 
 
 @database_common.connection_handler
-def delete_comments_by_question_id(cursor: RealDictCursor, question_id: int):
+def delete_comments_by_question_id(cursor: RealDictCursor, question_id: int, user_id: int):
     query = """
+    UPDATE users_statistics
+    SET comment_count = comment_count - 1
+    WHERE user_id = {};
     DELETE FROM comment
-    WHERE question_id = {}""".format(question_id)
+    WHERE question_id = {}""".format(user_id, question_id)
     cursor.execute(query)
 
 
@@ -241,20 +259,26 @@ def search_answers(cursor: RealDictCursor, word: str) -> list:
 
 
 @database_common.connection_handler
-def delete_answer(cursor: RealDictCursor, answer_id: int) -> list:
+def delete_answer(cursor: RealDictCursor, answer_id: int, user_id: int) -> list:
     query = """
+    UPDATE users_statistics
+    SET answer_count = answer_count - 1 
+    WHERE user_id = {};
     DELETE FROM answer
-    WHERE id = {}""".format(answer_id)
+    WHERE id = {}""".format(user_id, answer_id)
     cursor.execute(query)
 
 
 @database_common.connection_handler
-def delete_question(cursor: RealDictCursor, question_id: int) -> list:
+def delete_question(cursor: RealDictCursor, question_id: int, user_id: int) -> list:
     query = """
+    UPDATE users_statistics
+    SET question_count  = question_count - 1
+    WHERE user_id = {};
     DELETE FROM question
     WHERE id = {};
     DELETE FROM answer
-    WHERE question_id = {}""".format(question_id, question_id)
+    WHERE question_id = {}""".format(user_id, question_id, question_id)
     cursor.execute(query)
 
 
@@ -293,15 +317,21 @@ def get_questions_sorted(cursor: RealDictCursor, parameter: str, direction: str 
 def add_question(cursor: RealDictCursor, question: dict) -> list:
     if question['image'] is not None:
         query = """
+        UPDATE users_statistics
+        SET question_count  = question_count + 1
+        WHERE user_id = {};
         INSERT INTO question (submission_time, view_number, vote_number, title, message, image, user_id)
         VALUES(CURRENT_TIMESTAMP, 0, 0, '{}', '{}', '{}', {}) RETURNING id;""" \
-            .format(question["title"], question['message'], question['image'], question['user_id'])
+            .format(question['user_id'], question["title"], question['message'], question['image'], question['user_id'])
         cursor.execute(query)
     else:
         query = """
+        UPDATE users_statistics
+        SET question_count  = question_count + 1
+        WHERE user_id = {};
         INSERT INTO question (submission_time, view_number, vote_number, title, message, user_id)
         VALUES(CURRENT_TIMESTAMP, 0, 0, '{}', '{}', {}) RETURNING id;""" \
-            .format(question["title"], question['message'], question['user_id'])
+            .format(question['user_id'], question["title"], question['message'], question['user_id'])
         cursor.execute(query)
     return cursor.fetchone()
 
@@ -351,10 +381,13 @@ def add_tag_to_question(cursor: RealDictCursor,tag_id:int,question_id:int) -> li
 
 
 @database_common.connection_handler
-def delete_answers_by_question_id(cursor: RealDictCursor, question_id:int) -> list:
+def delete_answers_by_question_id(cursor: RealDictCursor, question_id:int, user_id) -> list:
     query = """
+    UPDATE users_statistics
+    SET answer_count  = answer_count - 1
+    WHERE user_id = {};
     DELETE FROM answer
-    WHERE question_id = {}""".format(question_id)
+    WHERE question_id = {}""".format(user_id, question_id)
     cursor.execute(query)
 
 @database_common.connection_handler

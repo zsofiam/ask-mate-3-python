@@ -117,14 +117,14 @@ def post_new_comment(question_id):
     else:
         comment = request.form['new_comment']
         user_id = session['user_id']
-        print(user_id, session['username'])
         data_manager.write_comment(question_id, comment, user_id)
         return redirect("/question/" + str(question_id))
 
 
 @app.route("/comment/<id>/<question_id>/delete")
 def delete_comment(id, question_id):
-    data_manager.delete_comment_by_id(id)
+    user_dict = data_manager.get_user_data(session['username'])
+    data_manager.delete_comment_by_id(id, user_dict['id'])
     return redirect("/question/" + str(question_id))
 
 
@@ -170,11 +170,12 @@ def edit_question(question_id):
 
 @app.route("/question/<question_id>/delete")
 def delete_question(question_id):
+    user_dict = data_manager.get_user_data(session['username'])
     data_manager.remove_tags_from_question(question_id)
-    data_manager.delete_comments_by_question_id(question_id)
-    data_manager.delete_answers_by_question_id(question_id)
+    data_manager.delete_comments_by_question_id(question_id, user_dict['id'])
+    data_manager.delete_answers_by_question_id(question_id, user_dict['id'])
     filename = data_manager.get_question_by_id(question_id)['image']
-    data_manager.delete_question(question_id)
+    data_manager.delete_question(question_id, user_dict['id'])
     try:
         os.remove(os.path.join(app.root_path, app.config['UPLOAD_FOLDER'], filename))
     except (FileNotFoundError, TypeError):
@@ -187,9 +188,10 @@ def delete_answer(answer_id):
     filename = data_manager.get_answer_data(answer_id)['image']
     question_id = data_manager.get_answer_data(answer_id)['question_id']
     comment_ids = data_manager.get_comment_id_by_answer(answer_id)
+    user_dict = data_manager.get_user_data(session['username'])
     for comment in comment_ids:
-        data_manager.delete_comment_by_id(comment['id'])
-    data_manager.delete_answer(answer_id)
+        data_manager.delete_comment_by_id(comment['id'], user_dict['id'])
+    data_manager.delete_answer(answer_id, user_dict['id'])
     try:
         os.remove(os.path.join(app.root_path, app.config['UPLOAD_FOLDER'], filename))
     except (FileNotFoundError, TypeError):
@@ -282,8 +284,11 @@ def logout():
 
 @app.route('/users')
 def users_table():
-    users_list = data_manager.get_users()
-    return render_template('users.html', users=users_list)
+    if 'username' in session:
+        users_list = data_manager.get_users()
+        return render_template('users.html', users=users_list)
+    else:
+        return redirect('/login')
 
 
 if __name__ == "__main__":

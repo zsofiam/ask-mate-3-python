@@ -22,7 +22,6 @@ def main_page():
         results = data_manager.search(word)
         results_answers = data_manager.search_answers(word)
     questions = data_manager.get_latest_five_questions()
-    print("branch_test_deletable_later")
     return render_template('index.html', questions=questions, results=results, results_answers=results_answers,
                            word=word)
 
@@ -34,7 +33,7 @@ def registration():
     if request.method == 'POST':
         user_email = request.form['email_address']
         user_id = data_manager.get_user_id(user_email)
-        if user_id != None:
+        if user_id is not None:
             error_message = "User is already registered!"
             return render_template('registration.html', error_message=error_message)
         hashed_password = hash_password(request.form['password'])
@@ -312,6 +311,12 @@ def users_table():
         return render_template('users.html', users=users_list)
     else:
         return redirect('/login')
+
+
+@app.route('/user/<int:user_id>')
+def user_profile(user_id):
+    userdata = data_manager.get_user_by_id(user_id)
+    return render_template('user_profile.html', userdata=userdata)
 
 
 if __name__ == "__main__":

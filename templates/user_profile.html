@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" type="text/css" href="/static/CSS/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css" integrity="sha512-HK5fgLBL+xu6dm/Ii3z4xhlSUyZgTT9tuc/hSrtw6uzJOvgRr2a9jyxxT1ely+B+xFAmJKVSTbpM/CuL7qxO8w==" crossorigin="anonymous" />
+    <meta charset="UTF-8">
+    <title>User Profile</title>
+</head>
+<body>
+    <div class="container">
+        <nav>
+            <ul id="nav">
+                <li><a href="/"><i class="fas fa-home"></i> Home</a></li>
+                {% if 'username' in session %}
+                    <li><a class="nav-right" href="/logout"><i class="fas fa-sign-out-alt"></i> Log out</a></li>
+                    <li><span class="nav-right">Welcome {{ session['username'] }}!</span></li>
+                {% else %}
+                    <li><a class="nav-right" href="/login"><i class="fas fa-sign-in-alt"></i> Log in</a></li>
+                    <li><a class="nav-right" href="/registration"><i class="fas fa-user-plus"></i> Sign up</a></li>
+                {% endif %}
+            </ul>
+        </nav>
+    <ul>
+        <li>User Id: {{ userdata['id'] }}</li>
+        <li>User Name: {{ userdata['username'] }}</li>
+        <li>Registration Date: {{ userdata['registration_date'] }}</li>
+        <li>Number of Asked Questions: {{ userdata['question_count'] }}</li>
+        <li>Number of Answers: {{ userdata['answer_count'] }}</li>
+        <li>Number of Comments: {{ userdata['comment_count'] }}</li>
+        <li>Reputation: {{ userdata['reputation'] }}</li>
+    </ul>
+    <table class="users-table">
+        <tr>
+            <th>Question id</th>
+            <th>Question title</th>
+        </tr>
+        <tr>
+            <td><a href="#">Question id</a></td>
+            <td>Question title</td>
+        </tr>
+    </table>
+    <table class="users-table">
+        <tr>
+            <th>Question id</th>
+            <th>Answer</th>
+        </tr>
+        <tr>
+            <td><a href="#">Question id</a></td>
+            <td>Answer</td>
+        </tr>
+    </table>
+    <table class="users-table">
+        <tr>
+            <th>Question id</th>
+            <th>Comment</th>
+        </tr>
+        <tr>
+            <td><a href="#">Question id</a></td>
+            <td>Comment</td>
+        </tr>
+    </table>
+    </div>
+</body>
+</html>

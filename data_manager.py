@@ -492,8 +492,9 @@ def unaccept_answer(cursor: RealDictCursor, answer_id: int):
     set accepted = FALSE 
     where id = (%s);"""
     cursor.execute(query, (answer_id,))
-    
-    
+
+
+@database_common.connection_handler
 def get_user_questions(cursor: RealDictCursor, user_id: int) -> list:
     query = """SELECT * FROM question
     WHERE user_id = %s"""

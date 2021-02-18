@@ -411,11 +411,52 @@ def get_user_id(cursor: RealDictCursor, email:str) -> list:
 
 @database_common.connection_handler
 def get_users(cursor: RealDictCursor) -> list:
-    query = """SELECT * FROM users
-    JOIN users_statistics
-    ON users.id = users_statistics.user_id"""
+    query = """SELECT u.username,
+     u.registration_date,
+     u.reputation,
+       count(q.id) as question_count,
+       count(a.id) as answer_count,
+       count(c.id) as comment_count
+        FROM users u
+        left JOIN question q on u.id = q.user_id
+        left JOIN comment c on u.id = c.user_id
+        left JOIN answer a on u.id = a.user_id
+        group by username, reputation;
+    """
     cursor.execute(query)
     return cursor.fetchall()
+
+
+@database_common.connection_handler
+def question_reputation_up(cursor: RealDictCursor, question_id:int):
+    query = """ UPDATE users
+	SET reputation = reputation + 5 
+	WHERE id in (SELECT user_id FROM question WHERE id = (%s)); """
+    cursor.execute(query, (question_id,))
+
+
+@database_common.connection_handler
+def question_reputation_down(cursor: RealDictCursor, question_id:int):
+    query = """ UPDATE users
+	SET reputation = reputation - 2 
+	WHERE id in (SELECT user_id FROM question WHERE id = (%s)); """
+    cursor.execute(query, (question_id,))
+
+
+@database_common.connection_handler
+def answer_reputation_up(cursor: RealDictCursor, answer_id: int):
+    query = """ UPDATE users
+    SET reputation = reputation + 10
+    WHERE id in (SELECT user_id FROM answer WHERE id = (%s)); """
+    cursor.execute(query, (answer_id,))
+
+
+@database_common.connection_handler
+def answer_reputation_down(cursor: RealDictCursor, answer_id: int):
+    query = """ UPDATE users
+    SET reputation = reputation - 2
+    WHERE id in (SELECT user_id FROM answer WHERE id = (%s)); """
+    cursor.execute(query, (answer_id,))
 
 
 @database_common.connection_handler

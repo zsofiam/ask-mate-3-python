@@ -394,7 +394,8 @@ def delete_answers_by_question_id(cursor: RealDictCursor, question_id:int, user_
 def add_user(cursor: RealDictCursor, email:str,password:str):
     query = """
     INSERT INTO users(id,username,password,registration_date,reputation) 
-    VALUES (DEFAULT,%s,%s,CURRENT_TIMESTAMP,0);"""
+    VALUES (DEFAULT,%s,%s,CURRENT_TIMESTAMP,0);
+    """
     cursor.execute(query, (email,password,))
 
 @database_common.connection_handler
@@ -409,9 +410,18 @@ def get_user_id(cursor: RealDictCursor, email:str) -> list:
 
 @database_common.connection_handler
 def get_users(cursor: RealDictCursor) -> list:
-    query = """SELECT * FROM users
-    JOIN users_statistics
-    ON users.id = users_statistics.user_id"""
+    query = """SELECT u.username,
+     u.registration_date,
+     u.reputation,
+       count(q.id) as question_count,
+       count(a.id) as answer_count,
+       count(c.id) as comment_count
+        FROM users u
+        left JOIN question q on u.id = q.user_id
+        left JOIN comment c on u.id = c.user_id
+        left JOIN answer a on u.id = a.user_id
+        group by username, reputation;
+    """
     cursor.execute(query)
     return cursor.fetchall()
 

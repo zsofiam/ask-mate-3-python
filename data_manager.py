@@ -435,3 +435,11 @@ def get_user_question(cursor: RealDictCursor, user_id: int) -> list:
     WHERE user_id = %s"""
     cursor.execute(query, (user_id,))
     return cursor.fetchall()
+
+
+@database_common.connection_handler
+def get_user_answer(cursor: RealDictCursor, user_id: int) -> list:
+    query = """SELECT * FROM answer
+    WHERE user_id = %s"""
+    cursor.execute(query, (user_id,))
+    return cursor.fetchall()

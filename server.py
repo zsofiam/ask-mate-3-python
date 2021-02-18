@@ -317,8 +317,9 @@ def users_table():
 def user_profile(user_id):
     userdata = data_manager.get_user_by_id(user_id)
     questions = data_manager.get_user_question(user_id)
+    answers = data_manager.get_user_answer(user_id)
     return render_template('user_profile.html', userdata=userdata,
-                           questions=questions)
+                           questions=questions, answers=answers)
 
 
 if __name__ == "__main__":

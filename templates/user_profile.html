@@ -40,7 +40,7 @@
         </tr>
         {% for question in questions %}
         <tr>
-            <td><a href="/question/{{ question['id'] }}">Id</a></td>
+            <td><a href="/question/{{ question['id'] }}">{{ question['id'] }}</a></td>
             <td>{{ question['title'] }}</td>
             <td>{{ question['message'] }}</td>
             <td>{{ question['submission_time'] }}</td>
@@ -56,12 +56,14 @@
             <th>Submission Time</th>
             <th>Vote Number</th>
         </tr>
+        {% for answer in answers %}
         <tr>
-            <td><a href="/question/{{ id }}">Question id</a></td>
-            <td>Answer</td>
-            <td>Title</td>
-            <td>Title</td>
+            <td><a href="/question/{{ answer['user_id'] }}">{{ answer['user_id'] }}</a></td>
+            <td>{{ answer['message'] }}</td>
+            <td>{{ answer['submission_time'] }}</td>
+            <td>{{ answer['vote_number'] }}</td>
         </tr>
+        {% endfor %}
     </table>
     <table class="users-table">
         <tr>

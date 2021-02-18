@@ -32,7 +32,7 @@
     </tr>
     {% for user in users %}
     <tr>
-        <td><a href="#">{{ user.username }}</a></td>
+        <td><a href="/user/{{ user.id }}">{{ user.username }}</a></td>
         <td>{{ user.registration_date }}</td>
         <td>{{ user.question_count }}</td>
         <td>{{ user.answer_count }}</td>

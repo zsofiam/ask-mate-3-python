@@ -71,7 +71,7 @@
                                 <p><img src="/static/images/{{ answer["image"] }}" alt="{{ answer["image"] }}"></p>
                             {% endif %}
                             <p><small {% if answer['accepted'] == False %} class="red-font"{% endif %}>Vote number: {{ answer['vote_number'] }}</small></p>
-                            <form action="#" method="post">
+                            <form action="/question/{{ question['id'] }}/answer/{{ answer['id'] }}/edit" method="post">
                                 <label for="{{ loop.index }}">Accept Answer</label>
                                 <input type="checkbox" id="{{ loop.index }}" name="{{ answer["id"] }}" {% if answer['accepted'] %}checked="checked"{% endif %}><br>
                                 <input type="submit" value="Change Status">

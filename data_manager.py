@@ -460,3 +460,19 @@ def question_get_user_id(cursor: RealDictCursor, question_id: int):
     where id = (%s);"""
     cursor.execute(query, (question_id,))
     return cursor.fetchone()
+
+
+@database_common.connection_handler
+def accept_answer(cursor: RealDictCursor, answer_id: int):
+    query = """update answer
+    set accepted = TRUE 
+    where id = (%s);"""
+    cursor.execute(query, (answer_id,))
+
+
+@database_common.connection_handler
+def unaccept_answer(cursor: RealDictCursor, answer_id: int):
+    query = """update answer
+    set accepted = FALSE 
+    where id = (%s);"""
+    cursor.execute(query, (answer_id,))

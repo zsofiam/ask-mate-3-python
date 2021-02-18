@@ -316,7 +316,9 @@ def users_table():
 @app.route('/user/<int:user_id>')
 def user_profile(user_id):
     userdata = data_manager.get_user_by_id(user_id)
-    return render_template('user_profile.html', userdata=userdata)
+    questions = data_manager.get_user_question(user_id)
+    return render_template('user_profile.html', userdata=userdata,
+                           questions=questions)
 
 
 if __name__ == "__main__":

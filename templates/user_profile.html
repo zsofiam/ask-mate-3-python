@@ -38,14 +38,16 @@
             <th>View Number</th>
             <th>Vote Number</th>
         </tr>
+        {% for question in questions %}
         <tr>
-            <td><a href="#">Question id</a></td>
-            <td>Title</td>
-            <td>Title</td>
-            <td>Title</td>
-            <td>Title</td>
-            <td>Title</td>
+            <td><a href="/question/{{ question['id'] }}">Id</a></td>
+            <td>{{ question['title'] }}</td>
+            <td>{{ question['message'] }}</td>
+            <td>{{ question['submission_time'] }}</td>
+            <td>{{ question['view_number'] }}</td>
+            <td>{{ question['vote_number'] }}</td>
         </tr>
+        {% endfor %}
     </table>
     <table class="users-table">
         <tr>
@@ -55,7 +57,7 @@
             <th>Vote Number</th>
         </tr>
         <tr>
-            <td><a href="#">Question id</a></td>
+            <td><a href="/question/{{ id }}">Question id</a></td>
             <td>Answer</td>
             <td>Title</td>
             <td>Title</td>
@@ -69,7 +71,7 @@
             <th>Number of Edition</th>
         </tr>
         <tr>
-            <td><a href="#">Question id</a></td>
+            <td><a href="/question/{{ id }}">Question id</a></td>
             <td>Comment</td>
             <td>Title</td>
             <td>Title</td>

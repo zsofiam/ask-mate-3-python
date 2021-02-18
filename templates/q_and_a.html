@@ -24,12 +24,12 @@
         <table>
             <tr>
                 <td class="cols">
-                     <b>{{ question['title'] }}</b>
+                     <b class="title">{{ question['title'] }}</b>
                 </td>
                 <td class="cols">
                     {% for tag in tags %}
                     <a class="tag" href="/tag/{{ tag["id"] }}">#{{ tag["name"] }}</a>
-                    <a class="delete-tag" href="/question/{{ question["id"] }}/tag/{{ tag["id"] }}/delete">X</a>
+                    <a class="delete-tag" href="/question/{{ question["id"] }}/tag/{{ tag["id"] }}/delete"><i class="fas fa-times-circle"></i></a>
                     {% endfor %}
                     <br><a class="add" href="/question/{{ question["id"] }}/new-tag">add tag</a>
                 </td>
@@ -40,20 +40,20 @@
                     {% if question["image"] %}
                         <img src="/static/images/{{ question['image'] }}" alt="{{ question['image'] }}"><br>
                     {% endif %}
-                    <a class="delete" href="/question/{{ question['id'] }}/delete">DELETE question</a> |
-                    <a class="edit" href="/question/{{ question["id"] }}/edit">EDIT question</a><br><br>
+                    <a class="delete" href="/question/{{ question['id'] }}/delete"><i class="fas fa-trash-alt"></i> Delete</a> |
+                    <a class="edit" href="/question/{{ question["id"] }}/edit"><i class="fas fa-edit"></i> Edit</a><br><br>
                  <a class="add" href="/question/{{ question['id'] }}/new-answer">Write new answer</a>
                 </td>
                 <td class="cols" rowspan="2">
-                    <a class="add" href="/question/{{ question['id'] }}/new_comment">Comment the question </a><br>
+                    <a class="add" href="/question/{{ question['id'] }}/new_comment">Comment the question </a><br><br>
                     {% for comment in comments %}
                         {% if comment.answer_id == None %}
                         <small>Submission Time: {{ comment["submission_time"] }}</small><br>
                             <small>Edited <b>{{ comment["edited_count"] }}</b> times</small><br><br>
                         <b>Comment {{ loop.index }}:</b><br>
                         {{ comment.message }}<br><br>
-                            <a class="delete" href="/comment/{{ comment['id'] }}/{{ question['id'] }}/delete"><i onclick="confirm('Are you sure?')" class="fas fa-trash-alt"></i></a> |
-                            <a class="edit" href="/comment/{{ question['id'] }}/{{ comment['id'] }}/edit">EDIT comment</a>
+                            <a class="delete" href="/comment/{{ comment['id'] }}/{{ question['id'] }}/delete"><i onclick="confirm('Are you sure?')" class="fas fa-trash-alt"></i> Delete</a> |
+                            <a class="edit" href="/comment/{{ question['id'] }}/{{ comment['id'] }}/edit"><i class="fas fa-edit"></i> Edit</a>
                             <br><br>
                         {%  endif %}
                     {% endfor %}
@@ -74,8 +74,8 @@
                                 <input type="checkbox" id="{{ loop.index }}" name="{{ answer["id"] }}" {% if answer['accepted'] %}checked="checked"{% endif %}>
                                 <input type="submit" value="Change Status">
                             </form>
-                            <a class="delete" href="/answer/{{ answer['id'] }}/delete">DELETE answer</a> |
-                            <a class="edit" href="/answer/{{ answer['id'] }}/edit">EDIT answer</a><br><br>
+                            <a class="delete" href="/answer/{{ answer['id'] }}/delete"><i class="fas fa-trash-alt"></i> Delete</a> |
+                            <a class="edit" href="/answer/{{ answer['id'] }}/edit"><i class="fas fa-edit"></i> Edit</a><br><br>
                             <a class="add" href="/question/{{ question['id'] }}/answer/{{ answer['id'] }}/new_comment">Comment to answer </a>
                             {% for comment in comments %}
                                 {% if comment.answer_id == answer.id %}<br>
@@ -83,7 +83,7 @@
                                     <small>Submission Time: {{ comment["submission_time"] }}</small><br>
                                     <small>Edited <b>{{ comment["edited_count"] }}</b> times</small><br><br>
                                     {{ comment.message }}<br><br>
-                                    <a class="delete" href="/comment/{{ comment['id'] }}/{{ question['id'] }}/delete"><i onclick="confirm('Are you sure?')" class="fas fa-trash-alt"></i></a> |
+                                    <a class="delete" href="/comment/{{ comment['id'] }}/{{ question['id'] }}/delete"><i onclick="confirm('Are you sure?')" class="fas fa-trash-alt"></i> Delete</a> |
                                     <a class="edit" href="/comment/{{ question['id'] }}/{{ comment['id'] }}/edit">EDIT comment</a>
                                     <br>
                                 {% endif %}
@@ -103,7 +103,7 @@
                         <form class="like-form" action="/answer/{{ answer.get('id') }}/vote-down" method="post">
                             <button class="all-buttons" id="dislike" type="submit">Dislike!</button>
                         </form><br>
-                        <a class="delete" href="/answer/{{ answer['id'] }}/delete">DELETE answer</a> |
+                        <a class="delete" href="/answer/{{ answer['id'] }}/delete"><i class="fas fa-trash-alt"></i> Delete</a> |
                         <a class="edit" href="/answer/{{ answer['id'] }}/edit">EDIT answer</a><br><br>
                          <a class="add" href="/question/{{ question['id'] }}/answer/{{ answer['id'] }}/new_comment">Comment to answer </a><br>
                          {% for comment in comments %}

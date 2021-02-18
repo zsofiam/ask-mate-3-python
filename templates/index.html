@@ -24,7 +24,7 @@
         </ul>
         </nav>
         <form action="/search" method="get">
-            <input type="text" name="q"> <input class="button all-buttons" type="submit" value="Search">
+            <input type="text" name="q"><button type="submit" id="search" class="button all-buttons"><i class="fas fa-search"></i></button>
         </form>
         <div>
             {% if word != '' %}
@@ -77,21 +77,21 @@
             {% for question in questions %}
                 <tr>
                     <td>
-                        <a href="/question/{{ question.get('id') }}"><strong>{{question.get('title')}}</strong></a></td>
-                    <td>
-                        <small>Number of Views: <strong>{{ question.get('view_number') }}</strong></small>
-                        <small>Vote Number: <strong>{{ question.get('vote_number') }}</strong></small>
-                        <small>Submission Time: <strong>{{ question["submission_time"] }}</strong></small>
+                        <a class="title" href="/question/{{ question.get('id') }}"><strong>{{question.get('title')}}</strong></a></td>
+                    <td class="second-col">
+                        <small>Views: <strong>{{ question.get('view_number') }}</strong></small>
+                        <small>Votes: <strong>{{ question.get('vote_number') }}</strong></small>
+                        <small>Date: <strong>{{ question["submission_time"] }}</strong></small>
                     </td>
                 </tr>
                 <tr>
                     <td colspan="2">
                         <p>{{ question.get('message') }}</p>
                         <form class="like-form" action="/question/{{ question.get('id') }}/vote-up" method="post">
-                        <button class="all-buttons" id="like" type="submit">Like!</button>
+                        <button class="all-buttons" id="like" type="submit"><i class="fas fa-thumbs-up"></i></button>
                         </form>
                         <form class="like-form" action="/question/{{ question.get('id') }}/vote-down" method="post">
-                        <button class="all-buttons" id="dislike" type="submit">Dislike!</button>
+                        <button class="all-buttons" id="dislike" type="submit"><i class="fas fa-thumbs-down"></i></button>
                         </form>
                     </td>
                 </tr>

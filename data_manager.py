@@ -492,3 +492,12 @@ def get_user_comments(cursor: RealDictCursor, user_id: int) -> list:
     WHERE user_id = %s"""
     cursor.execute(query, (user_id,))
     return cursor.fetchall()
+
+@database_common.connection_handler
+def get_tags(cursor: RealDictCursor) ->list:
+    query = """ SELECT COUNT(question_tag.tag_id) , tag.name
+	FROM question_tag
+	RIGHT JOIN tag ON question_tag.tag_id = tag.id
+	GROUP BY tag_id,tag.name;"""
+    cursor.execute(query)
+    return cursor.fetchall()

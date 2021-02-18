@@ -34,9 +34,10 @@
         <li>Number of Comments: {{ userdata['comment_count'] }}</li>
         <li>Reputation: {{ userdata['reputation'] }}</li>
     </ul>
+    <h3>Questions of user:</h3>
     <table class="users-table">
         <tr>
-            <th>Question id</th>
+            <th>Id</th>
             <th>Title</th>
             <th>Message</th>
             <th>Submission Time</th>
@@ -54,6 +55,7 @@
         </tr>
         {% endfor %}
     </table>
+    <h3>Answers of user:</h3>
     <table class="users-table">
         <tr>
             <th>Question id</th>
@@ -70,6 +72,7 @@
         </tr>
         {% endfor %}
     </table>
+    <h3>Comments of user:</h3>
     <table class="users-table">
         <tr>
             <th>Question id</th>

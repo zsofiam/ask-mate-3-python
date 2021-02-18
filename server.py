@@ -22,7 +22,7 @@ def main_page():
         results = data_manager.search(word)
         results_answers = data_manager.search_answers(word)
     questions = data_manager.get_latest_five_questions()
-    print("branch_test_deletable_later")
+    # print("branch_test_deletable_later")
     return render_template('index.html', questions=questions, results=results, results_answers=results_answers,
                            word=word)
 

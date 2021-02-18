@@ -419,11 +419,11 @@ def get_users(cursor: RealDictCursor) -> list:
 
 
 @database_common.connection_handler
-def get_user_by_id(cursor: RealDictCursor, user_id: int) -> list:
+def get_user_by_id(cursor: RealDictCursor, user_id: int):
     query = """SELECT u.id, u.username, u.registration_date, u.reputation, 
     s.question_count, s.answer_count, s.comment_count FROM users u
     JOIN users_statistics s
     ON u.id = s.user_id
     WHERE u.id = %s"""
     cursor.execute(query, (user_id,))
-    return cursor.fetchall()
+    return cursor.fetchone()

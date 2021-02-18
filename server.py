@@ -236,12 +236,14 @@ def edit_answer(answer_id):
 @app.route('/question/<question_id>/vote-up', methods=['POST'])
 def vote_up_question(question_id):
     data_manager.vote_up_question(question_id)
+    data_manager.question_reputation_up(question_id)
     return redirect("/")
 
 
 @app.route('/question/<question_id>/vote-down', methods=['POST'])
 def vote_down_question(question_id):
     data_manager.vote_down_question(question_id)
+    data_manager.question_reputation_down(question_id)
     return redirect("/")
 
 
@@ -262,6 +264,7 @@ def post_new_answer_comment(answer_id, question_id):
 @app.route('/answer/<answer_id>/vote-up', methods=['POST'])
 def vote_up_answer(answer_id):
     data_manager.vote_up_answer(answer_id)
+    data_manager.answer_reputation_up(answer_id)
     question_id = data_manager.get_answer_data(answer_id)['question_id']
     return redirect("/question/" + str(question_id))
 
@@ -269,6 +272,7 @@ def vote_up_answer(answer_id):
 @app.route('/answer/<answer_id>/vote-down', methods=['POST'])
 def vote_down_answer(answer_id):
     data_manager.vote_down_answer(answer_id)
+    data_manager.answer_reputation_down(answer_id)
     question_id = data_manager.get_answer_data(answer_id)['question_id']
     return redirect("/question/" + str(question_id))
 

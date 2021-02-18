@@ -69,12 +69,12 @@
                         <h1>Not Editable</h1>
                  {% endif %}
                     {% for answer in answers %}
-                        <br><strong>Answer {{ loop.index }}: </strong>
+                        <br><strong {% if answer['accepted'] %} class="red-font" {% endif %}>Answer {{ loop.index }}: </strong>
                         <p {% if answer['accepted'] %} class="red-font" {% endif %}>{{ answer['message'] }}</p>
                             {% if answer["image"]%}
                         <p><img src="/static/images/{{ answer["image"] }}" alt="{{ answer["image"] }}"></p>
                             {% endif %}
-                        <p><small>Vote number: {{ answer['vote_number'] }}</small></p>
+                        <p><small {% if answer['accepted'] %} class="red-font" {% endif %}>Vote number: {{ answer['vote_number'] }}</small></p>
                         <form class="like-form" action="/answer/{{ answer.get('id') }}/vote-up" method="post">
                             <button class="all-buttons" id="like" type="submit">Like!</button>
                         </form>

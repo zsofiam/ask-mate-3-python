@@ -31,7 +31,7 @@ def get_user_data(cursor: RealDictCursor, username: str):
 @database_common.connection_handler
 def get_answers(cursor: RealDictCursor, question_id: int) -> list:
     query = """
-        SELECT id, image, message, submission_time, vote_number
+        SELECT id, image, message, submission_time, vote_number, accepted
         FROM answer
         WHERE question_id={}
         ORDER BY id""".format(question_id)
@@ -458,7 +458,15 @@ def answer_reputation_down(cursor: RealDictCursor, answer_id: int):
     WHERE id in (SELECT user_id FROM answer WHERE id = (%s)); """
     cursor.execute(query, (answer_id,))
 
+    
+@database_common.connection_handler
+def question_get_user_id(cursor: RealDictCursor, question_id: int):
+    query = """select user_id
+    from question
+    where id = (%s);"""
+    cursor.execute(query, (question_id,))
 
+    
 @database_common.connection_handler
 def get_user_by_id(cursor: RealDictCursor, user_id: int):
     query = """SELECT u.id, u.username, u.registration_date, u.reputation, 
@@ -471,6 +479,21 @@ def get_user_by_id(cursor: RealDictCursor, user_id: int):
 
 
 @database_common.connection_handler
+def accept_answer(cursor: RealDictCursor, answer_id: int):
+    query = """update answer
+    set accepted = TRUE 
+    where id = (%s);"""
+    cursor.execute(query, (answer_id,))
+
+
+@database_common.connection_handler
+def unaccept_answer(cursor: RealDictCursor, answer_id: int):
+    query = """update answer
+    set accepted = FALSE 
+    where id = (%s);"""
+    cursor.execute(query, (answer_id,))
+    
+    
 def get_user_questions(cursor: RealDictCursor, user_id: int) -> list:
     query = """SELECT * FROM question
     WHERE user_id = %s"""

@@ -1,0 +1,2 @@
+ALTER TABLE ONLY answer
+ADD COLUMN accepted BOOLEAN;

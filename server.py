@@ -61,7 +61,11 @@ def display_question(question_id):
     answers = data_manager.get_answers(question_id)
     tags = data_manager.get_tags_by_question(question_id)
     comments = data_manager.get_comment(question_id)
-    return render_template('q_and_a.html', question=question, answers=answers, tags=tags, comments=comments)
+    editable = False
+    question_user_id = data_manager.question_get_user_id(question_id)['user_id']
+    if question_user_id == session['user_id']:
+         editable = True
+    return render_template('q_and_a.html', question=question, answers=answers, tags=tags, comments=comments, editable=editable)
 
 
 @app.route("/add-question", methods=['GET', 'POST'])
@@ -317,6 +321,16 @@ def users_table():
         return redirect('/login')
 
 
+
+@app.route("/question/<question_id>/answer/<answer_id>/edit", methods=['POST'])
+def accept_answer(question_id, answer_id):
+    if answer_id in request.form:
+        data_manager.accept_answer(answer_id)
+    else:
+        data_manager.unaccept_answer(answer_id)
+    return redirect("/question/" + str(question_id))
+
+ 
 @app.route('/user/<int:user_id>')
 def user_profile(user_id):
     userdata = data_manager.get_user_by_id(user_id)

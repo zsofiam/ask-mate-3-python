@@ -72,8 +72,8 @@
                             <form action="/question/{{ question['id'] }}/answer/{{ answer['id'] }}/edit" method="post">
                                 <label for="{{ loop.index }}">Accept Answer</label>
                                 <input type="checkbox" id="{{ loop.index }}" name="{{ answer["id"] }}" {% if answer['accepted'] %}checked="checked"{% endif %}>
-                                <input type="submit" value="Change Status">
-                            </form>
+                                <input type="submit" value="Change Status" class="change all-buttons">
+                            </form><br>
                             <a class="delete" href="/answer/{{ answer['id'] }}/delete"><i class="fas fa-trash-alt"></i> Delete</a> |
                             <a class="edit" href="/answer/{{ answer['id'] }}/edit"><i class="fas fa-edit"></i> Edit</a><br><br>
                             <a class="add" href="/question/{{ question['id'] }}/answer/{{ answer['id'] }}/new_comment">Comment to answer </a>
@@ -84,7 +84,7 @@
                                     <small>Edited <b>{{ comment["edited_count"] }}</b> times</small><br><br>
                                     {{ comment.message }}<br><br>
                                     <a class="delete" href="/comment/{{ comment['id'] }}/{{ question['id'] }}/delete"><i onclick="confirm('Are you sure?')" class="fas fa-trash-alt"></i> Delete</a> |
-                                    <a class="edit" href="/comment/{{ question['id'] }}/{{ comment['id'] }}/edit">EDIT comment</a>
+                                    <a class="edit" href="/comment/{{ question['id'] }}/{{ comment['id'] }}/edit"><i class="fas fa-edit"></i> Edit</a>
                                     <br>
                                 {% endif %}
                             {% endfor %}
@@ -98,13 +98,13 @@
                             {% endif %}
                         <p><small {% if answer['accepted'] == False %} class="red-font" {% endif %}>Vote number: {{ answer['vote_number'] }}</small></p>
                         <form class="like-form" action="/answer/{{ answer.get('id') }}/vote-up" method="post">
-                            <button class="all-buttons" id="like" type="submit">Like!</button>
+                            <button class="all-buttons" id="like" type="submit"><i class="fas fa-thumbs-up"></i></button>
                         </form>
                         <form class="like-form" action="/answer/{{ answer.get('id') }}/vote-down" method="post">
-                            <button class="all-buttons" id="dislike" type="submit">Dislike!</button>
+                            <button class="all-buttons" id="dislike" type="submit"><i class="fas fa-thumbs-down"></i></button>
                         </form><br>
                         <a class="delete" href="/answer/{{ answer['id'] }}/delete"><i class="fas fa-trash-alt"></i> Delete</a> |
-                        <a class="edit" href="/answer/{{ answer['id'] }}/edit">EDIT answer</a><br><br>
+                        <a class="edit" href="/answer/{{ answer['id'] }}/edit"><i class="fas fa-edit"></i> Edit</a><br><br>
                          <a class="add" href="/question/{{ question['id'] }}/answer/{{ answer['id'] }}/new_comment">Comment to answer </a><br>
                          {% for comment in comments %}
                             {% if comment.answer_id == answer.id %}<br>
@@ -112,8 +112,8 @@
                                 <small>Submission Time: {{ comment["submission_time"] }}</small><br>
                                 <small>Edited <b>{{ comment["edited_count"] }}</b> times</small><br><br>
                              {{ comment.message }}<br><br>
-                                <a class="delete" href="/comment/{{ comment['id'] }}/{{ question['id'] }}/delete"><i onclick="confirm('Are you sure?')" class="fas fa-trash-alt"></i></a> |
-                                  <a class="edit" href="/comment/{{ question['id'] }}/{{ comment['id'] }}/edit">EDIT comment</a>
+                                <a class="delete" href="/comment/{{ comment['id'] }}/{{ question['id'] }}/delete"><i onclick="confirm('Are you sure?')" class="fas fa-trash-alt"></i> Delete</a> |
+                                  <a class="edit" href="/comment/{{ question['id'] }}/{{ comment['id'] }}/edit"><i class="fas fa-edit"></i> Edit</a>
                                 <br>
                              {% endif %}
                         {% endfor %}

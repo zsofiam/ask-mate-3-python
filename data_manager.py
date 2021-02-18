@@ -410,7 +410,9 @@ def get_user_id(cursor: RealDictCursor, email:str) -> list:
 
 @database_common.connection_handler
 def get_users(cursor: RealDictCursor) -> list:
-    query = """SELECT u.username, u.reputation,
+    query = """SELECT u.username,
+     u.registration_date,
+     u.reputation,
        count(q.id) as question_count,
        count(a.id) as answer_count,
        count(c.id) as comment_count

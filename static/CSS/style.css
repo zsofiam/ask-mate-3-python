@@ -9,13 +9,17 @@ body {
 table {
     width: 100%;
 }
-/*tr td {*/
+
+/* ======== for testing ======== */
+/*tr td, th {*/
 /*    border: 1px solid black;*/
 /*    padding: 5px;*/
 /*}*/
 /*table {*/
 /*    border-collapse: collapse;*/
 /*}*/
+/* ======== for testing ======== */
+
 .cols {
     width: 50%;
     vertical-align: top;
@@ -117,21 +121,21 @@ img{
     width: 200px;
 }
 
-#users-table {
+.users-table {
     border-collapse: collapse;
     width: 100%;
 }
 
-#users-table td, #users-table th {
+.users-table td, .users-table th {
     border: 1px solid #ddd;
     padding: 8px;
 }
 
-#users-table tr:nth-child(even){background-color: #f2f2f2;}
+.users-table tr:nth-child(even){background-color: #f2f2f2;}
 
-#users-table tr:hover {background-color: #ddd;}
+.users-table tr:hover {background-color: #ddd;}
 
-#users-table th {
+.users-table th {
     padding-top: 12px;
     padding-bottom: 12px;
     text-align: left;

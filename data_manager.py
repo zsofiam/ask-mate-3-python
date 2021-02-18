@@ -390,13 +390,14 @@ def delete_answers_by_question_id(cursor: RealDictCursor, question_id:int, user_
     WHERE question_id = {}""".format(user_id, question_id)
     cursor.execute(query)
 
+
 @database_common.connection_handler
 def add_user(cursor: RealDictCursor, email:str,password:str):
     query = """
     INSERT INTO users(id,username,password,registration_date,reputation) 
-    VALUES (DEFAULT,%s,%s,CURRENT_TIMESTAMP,0);
-    """
+    VALUES (DEFAULT,%s,%s,CURRENT_TIMESTAMP,0);"""
     cursor.execute(query, (email,password,))
+
 
 @database_common.connection_handler
 def get_user_id(cursor: RealDictCursor, email:str) -> list:
@@ -410,7 +411,7 @@ def get_user_id(cursor: RealDictCursor, email:str) -> list:
 
 @database_common.connection_handler
 def get_users(cursor: RealDictCursor) -> list:
-    query = """SELECT u.username,
+    query = """SELECT u.id, u.username,
      u.registration_date,
      u.reputation,
        count(q.id) as question_count,
@@ -420,10 +421,11 @@ def get_users(cursor: RealDictCursor) -> list:
         left JOIN question q on u.id = q.user_id
         left JOIN comment c on u.id = c.user_id
         left JOIN answer a on u.id = a.user_id
-        group by username, reputation, registration_date;
+        group by u.id, u.username, u.registration_date, u.reputation;
     """
     cursor.execute(query)
     return cursor.fetchall()
+
 
 @database_common.connection_handler
 def question_reputation_up(cursor: RealDictCursor, question_id:int):
@@ -432,12 +434,14 @@ def question_reputation_up(cursor: RealDictCursor, question_id:int):
 	WHERE id in (SELECT user_id FROM question WHERE id = (%s)); """
     cursor.execute(query, (question_id,))
 
+
 @database_common.connection_handler
 def question_reputation_down(cursor: RealDictCursor, question_id:int):
     query = """ UPDATE users
 	SET reputation = reputation - 2 
 	WHERE id in (SELECT user_id FROM question WHERE id = (%s)); """
     cursor.execute(query, (question_id,))
+
 
 @database_common.connection_handler
 def answer_reputation_up(cursor: RealDictCursor, answer_id: int):
@@ -446,6 +450,7 @@ def answer_reputation_up(cursor: RealDictCursor, answer_id: int):
     WHERE id in (SELECT user_id FROM answer WHERE id = (%s)); """
     cursor.execute(query, (answer_id,))
 
+
 @database_common.connection_handler
 def answer_reputation_down(cursor: RealDictCursor, answer_id: int):
     query = """ UPDATE users
@@ -453,12 +458,23 @@ def answer_reputation_down(cursor: RealDictCursor, answer_id: int):
     WHERE id in (SELECT user_id FROM answer WHERE id = (%s)); """
     cursor.execute(query, (answer_id,))
 
+    
 @database_common.connection_handler
 def question_get_user_id(cursor: RealDictCursor, question_id: int):
     query = """select user_id
     from question
     where id = (%s);"""
     cursor.execute(query, (question_id,))
+
+    
+@database_common.connection_handler
+def get_user_by_id(cursor: RealDictCursor, user_id: int):
+    query = """SELECT u.id, u.username, u.registration_date, u.reputation, 
+    s.question_count, s.answer_count, s.comment_count FROM users u
+    JOIN users_statistics s
+    ON u.id = s.user_id
+    WHERE u.id = %s"""
+    cursor.execute(query, (user_id,))
     return cursor.fetchone()
 
 
@@ -476,3 +492,35 @@ def unaccept_answer(cursor: RealDictCursor, answer_id: int):
     set accepted = FALSE 
     where id = (%s);"""
     cursor.execute(query, (answer_id,))
+    
+    
+def get_user_questions(cursor: RealDictCursor, user_id: int) -> list:
+    query = """SELECT * FROM question
+    WHERE user_id = %s"""
+    cursor.execute(query, (user_id,))
+    return cursor.fetchall()
+
+
+@database_common.connection_handler
+def get_user_answers(cursor: RealDictCursor, user_id: int) -> list:
+    query = """SELECT * FROM answer
+    WHERE user_id = %s"""
+    cursor.execute(query, (user_id,))
+    return cursor.fetchall()
+
+
+@database_common.connection_handler
+def get_user_comments(cursor: RealDictCursor, user_id: int) -> list:
+    query = """SELECT * FROM comment
+    WHERE user_id = %s"""
+    cursor.execute(query, (user_id,))
+    return cursor.fetchall()
+
+@database_common.connection_handler
+def get_tags(cursor: RealDictCursor) ->list:
+    query = """ SELECT COUNT(question_tag.tag_id) , tag.name
+	FROM question_tag
+	RIGHT JOIN tag ON question_tag.tag_id = tag.id
+	GROUP BY tag_id,tag.name;"""
+    cursor.execute(query)
+    return cursor.fetchall()

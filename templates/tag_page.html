@@ -8,11 +8,14 @@
 </head>
 <body>
     <div class="container">
-     <nav>
+    <nav>
         <ul id="nav">
         <li><a href="/"><i class="fas fa-home"></i> Home</a></li>
+        <li><a href="/tags"><i class="fas fa-tags"></i> Tags</a></li>
         {% if 'username' in session %}
+            <li><a href="/users"><i class="fas fa-users"></i> Users</a></li>
             <li><a class="nav-right" href="/logout"><i class="fas fa-sign-out-alt"></i> Log out</a></li>
+            <li><a class="nav-right" href="/user/{{ session['user_id'] }}"><i class="fas fa-user-circle"></i> Profile</a></li>
             <li><span class="nav-right">Welcome {{ session['username'] }}!</span></li>
         {% else %}
             <li><a class="nav-right" href="/login"><i class="fas fa-sign-in-alt"></i> Log in</a></li>
@@ -20,20 +23,26 @@
         {% endif %}
         </ul>
         </nav>
-        <b>Select tags and/or define a new one</b><br><br>
-        <form action="/question/{{ question_id }}/new-tag" method="post">
-            {% for all_tag in all_tags %}
-            {% if all_tag in tags %}
-            <input type="checkbox" id="{{ all_tag["name"] }}" name="{{ all_tag["id"] }}" value="{{ all_tag["name"] }}" checked="checked">
-            {% else %}
-                <input type="checkbox" id="{{ all_tag["name"] }}" name="{{ all_tag["id"] }}" value="{{ all_tag["name"] }}">
-            {% endif %}
-                <label for="{{ all_tag["name"] }}">{{ all_tag["name"] }}</label><br>
-            {% endfor %}
-            <br><label for="new_tag">New Tag:</label><br><br>
-            <input type="text" id="new_tag" name="new-tag">
-            <input type="submit" value="SEND">
-        </form>
+        <div>
+
+            <table class="users-table">
+                  <tr>
+                    <th>Tag name</th>
+                    <th>Tag count</th>
+                  </tr>
+                    {% for tag in tags_list%}
+                    <tr>
+                        <td>{{ tag['name']  }}</td>
+                        <td>{{ tag['count'] }}</td>
+                    </tr>
+                    {% endfor %}
+
+                </table>
+
+
+
+
+        </div>
     </div>
 </body>
 </html>

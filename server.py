@@ -327,6 +327,12 @@ def user_profile(user_id):
                            questions=questions, answers=answers,
                            comments=comments)
 
+@app.route('/tags')
+def tags_page():
+    tags_list = data_manager.get_tags()
+    print(tags_list)
+    return render_template('tag_page.html',tags_list = tags_list)
+
 
 if __name__ == "__main__":
     app.run(

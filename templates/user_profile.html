@@ -58,7 +58,7 @@
         </tr>
         {% for answer in answers %}
         <tr>
-            <td><a href="/question/{{ answer['user_id'] }}">{{ answer['user_id'] }}</a></td>
+            <td><a href="/question/{{ answer['question_id'] }}">{{ answer['question_id'] }}</a></td>
             <td>{{ answer['message'] }}</td>
             <td>{{ answer['submission_time'] }}</td>
             <td>{{ answer['vote_number'] }}</td>
@@ -72,12 +72,14 @@
             <th>Submission Time</th>
             <th>Number of Edition</th>
         </tr>
+        {% for comment in comments %}
         <tr>
-            <td><a href="/question/{{ id }}">Question id</a></td>
-            <td>Comment</td>
-            <td>Title</td>
-            <td>Title</td>
+            <td><a href="/question/{{ comment['question_id'] }}">{{ comment['question_id'] }}</a></td>
+            <td>{{ comment['message'] }}</td>
+            <td>{{ comment['submission_time'] }}</td>
+            <td>{{ comment['edited_count'] }}</td>
         </tr>
+        {% endfor %}
     </table>
     </div>
 </body>

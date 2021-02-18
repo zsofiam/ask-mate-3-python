@@ -430,7 +430,7 @@ def get_user_by_id(cursor: RealDictCursor, user_id: int):
 
 
 @database_common.connection_handler
-def get_user_question(cursor: RealDictCursor, user_id: int) -> list:
+def get_user_questions(cursor: RealDictCursor, user_id: int) -> list:
     query = """SELECT * FROM question
     WHERE user_id = %s"""
     cursor.execute(query, (user_id,))
@@ -438,8 +438,16 @@ def get_user_question(cursor: RealDictCursor, user_id: int) -> list:
 
 
 @database_common.connection_handler
-def get_user_answer(cursor: RealDictCursor, user_id: int) -> list:
+def get_user_answers(cursor: RealDictCursor, user_id: int) -> list:
     query = """SELECT * FROM answer
+    WHERE user_id = %s"""
+    cursor.execute(query, (user_id,))
+    return cursor.fetchall()
+
+
+@database_common.connection_handler
+def get_user_comments(cursor: RealDictCursor, user_id: int) -> list:
+    query = """SELECT * FROM comment
     WHERE user_id = %s"""
     cursor.execute(query, (user_id,))
     return cursor.fetchall()

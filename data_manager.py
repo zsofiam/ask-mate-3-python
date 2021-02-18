@@ -465,6 +465,7 @@ def question_get_user_id(cursor: RealDictCursor, question_id: int):
     from question
     where id = (%s);"""
     cursor.execute(query, (question_id,))
+    return cursor.fetchone()
 
     
 @database_common.connection_handler

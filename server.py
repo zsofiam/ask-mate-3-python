@@ -55,7 +55,7 @@ def route_list():
     return render_template('list.html', questions=questions_list)
 
 
-@app.route("/question/<question_id>")
+@app.route("/question/<int:question_id>")
 def display_question(question_id):
     question = data_manager.get_question_by_id(question_id)
     answers = data_manager.get_answers(question_id)
@@ -64,7 +64,7 @@ def display_question(question_id):
     editable = False
     question_user_id = data_manager.question_get_user_id(question_id)['user_id']
     if question_user_id == session['user_id']:
-         editable = True
+        editable = True
     return render_template('q_and_a.html', question=question, answers=answers, tags=tags, comments=comments, editable=editable)
 
 

@@ -31,7 +31,7 @@ def get_user_data(cursor: RealDictCursor, username: str):
 @database_common.connection_handler
 def get_answers(cursor: RealDictCursor, question_id: int) -> list:
     query = """
-        SELECT id, image, message, submission_time, vote_number
+        SELECT id, image, message, submission_time, vote_number, accepted
         FROM answer
         WHERE question_id={}
         ORDER BY id""".format(question_id)
@@ -420,7 +420,7 @@ def get_users(cursor: RealDictCursor) -> list:
         left JOIN question q on u.id = q.user_id
         left JOIN comment c on u.id = c.user_id
         left JOIN answer a on u.id = a.user_id
-        group by username, reputation;
+        group by username, reputation, registration_date;
     """
     cursor.execute(query)
     return cursor.fetchall()
@@ -452,3 +452,11 @@ def answer_reputation_down(cursor: RealDictCursor, answer_id: int):
     SET reputation = reputation - 2
     WHERE id in (SELECT user_id FROM answer WHERE id = (%s)); """
     cursor.execute(query, (answer_id,))
+
+@database_common.connection_handler
+def question_get_user_id(cursor: RealDictCursor, question_id: int):
+    query = """select user_id
+    from question
+    where id = (%s);"""
+    cursor.execute(query, (question_id,))
+    return cursor.fetchone()

@@ -63,10 +63,14 @@
             </tr>
             <tr>
                  <td>
+                    {% if editable %}
+                 <h1>Editable</h1>
+                        {% else %}
+                        <h1>Not Editable</h1>
+                 {% endif %}
                     {% for answer in answers %}
-
                         <br><strong>Answer {{ loop.index }}: </strong>
-                        <p>{{ answer['message'] }}</p>
+                        <p {% if answer['accepted'] %} class="red-font" {% endif %}>{{ answer['message'] }}</p>
                             {% if answer["image"]%}
                         <p><img src="/static/images/{{ answer["image"] }}" alt="{{ answer["image"] }}"></p>
                             {% endif %}
@@ -92,6 +96,7 @@
                              {% endif %}
                         {% endfor %}
                     {% endfor %}
+
                  </td>
             </tr>
         </table>

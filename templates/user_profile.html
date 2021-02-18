@@ -20,6 +20,11 @@
                 {% endif %}
             </ul>
         </nav>
+    {% if session['username'] == userdata['username'] %}
+        <h3>My profile:</h3>
+    {% else %}
+        <h3>{{ userdata['username'] }}'s profile:</h3>
+    {% endif %}
     <ul>
         <li>User Id: {{ userdata['id'] }}</li>
         <li>User Name: {{ userdata['username'] }}</li>

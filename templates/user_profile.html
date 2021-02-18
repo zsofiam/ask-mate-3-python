@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" type="text/css" href="/static/CSS/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css" integrity="sha512-HK5fgLBL+xu6dm/Ii3z4xhlSUyZgTT9tuc/hSrtw6uzJOvgRr2a9jyxxT1ely+B+xFAmJKVSTbpM/CuL7qxO8w==" crossorigin="anonymous" />
+    <meta charset="UTF-8">
+    <title>User Profile</title>
+</head>
+<body>
+    <div class="container">
+        <nav>
+            <ul id="nav">
+                <li><a href="/"><i class="fas fa-home"></i> Home</a></li>
+                {% if 'username' in session %}
+                    <li><a class="nav-right" href="/logout"><i class="fas fa-sign-out-alt"></i> Log out</a></li>
+                    <li><span class="nav-right">Welcome {{ session['username'] }}!</span></li>
+                {% else %}
+                    <li><a class="nav-right" href="/login"><i class="fas fa-sign-in-alt"></i> Log in</a></li>
+                    <li><a class="nav-right" href="/registration"><i class="fas fa-user-plus"></i> Sign up</a></li>
+                {% endif %}
+            </ul>
+        </nav>
+    {% if session['username'] == userdata['username'] %}
+        <h3>My profile:</h3>
+    {% else %}
+        <h3>{{ userdata['username'] }}'s profile:</h3>
+    {% endif %}
+    <ul>
+        <li>User Id: {{ userdata['id'] }}</li>
+        <li>User Name: {{ userdata['username'] }}</li>
+        <li>Registration Date: {{ userdata['registration_date'] }}</li>
+        <li>Number of Asked Questions: {{ userdata['question_count'] }}</li>
+        <li>Number of Answers: {{ userdata['answer_count'] }}</li>
+        <li>Number of Comments: {{ userdata['comment_count'] }}</li>
+        <li>Reputation: {{ userdata['reputation'] }}</li>
+    </ul>
+    <h3>Questions of user:</h3>
+    <table class="users-table">
+        <tr>
+            <th>Id</th>
+            <th>Title</th>
+            <th>Message</th>
+            <th>Submission Time</th>
+            <th>View Number</th>
+            <th>Vote Number</th>
+        </tr>
+        {% for question in questions %}
+        <tr>
+            <td><a href="/question/{{ question['id'] }}">{{ question['id'] }}</a></td>
+            <td>{{ question['title'] }}</td>
+            <td>{{ question['message'] }}</td>
+            <td>{{ question['submission_time'] }}</td>
+            <td>{{ question['view_number'] }}</td>
+            <td>{{ question['vote_number'] }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+    <h3>Answers of user:</h3>
+    <table class="users-table">
+        <tr>
+            <th>Question id</th>
+            <th>Answer</th>
+            <th>Submission Time</th>
+            <th>Vote Number</th>
+        </tr>
+        {% for answer in answers %}
+        <tr>
+            <td><a href="/question/{{ answer['question_id'] }}">{{ answer['question_id'] }}</a></td>
+            <td>{{ answer['message'] }}</td>
+            <td>{{ answer['submission_time'] }}</td>
+            <td>{{ answer['vote_number'] }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+    <h3>Comments of user:</h3>
+    <table class="users-table">
+        <tr>
+            <th>Question id</th>
+            <th>Comment</th>
+            <th>Submission Time</th>
+            <th>Number of Edition</th>
+        </tr>
+        {% for comment in comments %}
+        <tr>
+            <td><a href="/question/{{ comment['question_id'] }}">{{ comment['question_id'] }}</a></td>
+            <td>{{ comment['message'] }}</td>
+            <td>{{ comment['submission_time'] }}</td>
+            <td>{{ comment['edited_count'] }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+    </div>
+</body>
+</html>

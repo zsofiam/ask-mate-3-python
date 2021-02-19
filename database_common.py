@@ -10,10 +10,10 @@ def get_connection_string():
     # setup connection string
     # to do this, please define these environment variables first
 
-    user_name = os.environ.get('PSQL_USER_NAME')
-    password = os.environ.get('PSQL_PASSWORD')
-    host = os.environ.get('PSQL_HOST')
-    database_name = os.environ.get('PSQL_DB_NAME')
+    user_name = "kgumkuzcvruxxm"
+    password = "a21bceabf886c860115d1e8ba10f057bcf5fb1596893a9ba03c7d011fb89d229"
+    host = "ec2-54-155-208-5.eu-west-1.compute.amazonaws.com"
+    database_name = "d6e0j7lgtp51t8"
 
     env_variables_defined = user_name and password and host and database_name
 

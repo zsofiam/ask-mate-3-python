@@ -10,12 +10,12 @@
     <div class="container">
      <nav>
         <ul id="nav">
-        <li><a href="/">Home</a></li>
+        <li><a href="/"><i class="fas fa-home"></i> Home</a></li>
         {% if 'username' in session %}
             <li><a class="nav-right" href="/logout">Log out</a></li>
             <li><span class="nav-right">Welcome {{ session['username'] }}!</span></li>
         {% else %}
-            <li><a class="nav-right" href="/login">Log in</a></li>
+            <li><a class="nav-right" href="/login"><i class="fas fa-sign-in-alt"></i> Log in</a></li>
         {% endif %}
         </ul>
         </nav>
@@ -24,8 +24,8 @@
         <p class="error">{{ error_message }}</p>
         {% endif %}
         <form action="/registration" method="POST">
-            <label>E-mail address:<br/><input type="text" name="email_address"></label><br/>
-            <label>Password:<br/><input type="password" name="password"></label><br/>
+            <label>E-mail address:<br/><input type="text" name="email_address"></label><br/><br>
+            <label>Password:<br/><input type="password" name="password"></label><br/><br>
             <button type="submit" value="Register">Register </button>
         </form>
     </div>

@@ -325,8 +325,10 @@ def users_table():
 def accept_answer(question_id, answer_id):
     if answer_id in request.form:
         data_manager.accept_answer(answer_id)
+        data_manager.answer_accepted_reputation_up(answer_id)
     else:
         data_manager.unaccept_answer(answer_id)
+        data_manager.answer_unaccepted_reputation_down(answer_id)
     return redirect("/question/" + str(question_id))
 
  

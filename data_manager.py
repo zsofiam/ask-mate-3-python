@@ -535,3 +535,18 @@ def get_tags(cursor: RealDictCursor) ->list:
 	GROUP BY tag_id,tag.name;"""
     cursor.execute(query)
     return cursor.fetchall()
+
+@database_common.connection_handler
+def answer_accepted_reputation_up(cursor: RealDictCursor, answer_id: int):
+    query = """ UPDATE users
+    SET reputation = reputation + 15
+    WHERE id in (SELECT user_id FROM answer WHERE id = (%s)); """
+    cursor.execute(query, (answer_id,))
+
+
+@database_common.connection_handler
+def answer_unaccepted_reputation_down(cursor: RealDictCursor, answer_id: int):
+    query = """ UPDATE users
+    SET reputation = reputation - 15
+    WHERE id in (SELECT user_id FROM answer WHERE id = (%s)); """
+    cursor.execute(query, (answer_id,))

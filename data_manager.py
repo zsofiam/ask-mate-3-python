@@ -411,20 +411,29 @@ def get_user_id(cursor: RealDictCursor, email:str) -> list:
 
 @database_common.connection_handler
 def get_users(cursor: RealDictCursor) -> list:
-    query = """SELECT u.id, u.username,
-     u.registration_date,
-     u.reputation,
-       count(q.id) as question_count,
-       count(a.id) as answer_count,
-       count(c.id) as comment_count
-        FROM users u
-        left JOIN question q on u.id = q.user_id
-        left JOIN comment c on u.id = c.user_id
-        left JOIN answer a on u.id = a.user_id
-        group by u.id, u.username, u.registration_date, u.reputation;
-    """
+    query = """SELECT u.id, u.username, u.registration_date, u.reputation, 
+    s.question_count, s.answer_count, s.comment_count FROM users u
+    JOIN users_statistics s
+    ON u.id = s.user_id"""
     cursor.execute(query)
     return cursor.fetchall()
+
+# @database_common.connection_handler
+# def get_users(cursor: RealDictCursor) -> list:
+#     query = """SELECT u.id, u.username,
+#      u.registration_date,
+#      u.reputation,
+#        count(q.id) as question_count,
+#        count(a.id) as answer_count,
+#        count(c.id) as comment_count
+#         FROM users u
+#         left JOIN question q on u.id = q.user_id
+#         left JOIN comment c on u.id = c.user_id
+#         left JOIN answer a on u.id = a.user_id
+#         group by u.id, u.username, u.registration_date, u.reputation;
+#     """
+#     cursor.execute(query)
+#     return cursor.fetchall()
 
 
 @database_common.connection_handler

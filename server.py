@@ -321,7 +321,6 @@ def users_table():
         return redirect('/login')
 
 
-
 @app.route("/question/<question_id>/answer/<answer_id>/edit", methods=['POST'])
 def accept_answer(question_id, answer_id):
     if answer_id in request.form:

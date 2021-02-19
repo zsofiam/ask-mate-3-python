@@ -156,8 +156,9 @@ ol, ul {
     color: white;
 }
 
-.red-font{
-    color: red;
+.green-font{
+    color: #116600;
+    font-style: italic;
 }
 
 .title {
